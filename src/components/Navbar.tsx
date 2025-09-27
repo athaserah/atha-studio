@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { Menu, X, Camera, User, Mail, Image, LogIn } from "lucide-react";
+import { Menu, X, Camera, User, Mail, Image, LogIn, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   const navItems = [
     { href: "/", label: "Home", icon: Camera },
@@ -49,6 +49,19 @@ const Navbar = () => {
                 </Link>
               );
             })}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
+                  isActive("/admin")
+                    ? "text-primary bg-primary/10"
+                    : "text-foreground hover:text-primary hover:bg-primary/5"
+                }`}
+              >
+                <Settings className="h-4 w-4" />
+                <span>Admin</span>
+              </Link>
+            )}
             {user ? (
               <Button variant="premium" size="sm" asChild>
                 <Link to="/dashboard">
@@ -100,6 +113,20 @@ const Navbar = () => {
                   </Link>
                 );
               })}
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 ${
+                    isActive("/admin")
+                      ? "text-primary bg-primary/10"
+                      : "text-foreground hover:text-primary hover:bg-primary/5"
+                  }`}
+                >
+                  <Settings className="h-5 w-5" />
+                  <span>Admin</span>
+                </Link>
+              )}
               <div className="px-4 pt-2">
                 {user ? (
                   <Button variant="premium" className="w-full" asChild>
