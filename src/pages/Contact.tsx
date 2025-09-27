@@ -7,6 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
 import { 
   Mail, 
   Phone, 
@@ -21,11 +24,29 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
+const bookingSchema = z.object({
+  name: z.string().min(2, 'Nama minimal 2 karakter'),
+  email: z.string().email('Email tidak valid'),
+  phone: z.string().min(10, 'Nomor telepon minimal 10 digit'),
+  service: z.string().min(1, 'Pilih jenis layanan'),
+  package: z.string().min(1, 'Pilih paket'),
+  budget: z.string().min(1, 'Pilih range budget'),
+  message: z.string().optional()
+});
+
 const Contact = () => {
   const [selectedService, setSelectedService] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [photoPackage, setPhotoPackage] = useState("");
   const [websitePackage, setWebsitePackage] = useState("");
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const contactInfo = [
     {
@@ -96,10 +117,73 @@ const Contact = () => {
     }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted");
+    setLoading(true);
+
+    try {
+      const currentPackage = selectedService === 'photography' ? photoPackage : websitePackage;
+      const budget = selectedService === 'photography' 
+        ? photoPackages.find(p => p.name === photoPackage)?.price || ''
+        : websitePackages.find(p => p.name === websitePackage)?.price || '';
+
+      const validatedData = bookingSchema.parse({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        service: selectedService,
+        package: currentPackage,
+        budget: budget,
+        message: formData.message
+      });
+
+      const { error } = await supabase
+        .from('bookings')
+        .insert({
+          customer_name: validatedData.name,
+          customer_email: validatedData.email,
+          customer_phone: validatedData.phone,
+          service_type: validatedData.service,
+          package_type: validatedData.package,
+          event_date: selectedDate?.toISOString().split('T')[0] || null,
+          budget_range: validatedData.budget,
+          message: validatedData.message || null,
+          status: 'pending'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Pemesanan berhasil!",
+        description: "Terima kasih, kami akan menghubungi Anda segera.",
+      });
+
+      // Reset form
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      setSelectedService('');
+      setSelectedDate(undefined);
+      setPhotoPackage('');
+      setWebsitePackage('');
+    } catch (error: any) {
+      console.error('Booking error:', error);
+      
+      if (error.errors) {
+        const errorMessage = error.errors.map((err: any) => err.message).join(', ');
+        toast({
+          title: "Validation Error",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: error.message || "Terjadi kesalahan saat mengirim pemesanan",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -266,17 +350,32 @@ const Contact = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Name *</label>
-                    <Input placeholder="Your full name" required />
+                    <Input 
+                      placeholder="Your full name" 
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Email *</label>
-                    <Input type="email" placeholder="your@email.com" required />
+                    <Input 
+                      type="email" 
+                      placeholder="your@email.com" 
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      required 
+                    />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Phone</label>
-                  <Input placeholder="+62 812-3456-7890" />
+                  <Input 
+                    placeholder="+62 812-3456-7890" 
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  />
                 </div>
 
                 {/* Service Selection */}
@@ -360,6 +459,8 @@ const Contact = () => {
                   <Textarea 
                     placeholder="Tell us about your project, requirements, or any questions you have..."
                     className="min-h-32"
+                    value={formData.message}
+                    onChange={(e) => setFormData({...formData, message: e.target.value})}
                     required
                   />
                 </div>
@@ -380,9 +481,9 @@ const Contact = () => {
                   </div>
                 )}
 
-                <Button type="submit" variant="hero" className="w-full" size="lg">
+                <Button type="submit" variant="hero" className="w-full" size="lg" disabled={loading}>
                   <Mail className="h-5 w-5" />
-                  Send Message
+                  {loading ? 'Sending...' : 'Send Message'}
                 </Button>
               </form>
             </CardContent>

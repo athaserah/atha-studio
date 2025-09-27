@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import { Menu, X, Camera, User, Mail, Image, LogIn } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   const navItems = [
     { href: "/", label: "Home", icon: Camera },
@@ -47,10 +49,21 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            <Button variant="premium" size="sm">
-              <LogIn className="h-4 w-4" />
-              Login
-            </Button>
+            {user ? (
+              <Button variant="premium" size="sm" asChild>
+                <Link to="/dashboard">
+                  <User className="h-4 w-4" />
+                  Dashboard
+                </Link>
+              </Button>
+            ) : (
+              <Button variant="premium" size="sm" asChild>
+                <Link to="/auth">
+                  <LogIn className="h-4 w-4" />
+                  Login
+                </Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -88,10 +101,21 @@ const Navbar = () => {
                 );
               })}
               <div className="px-4 pt-2">
-                <Button variant="premium" className="w-full">
-                  <LogIn className="h-4 w-4" />
-                  Login
-                </Button>
+                {user ? (
+                  <Button variant="premium" className="w-full" asChild>
+                    <Link to="/dashboard">
+                      <User className="h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button variant="premium" className="w-full" asChild>
+                    <Link to="/auth">
+                      <LogIn className="h-4 w-4" />
+                      Login
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
           </div>
