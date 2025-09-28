@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Search, Filter, Heart, Download, Share2 } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 const Gallery = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
@@ -78,7 +79,9 @@ const Gallery = () => {
   });
 
   return (
-    <div className="min-h-screen pt-24 pb-16">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 fade-in">
@@ -229,6 +232,7 @@ const Gallery = () => {
             </p>
           </div>
         )}
+        </div>
       </div>
     </div>
   );

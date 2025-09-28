@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Award, Users, Clock, Star, Heart, Palette, Zap } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 const About = () => {
   const skills = [
@@ -42,7 +43,9 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-24 pb-16">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
@@ -201,6 +204,7 @@ const About = () => {
               Minta Quote Website
             </Button>
           </div>
+        </div>
         </div>
       </div>
     </div>

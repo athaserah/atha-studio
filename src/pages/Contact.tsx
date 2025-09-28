@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
+import Navbar from "@/components/Navbar";
 import { 
   Mail, 
   Phone, 
@@ -187,7 +188,9 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 fade-in">
@@ -488,6 +491,7 @@ const Contact = () => {
               </form>
             </CardContent>
           </Card>
+        </div>
         </div>
       </div>
     </div>

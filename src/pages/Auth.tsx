@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { z } from 'zod';
+import Navbar from '@/components/Navbar';
 
 const authSchema = z.object({
   email: z.string().email('Email tidak valid'),
@@ -119,7 +120,9 @@ export default function Auth() {
 
   if (user) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] px-4">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-center">Selamat datang balik bos!</CardTitle>
@@ -133,12 +136,15 @@ export default function Auth() {
             </Button>
           </CardContent>
         </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] px-4">
       <Card className="w-full max-w-md">
         <CardHeader>
             <CardTitle className="text-center">
@@ -201,6 +207,7 @@ export default function Auth() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

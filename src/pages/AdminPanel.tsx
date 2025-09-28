@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { Trash2, Edit, Plus, Users, BookOpen, Image } from 'lucide-react';
+import Navbar from '@/components/Navbar';
 
 interface Profile {
   id: string;
@@ -265,14 +266,19 @@ export default function AdminPanel() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="flex items-center justify-center min-h-[calc(100vh-4rem)]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="container mx-auto px-4 py-8 pt-24">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Panel Sultan</h1>
         <p className="text-muted-foreground">Atur semua yang ada di website lu bos</p>
@@ -510,6 +516,7 @@ export default function AdminPanel() {
           </Card>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 }
