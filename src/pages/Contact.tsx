@@ -192,14 +192,14 @@ const Contact = () => {
         {/* Header */}
         <div className="text-center mb-16 fade-in">
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            Get In
+            Hit Me
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              {" "}Touch
+              {" "}Up Dong!
             </span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Ready to bring your vision to life? Contact us for photography services 
-            or website development. We're here to help create something amazing together.
+            Siap wujudin visi lu jadi kenyataan? Gas kontak gue buat jasa foto 
+            atau bikin website. Gue siap bantu lu bikin sesuatu yang amazing!
           </p>
         </div>
 
@@ -211,7 +211,7 @@ const Contact = () => {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Mail className="h-5 w-5 text-primary" />
-                  <span>Contact Information</span>
+                  <span>Info Kontak</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -237,7 +237,7 @@ const Contact = () => {
             {/* Social Media */}
             <Card>
               <CardHeader>
-                <CardTitle>Follow Us</CardTitle>
+                <CardTitle>Follow Gue</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex space-x-4">
@@ -264,7 +264,7 @@ const Contact = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <Camera className="h-5 w-5 text-primary" />
-                    <span>Photography Packages</span>
+                    <span>Paket Fotoan Kece</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -305,7 +305,7 @@ const Contact = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <Globe className="h-5 w-5 text-primary" />
-                    <span>Website Packages</span>
+                    <span>Paket Website Kece</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -342,7 +342,7 @@ const Contact = () => {
           {/* Contact Form */}
           <Card className="slide-up">
             <CardHeader>
-              <CardTitle>Send us a Message</CardTitle>
+              <CardTitle>Kirim Pesan ke Gue</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">

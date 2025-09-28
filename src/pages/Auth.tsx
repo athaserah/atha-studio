@@ -65,8 +65,8 @@ export default function Auth() {
         if (error) throw error;
         
         toast({
-          title: "Login berhasil!",
-          description: "Selamat datang kembali",
+          title: "Masuk berhasil bos!",
+          description: "Akhirnya balik lagi nih!",
         });
       } else {
         const { error } = await supabase.auth.signUp({
@@ -83,8 +83,8 @@ export default function Auth() {
         if (error) throw error;
 
         toast({
-          title: "Registrasi berhasil!",
-          description: "Silakan cek email untuk verifikasi akun",
+          title: "Daftar berhasil bos!",
+          description: "Gas cek email lu buat verifikasi akun",
         });
       }
     } catch (error: any) {
@@ -122,11 +122,11 @@ export default function Auth() {
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-center">Selamat datang!</CardTitle>
+            <CardTitle className="text-center">Selamat datang balik bos!</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-center text-muted-foreground">
-              Anda sudah login sebagai {user.email}
+              Lu udah masuk sebagai {user.email}
             </p>
             <Button onClick={handleLogout} className="w-full" variant="outline">
               Logout
@@ -141,9 +141,9 @@ export default function Auth() {
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-center">
-            {isLogin ? 'Login' : 'Daftar Akun'}
-          </CardTitle>
+            <CardTitle className="text-center">
+              {isLogin ? 'Masuk' : 'Daftar Akun Baru'}
+            </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -186,7 +186,7 @@ export default function Auth() {
             </div>
             
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Memproses...' : (isLogin ? 'Login' : 'Daftar')}
+              {loading ? 'Tunggu bentar...' : (isLogin ? 'Masuk' : 'Daftar')}
             </Button>
           </form>
           
@@ -196,7 +196,7 @@ export default function Auth() {
               onClick={() => setIsLogin(!isLogin)}
               className="text-sm text-primary hover:underline"
             >
-              {isLogin ? 'Belum punya akun? Daftar' : 'Sudah punya akun? Login'}
+              {isLogin ? 'Belum punya akun? Gas daftar!' : 'Udah punya akun? Masuk aja!'}
             </button>
           </div>
         </CardContent>

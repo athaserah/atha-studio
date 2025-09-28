@@ -10,10 +10,10 @@ const Navbar = () => {
   const { user, isAdmin } = useAuth();
 
   const navItems = [
-    { href: "/", label: "Home", icon: Camera },
-    { href: "/gallery", label: "Gallery", icon: Image },
-    { href: "/about", label: "About", icon: User },
-    { href: "/contact", label: "Contact", icon: Mail },
+    { href: "/", label: "Beranda", icon: Camera },
+    { href: "/gallery", label: "Galeri Kece", icon: Image },
+    { href: "/about", label: "Tentang Gue", icon: User },
+    { href: "/contact", label: "Hit Me Up", icon: Mail },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -59,21 +59,21 @@ const Navbar = () => {
                 }`}
               >
                 <Settings className="h-4 w-4" />
-                <span>Admin</span>
+                <span>Mode Sultan</span>
               </Link>
             )}
             {user ? (
               <Button variant="premium" size="sm" asChild>
                 <Link to="/dashboard">
                   <User className="h-4 w-4" />
-                  Dashboard
+                  Dashboard Gue
                 </Link>
               </Button>
             ) : (
               <Button variant="premium" size="sm" asChild>
                 <Link to="/auth">
                   <LogIn className="h-4 w-4" />
-                  Login
+                  Masuk Dong
                 </Link>
               </Button>
             )}
@@ -124,7 +124,7 @@ const Navbar = () => {
                   }`}
                 >
                   <Settings className="h-5 w-5" />
-                  <span>Admin</span>
+                  <span>Mode Sultan</span>
                 </Link>
               )}
               <div className="px-4 pt-2">
@@ -132,14 +132,14 @@ const Navbar = () => {
                   <Button variant="premium" className="w-full" asChild>
                     <Link to="/dashboard">
                       <User className="h-4 w-4" />
-                      Dashboard
+                      Dashboard Gue
                     </Link>
                   </Button>
                 ) : (
                   <Button variant="premium" className="w-full" asChild>
                     <Link to="/auth">
                       <LogIn className="h-4 w-4" />
-                      Login
+                      Masuk Dong
                     </Link>
                   </Button>
                 )}

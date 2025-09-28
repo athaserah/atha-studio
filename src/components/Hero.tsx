@@ -4,10 +4,10 @@ import heroImage from "@/assets/hero-photography.jpg";
 
 const Hero = () => {
   const stats = [
-    { icon: Camera, label: "Photos Captured", value: "10K+" },
-    { icon: Users, label: "Happy Clients", value: "500+" },
-    { icon: Award, label: "Awards Won", value: "25+" },
-    { icon: Star, label: "Client Rating", value: "4.9" },
+    { icon: Camera, label: "Foto Udah Diabadiin", value: "10K+" },
+    { icon: Users, label: "Client Bahagia", value: "500+" },
+    { icon: Award, label: "Award Kece", value: "25+" },
+    { icon: Star, label: "Rating Sultan", value: "4.9" },
   ];
 
   return (
@@ -28,23 +28,23 @@ const Hero = () => {
           {/* Left Content */}
           <div className="text-center lg:text-left fade-in">
             <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-6">
-              Capture Your
+              Abadikan Momen
               <span className="block bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Perfect Moment
+                Kece Lu!
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl">
-              Professional photography services with cutting-edge automation tools. 
-              From stunning portraits to complete website solutions, we bring your vision to life.
+              Jasa foto profesional yang bikin lu auto jadi sultan konten! 
+              Dari portrait kece sampai website yang bikin branding lu naik level.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
               <Button variant="hero" size="xl" className="group">
                 <Camera className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
-                Book Photo Session
+                Gas Booking Fotoan!
               </Button>
               <Button variant="premium" size="xl">
-                View Portfolio
+                Liat Karya Gue
               </Button>
             </div>
 
@@ -78,11 +78,11 @@ const Hero = () => {
                     <Camera className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">Photography Services</h3>
+                    <h3 className="text-lg font-semibold mb-2">Jasa Fotoan Kece</h3>
                     <p className="text-muted-foreground text-sm mb-3">
-                      Professional photo shoots starting from Rp 250,000
+                      Sesi foto profesional yang bikin lu auto percaya diri
                     </p>
-                    <div className="text-primary font-semibold">From Rp 250.000</div>
+                    <div className="text-primary font-semibold">Mulai Rp 250.000</div>
                   </div>
                 </div>
               </div>
@@ -93,11 +93,11 @@ const Hero = () => {
                     <Award className="h-6 w-6 text-accent" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">Website Development</h3>
+                    <h3 className="text-lg font-semibold mb-2">Bikin Website Kece</h3>
                     <p className="text-muted-foreground text-sm mb-3">
-                      Complete website solutions for your business
+                      Website lengkap yang bikin bisnis lu naik level
                     </p>
-                    <div className="text-accent font-semibold">From Rp 700.000</div>
+                    <div className="text-accent font-semibold">Mulai Rp 700.000</div>
                   </div>
                 </div>
               </div>

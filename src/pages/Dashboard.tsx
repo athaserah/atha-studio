@@ -142,32 +142,32 @@ export default function Dashboard() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <h1 className="text-3xl font-bold">Dashboard Gue</h1>
             <p className="text-muted-foreground">
-              Selamat datang, {profile?.full_name || user?.email}
+              Selamat datang balik, {profile?.full_name || user?.email}
             </p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => navigate('/')}>
-              Kembali ke Website
+              Balik ke Website
             </Button>
             <Button variant="outline" onClick={handleLogout}>
-              Logout
+              Keluar
             </Button>
           </div>
         </div>
 
         <Tabs defaultValue="bookings" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="bookings">Pemesanan</TabsTrigger>
-            <TabsTrigger value="photos">Foto</TabsTrigger>
-            <TabsTrigger value="profile">Profil</TabsTrigger>
+            <TabsTrigger value="bookings">Pesanan Gue</TabsTrigger>
+            <TabsTrigger value="photos">Koleksi Foto</TabsTrigger>
+            <TabsTrigger value="profile">Profil Gue</TabsTrigger>
           </TabsList>
 
           <TabsContent value="bookings" className="space-y-4">
             <div className="grid gap-4">
               <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Daftar Pemesanan</h2>
+                <h2 className="text-2xl font-semibold">Daftar Pesanan Gue</h2>
                 <Badge variant="secondary">{bookings.length} total</Badge>
               </div>
               
@@ -175,7 +175,7 @@ export default function Dashboard() {
                 <Card>
                   <CardContent className="flex flex-col items-center justify-center py-12">
                     <Camera className="h-12 w-12 text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">Belum ada pemesanan</p>
+                    <p className="text-muted-foreground">Belum ada pesanan nih bos</p>
                   </CardContent>
                 </Card>
               ) : (

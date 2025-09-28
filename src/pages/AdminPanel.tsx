@@ -274,35 +274,35 @@ export default function AdminPanel() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Admin Panel</h1>
-        <p className="text-muted-foreground">Manage users, bookings, and content</p>
+        <h1 className="text-3xl font-bold mb-2">Panel Sultan</h1>
+        <p className="text-muted-foreground">Atur semua yang ada di website lu bos</p>
       </div>
 
       <Tabs defaultValue="bookings" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="bookings" className="flex items-center gap-2">
             <BookOpen className="h-4 w-4" />
-            Bookings ({bookings.length})
+            Pesanan ({bookings.length})
           </TabsTrigger>
           <TabsTrigger value="photos" className="flex items-center gap-2">
             <Image className="h-4 w-4" />
-            Photos ({photos.length})
+            Foto ({photos.length})
           </TabsTrigger>
           <TabsTrigger value="users" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
-            Users ({profiles.length})
+            User ({profiles.length})
           </TabsTrigger>
           <TabsTrigger value="roles" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
-            Roles
+            Role
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="bookings">
           <Card>
             <CardHeader>
-              <CardTitle>Booking Management</CardTitle>
-              <CardDescription>View and manage all customer bookings</CardDescription>
+              <CardTitle>Manajemen Pesanan</CardTitle>
+              <CardDescription>Liat dan atur semua pesanan customer</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">

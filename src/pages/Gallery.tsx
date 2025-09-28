@@ -61,12 +61,12 @@ const Gallery = () => {
   ];
 
   const categories = [
-    { value: "all", label: "All Photos" },
-    { value: "portrait", label: "Portraits" },
-    { value: "landscape", label: "Landscapes" },
-    { value: "wedding", label: "Weddings" },
-    { value: "architecture", label: "Architecture" },
-    { value: "product", label: "Products" },
+    { value: "all", label: "Semua Foto" },
+    { value: "portrait", label: "Portrait" },
+    { value: "landscape", label: "Landscape" },
+    { value: "wedding", label: "Wedding" },
+    { value: "architecture", label: "Arsitektur" },
+    { value: "product", label: "Produk" },
     { value: "street", label: "Street" },
   ];
 
@@ -83,14 +83,14 @@ const Gallery = () => {
         {/* Header */}
         <div className="text-center mb-12 fade-in">
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            Photo
+            Galeri
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              {" "}Gallery
+              {" "}Foto Kece
             </span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Explore our collection of stunning photographs across various categories. 
-            Each image tells a unique story captured through our lens.
+            Jelajahi koleksi foto-foto kece gue dari berbagai kategori. 
+            Setiap gambar punya cerita unik yang udah gue abadiin lewat lensa.
           </p>
         </div>
 
@@ -102,7 +102,7 @@ const Gallery = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search photos..."
+                placeholder="Cari foto di sini bos..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
@@ -223,9 +223,9 @@ const Gallery = () => {
         {filteredPhotos.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📷</div>
-            <h3 className="text-2xl font-semibold mb-2">No photos found</h3>
+            <h3 className="text-2xl font-semibold mb-2">Waduh, foto gak ketemu nih</h3>
             <p className="text-muted-foreground">
-              Try adjusting your search terms or filters
+              Coba adjust kata kunci pencarian atau filter lu
             </p>
           </div>
         )}

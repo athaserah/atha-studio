@@ -35,10 +35,10 @@ const About = () => {
   ];
 
   const achievements = [
-    { icon: Award, value: "25+", label: "Awards Won" },
-    { icon: Users, value: "500+", label: "Happy Clients" },
-    { icon: Camera, value: "10K+", label: "Photos Captured" },
-    { icon: Clock, value: "5+", label: "Years Experience" },
+    { icon: Award, value: "25+", label: "Award Kece" },
+    { icon: Users, value: "500+", label: "Client Bahagia" },
+    { icon: Camera, value: "10K+", label: "Foto Udah Diabadiin" },
+    { icon: Clock, value: "5+", label: "Tahun Pengalaman" },
   ];
 
   return (
@@ -48,39 +48,39 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
           <div className="fade-in">
             <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-              About
+              Tentang
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 {" "}ChronoLens Pro
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              I'm a passionate photographer with over 5 years of experience capturing life's most 
-              beautiful moments. My style blends artistic vision with technical precision, creating 
-              timeless images that tell compelling stories.
+              Gue fotografer yang passionate banget udah 5 tahun lebih ngejalanin bisnis ini. 
+              Style gue gabungin visi artistik sama presisi teknis yang bikin hasil foto lu 
+              jadi timeless dan punya cerita yang kuat banget.
             </p>
             
             <div className="space-y-4 mb-8">
               <div className="flex items-center space-x-3">
                 <Heart className="h-5 w-5 text-primary" />
-                <span>Passionate about capturing authentic emotions</span>
+                <span>Passionate banget buat capture emosi yang autentik</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Star className="h-5 w-5 text-primary" />
-                <span>Committed to delivering exceptional quality</span>
+                <span>Komitmen banget buat kasih kualitas yang exceptional</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Zap className="h-5 w-5 text-primary" />
-                <span>Utilizing cutting-edge technology and techniques</span>
+                <span>Pake teknologi cutting-edge yang bikin hasil makin kece</span>
               </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button variant="hero" size="lg">
                 <Camera className="h-5 w-5" />
-                Book a Session
+                Gas Booking!
               </Button>
               <Button variant="outline" size="lg">
-                View Portfolio
+                Liat Portfolio
               </Button>
             </div>
           </div>
@@ -121,7 +121,7 @@ const About = () => {
         {/* Skills */}
         <div className="mb-20 slide-up">
           <h2 className="text-3xl font-bold text-center mb-12">
-            My Skills & Expertise
+            Skill & Keahlian Gue
           </h2>
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {skills.map((skill, index) => (
@@ -147,7 +147,7 @@ const About = () => {
         {/* Services */}
         <div className="fade-in">
           <h2 className="text-3xl font-bold text-center mb-12">
-            What I Offer
+            Yang Gue Tawarkan
           </h2>
           <div className="grid lg:grid-cols-3 gap-8">
             {services.map((service, index) => {
@@ -187,18 +187,18 @@ const About = () => {
         {/* Call to Action */}
         <div className="text-center mt-20 p-12 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl">
           <h2 className="text-3xl font-bold mb-4">
-            Ready to Create Something Amazing?
+            Siap Bikin Sesuatu yang Kece?
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Let's work together to capture your special moments and bring your creative vision to life.
+            Yuk collab bareng buat abadikan momen spesial lu dan wujudin visi kreatif yang kece!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="hero" size="lg">
               <Camera className="h-5 w-5" />
-              Book Photography Session
+              Gas Booking Sesi Foto
             </Button>
             <Button variant="premium" size="lg">
-              Request Website Quote
+              Minta Quote Website
             </Button>
           </div>
         </div>
