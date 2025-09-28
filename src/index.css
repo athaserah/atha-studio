@@ -154,6 +154,51 @@
   .glow-effect {
     box-shadow: 0 0 30px hsl(var(--primary) / 0.3);
   }
+
+  /* Mobile-first responsive utilities */
+  .mobile-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .mobile-text {
+    @apply text-base sm:text-lg lg:text-xl;
+  }
+  
+  .mobile-heading {
+    @apply text-2xl sm:text-3xl lg:text-4xl;
+  }
+  
+  .mobile-hero-heading {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl;
+  }
+  
+  /* Mobile-first grid */
+  .mobile-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+  
+  .mobile-menu-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
+  }
+  
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+  
+  /* Mobile-optimized cards */
+  .mobile-card {
+    @apply p-4 sm:p-6 lg:p-8 rounded-xl bg-card border border-border;
+  }
+  
+  /* Responsive spacing */
+  .mobile-section-padding {
+    @apply py-8 sm:py-12 lg:py-16 xl:py-20;
+  }
+  
+  .mobile-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
 }
 
 @keyframes fadeIn {
