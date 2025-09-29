@@ -243,7 +243,7 @@ const Contact = () => {
                 <CardTitle>Follow Gue</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex space-x-4">
+                <div className="flex flex-wrap gap-3">
                   {socialLinks.map((social) => {
                     const Icon = social.icon;
                     return (

@@ -97,6 +97,8 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    max-width: 100%;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -104,9 +106,10 @@
     @apply font-medium tracking-tight;
   }
   
-  /* Smooth scrolling */
+  /* Smooth scrolling and prevent horizontal overflow */
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
   
   /* Custom scrollbar */

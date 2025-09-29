@@ -89,13 +89,13 @@ const About = () => {
           </div>
 
           <div className="slide-up">
-            <div className="relative">
+            <div className="relative overflow-hidden lg:overflow-visible rounded-2xl">
               <img
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop&crop=face"
                 alt="Photographer Portrait"
                 className="w-full max-w-md mx-auto rounded-2xl shadow-2xl"
               />
-              <div className="absolute -bottom-6 -right-6 bg-primary text-primary-foreground p-4 rounded-xl shadow-lg">
+              <div className="absolute bottom-4 right-4 lg:-bottom-6 lg:-right-6 bg-primary text-primary-foreground p-4 rounded-xl shadow-lg">
                 <div className="text-center">
                   <div className="text-2xl font-bold">5+</div>
                   <div className="text-sm">Years Experience</div>
