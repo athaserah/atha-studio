@@ -77,11 +77,69 @@ export default function AdminPanel() {
 
   React.useEffect(() => {
     fetchAllData();
+    
+    // Set up real-time listeners for admin
+    const bookingsChannel = supabase
+      .channel('admin-bookings-changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'bookings'
+      }, () => {
+        console.log('🔄 Bookings updated - refreshing data');
+        fetchAllData();
+      })
+      .subscribe();
+
+    const photosChannel = supabase
+      .channel('admin-photos-changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'photos'
+      }, () => {
+        console.log('🔄 Photos updated - refreshing data');
+        fetchAllData();
+      })
+      .subscribe();
+
+    const profilesChannel = supabase
+      .channel('admin-profiles-changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'profiles'
+      }, () => {
+        console.log('🔄 Profiles updated - refreshing data');
+        fetchAllData();
+      })
+      .subscribe();
+
+    const rolesChannel = supabase
+      .channel('admin-roles-changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'user_roles'
+      }, () => {
+        console.log('🔄 User roles updated - refreshing data');
+        fetchAllData();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(bookingsChannel);
+      supabase.removeChannel(photosChannel);
+      supabase.removeChannel(profilesChannel);
+      supabase.removeChannel(rolesChannel);
+    };
   }, []);
 
   const fetchAllData = async () => {
     try {
       setLoading(true);
+      console.log('📊 Fetching admin data...');
+      
       const [profilesRes, bookingsRes, photosRes, rolesRes] = await Promise.all([
         supabase.from('profiles').select('*').order('created_at', { ascending: false }),
         supabase.from('bookings').select('*').order('created_at', { ascending: false }),
@@ -98,7 +156,10 @@ export default function AdminPanel() {
       setBookings(bookingsRes.data || []);
       setPhotos(photosRes.data || []);
       setUserRoles(rolesRes.data || []);
+      
+      console.log('✅ Admin data loaded successfully');
     } catch (error: any) {
+      console.error('❌ Error fetching admin data:', error);
       toast({
         title: "Error",
         description: error.message,
@@ -119,14 +180,15 @@ export default function AdminPanel() {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "Booking status updated successfully"
+        title: "✅ Success",
+        description: "Status booking berhasil diupdate secara real-time!"
       });
       
-      fetchAllData();
+      // Data will auto-refresh via real-time listener
     } catch (error: any) {
+      console.error('❌ Error updating booking status:', error);
       toast({
-        title: "Error",
+        title: "❌ Error",
         description: error.message,
         variant: "destructive"
       });
@@ -143,14 +205,15 @@ export default function AdminPanel() {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "Booking deleted successfully"
+        title: "✅ Success", 
+        description: "Booking berhasil dihapus secara real-time!"
       });
       
-      fetchAllData();
+      // Data will auto-refresh via real-time listener
     } catch (error: any) {
+      console.error('❌ Error deleting booking:', error);
       toast({
-        title: "Error",
+        title: "❌ Error",
         description: error.message,
         variant: "destructive"
       });
@@ -167,16 +230,17 @@ export default function AdminPanel() {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "Photo updated successfully"
+        title: "✅ Success",
+        description: "Foto berhasil diupdate secara real-time!"
       });
       
       setEditingPhoto(null);
       setIsDialogOpen(false);
-      fetchAllData();
+      // Data will auto-refresh via real-time listener
     } catch (error: any) {
+      console.error('❌ Error updating photo:', error);
       toast({
-        title: "Error",
+        title: "❌ Error",
         description: error.message,
         variant: "destructive"
       });
@@ -193,14 +257,15 @@ export default function AdminPanel() {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "Photo deleted successfully"
+        title: "✅ Success",
+        description: "Foto berhasil dihapus secara real-time!"
       });
       
-      fetchAllData();
+      // Data will auto-refresh via real-time listener
     } catch (error: any) {
+      console.error('❌ Error deleting photo:', error);
       toast({
-        title: "Error",
+        title: "❌ Error",
         description: error.message,
         variant: "destructive"
       });
@@ -216,15 +281,16 @@ export default function AdminPanel() {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "Photo created successfully"
+        title: "✅ Success",
+        description: "Foto baru berhasil dibuat secara real-time!"
       });
       
       setIsDialogOpen(false);
-      fetchAllData();
+      // Data will auto-refresh via real-time listener
     } catch (error: any) {
+      console.error('❌ Error creating photo:', error);
       toast({
-        title: "Error",
+        title: "❌ Error",
         description: error.message,
         variant: "destructive"
       });
@@ -241,14 +307,15 @@ export default function AdminPanel() {
       if (error) throw error;
 
       toast({
-        title: "Success",
-        description: "User role updated successfully"
+        title: "✅ Success",
+        description: "Role user berhasil diupdate secara real-time!"
       });
       
-      fetchAllData();
+      // Data will auto-refresh via real-time listener
     } catch (error: any) {
+      console.error('❌ Error updating user role:', error);
       toast({
-        title: "Error",
+        title: "❌ Error",
         description: error.message,
         variant: "destructive"
       });
