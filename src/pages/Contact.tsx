@@ -206,9 +206,9 @@ const Contact = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Contact Information */}
-          <div className="space-y-8 slide-up">
+          <div className="space-y-6 lg:space-y-8 slide-up order-2 lg:order-1">
             {/* Contact Details */}
             <Card>
               <CardHeader>
@@ -343,14 +343,14 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <Card className="slide-up">
+          <Card className="slide-up order-1 lg:order-2">
             <CardHeader>
               <CardTitle>Kirim Pesan ke Gue</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Basic Information */}
-                <div className="grid md:grid-cols-2 gap-4">
+                 {/* Basic Information */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Name *</label>
                     <Input 

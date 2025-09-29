@@ -48,15 +48,15 @@ const About = () => {
       <div className="pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16 lg:mb-20">
           <div className="fade-in">
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 lg:mb-6">
               Tentang
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 {" "}ChronoLens Pro
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 leading-relaxed">
               Gue fotografer yang passionate banget udah 5 tahun lebih ngejalanin bisnis ini. 
               Style gue gabungin visi artistik sama presisi teknis yang bikin hasil foto lu 
               jadi timeless dan punya cerita yang kuat banget.
@@ -106,7 +106,7 @@ const About = () => {
         </div>
 
         {/* Achievements */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20 fade-in">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-16 lg:mb-20 fade-in">
           {achievements.map((achievement, index) => {
             const Icon = achievement.icon;
             return (
@@ -122,11 +122,11 @@ const About = () => {
         </div>
 
         {/* Skills */}
-        <div className="mb-20 slide-up">
-          <h2 className="text-3xl font-bold text-center mb-12">
+        <div className="mb-16 lg:mb-20 slide-up">
+          <h2 className="text-2xl lg:text-3xl font-bold text-center mb-8 lg:mb-12">
             Skill & Keahlian Gue
           </h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
             {skills.map((skill, index) => (
               <div key={skill.name} className="space-y-2">
                 <div className="flex justify-between items-center">
@@ -149,10 +149,10 @@ const About = () => {
 
         {/* Services */}
         <div className="fade-in">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-2xl lg:text-3xl font-bold text-center mb-8 lg:mb-12">
             Yang Gue Tawarkan
           </h2>
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {services.map((service, index) => {
               const Icon = service.icon;
               return (
@@ -188,11 +188,11 @@ const About = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-20 p-12 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl">
-          <h2 className="text-3xl font-bold mb-4">
+        <div className="text-center mt-16 lg:mt-20 p-6 lg:p-12 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl">
+          <h2 className="text-2xl lg:text-3xl font-bold mb-4">
             Siap Bikin Sesuatu yang Kece?
           </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 max-w-2xl mx-auto">
             Yuk collab bareng buat abadikan momen spesial lu dan wujudin visi kreatif yang kece!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
