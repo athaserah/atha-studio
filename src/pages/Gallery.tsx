@@ -2,64 +2,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Search, Filter, Heart, Download, Share2 } from "lucide-react";
+import { Search, Filter, Heart, Download, Share2, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { usePhotos } from "@/hooks/usePhotos";
 
 const Gallery = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-
-  // Mock gallery data
-  const photos = [
-    {
-      id: 1,
-      title: "Golden Hour Portrait",
-      category: "portrait",
-      tags: ["portrait", "golden-hour", "outdoor"],
-      url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800",
-      likes: 24,
-    },
-    {
-      id: 2,
-      title: "Urban Architecture",
-      category: "architecture",
-      tags: ["architecture", "urban", "modern"],
-      url: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800",
-      likes: 18,
-    },
-    {
-      id: 3,
-      title: "Nature Landscape",
-      category: "landscape",
-      tags: ["landscape", "nature", "mountains"],
-      url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-      likes: 32,
-    },
-    {
-      id: 4,
-      title: "Wedding Ceremony",
-      category: "wedding",
-      tags: ["wedding", "ceremony", "love"],
-      url: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800",
-      likes: 45,
-    },
-    {
-      id: 5,
-      title: "Product Photography",
-      category: "product",
-      tags: ["product", "commercial", "studio"],
-      url: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800",
-      likes: 16,
-    },
-    {
-      id: 6,
-      title: "Street Photography",
-      category: "street",
-      tags: ["street", "urban", "candid"],
-      url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800",
-      likes: 28,
-    },
-  ];
+  const { photos, isLoading, handleLike, handleDownload, handleShare } = usePhotos();
 
   const categories = [
     { value: "all", label: "Semua Foto" },
@@ -74,7 +24,7 @@ const Gallery = () => {
   const filteredPhotos = photos.filter((photo) => {
     const matchesCategory = selectedFilter === "all" || photo.category === selectedFilter;
     const matchesSearch = photo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         photo.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+                         (photo.tags || []).some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 
@@ -130,9 +80,18 @@ const Gallery = () => {
           </div>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center items-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <span className="ml-2 text-muted-foreground">Loading foto...</span>
+          </div>
+        )}
+
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredPhotos.map((photo, index) => (
+        {!isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredPhotos.map((photo, index) => (
             <Dialog key={photo.id}>
               <DialogTrigger asChild>
                 <div 
@@ -140,7 +99,7 @@ const Gallery = () => {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <img
-                    src={photo.url}
+                    src={photo.image_url}
                     alt={photo.title}
                     className="w-full h-64 object-cover rounded-lg"
                   />
@@ -149,17 +108,33 @@ const Gallery = () => {
                   <div className="absolute inset-0 flex flex-col justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                     <div className="flex justify-between items-start">
                       <div className="flex flex-wrap gap-1">
-                        {photo.tags.slice(0, 2).map((tag) => (
+                        {(photo.tags || []).slice(0, 2).map((tag) => (
                           <Badge key={tag} variant="secondary" className="text-xs bg-white/20 text-white">
                             {tag}
                           </Badge>
                         ))}
                       </div>
                       <div className="flex space-x-2">
-                        <Button size="icon" variant="glass" className="h-8 w-8">
+                        <Button 
+                          size="icon" 
+                          variant="glass" 
+                          className="h-8 w-8"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLike(photo.id);
+                          }}
+                        >
                           <Heart className="h-4 w-4" />
                         </Button>
-                        <Button size="icon" variant="glass" className="h-8 w-8">
+                        <Button 
+                          size="icon" 
+                          variant="glass" 
+                          className="h-8 w-8"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleShare(photo.id, photo.title);
+                          }}
+                        >
                           <Share2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -169,7 +144,7 @@ const Gallery = () => {
                       <h3 className="font-semibold text-lg mb-1">{photo.title}</h3>
                       <div className="flex items-center space-x-2 text-sm">
                         <Heart className="h-4 w-4" />
-                        <span>{photo.likes} likes</span>
+                        <span>{photo.likes_count} likes</span>
                       </div>
                     </div>
                   </div>
@@ -179,7 +154,7 @@ const Gallery = () => {
               <DialogContent className="max-w-4xl w-full p-0 bg-transparent border-none">
                 <div className="relative">
                   <img
-                    src={photo.url}
+                    src={photo.image_url}
                     alt={photo.title}
                     className="w-full max-h-[80vh] object-contain rounded-lg"
                   />
@@ -190,7 +165,7 @@ const Gallery = () => {
                       <div className="text-white">
                         <h3 className="text-2xl font-bold mb-2">{photo.title}</h3>
                         <div className="flex flex-wrap gap-2 mb-3">
-                          {photo.tags.map((tag) => (
+                          {(photo.tags || []).map((tag) => (
                             <Badge key={tag} variant="secondary" className="bg-white/20 text-white">
                               {tag}
                             </Badge>
@@ -199,17 +174,33 @@ const Gallery = () => {
                         <div className="flex items-center space-x-4 text-sm">
                           <div className="flex items-center space-x-1">
                             <Heart className="h-4 w-4" />
-                            <span>{photo.likes} likes</span>
+                            <span>{photo.likes_count} likes</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Download className="h-4 w-4" />
+                            <span>{photo.downloads_count} downloads</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Share2 className="h-4 w-4" />
+                            <span>{photo.shares_count} shares</span>
                           </div>
                         </div>
                       </div>
                       
                       <div className="flex space-x-2">
-                        <Button variant="glass" size="sm">
+                        <Button 
+                          variant="glass" 
+                          size="sm"
+                          onClick={() => handleDownload(photo.id, photo.image_url, photo.title)}
+                        >
                           <Download className="h-4 w-4 mr-2" />
                           Download
                         </Button>
-                        <Button variant="glass" size="sm">
+                        <Button 
+                          variant="glass" 
+                          size="sm"
+                          onClick={() => handleShare(photo.id, photo.title)}
+                        >
                           <Share2 className="h-4 w-4 mr-2" />
                           Share
                         </Button>
@@ -219,11 +210,12 @@ const Gallery = () => {
                 </div>
               </DialogContent>
             </Dialog>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* No Results */}
-        {filteredPhotos.length === 0 && (
+        {!isLoading && filteredPhotos.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📷</div>
             <h3 className="text-2xl font-semibold mb-2">Waduh, foto gak ketemu nih</h3>

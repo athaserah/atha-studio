@@ -67,9 +67,12 @@ export type Database = {
           category: string | null
           created_at: string
           description: string | null
+          downloads_count: number
           id: string
           image_url: string
           is_featured: boolean | null
+          likes_count: number
+          shares_count: number
           sort_order: number | null
           tags: string[] | null
           title: string
@@ -80,9 +83,12 @@ export type Database = {
           category?: string | null
           created_at?: string
           description?: string | null
+          downloads_count?: number
           id?: string
           image_url: string
           is_featured?: boolean | null
+          likes_count?: number
+          shares_count?: number
           sort_order?: number | null
           tags?: string[] | null
           title: string
@@ -93,9 +99,12 @@ export type Database = {
           category?: string | null
           created_at?: string
           description?: string | null
+          downloads_count?: number
           id?: string
           image_url?: string
           is_featured?: boolean | null
+          likes_count?: number
+          shares_count?: number
           sort_order?: number | null
           tags?: string[] | null
           title?: string
@@ -176,6 +185,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_photo_stat: {
+        Args: { photo_id: string; stat_type: string }
+        Returns: undefined
       }
     }
     Enums: {
