@@ -91,7 +91,7 @@ const About = () => {
           <div className="slide-up">
             <div className="relative overflow-hidden lg:overflow-visible rounded-2xl">
               <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop&crop=face"
+                src="https://res.cloudinary.com/dfjvcvbsn/image/upload/v1754012379/514418398_1243307167528963_507092194719317945_n_kndack.jpg"
                 alt="Photographer Portrait"
                 className="w-full max-w-md mx-auto rounded-2xl shadow-2xl"
               />
