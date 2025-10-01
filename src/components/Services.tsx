@@ -3,7 +3,7 @@ import { Camera, Code, Check, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Services = () => {
-  const whatsappNumber = "082241590417";
+  const whatsappNumber = "6282241590417";
   
   const handleBooking = (serviceName: string, packageName: string) => {
     const message = `Halo! Saya tertarik dengan jasa ${serviceName} - Paket ${packageName}. Bisa kasih info lebih lanjut?`;
