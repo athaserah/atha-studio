@@ -1,14 +1,42 @@
 import { Button } from "@/components/ui/button";
 import { Camera, Code, Check, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const Services = () => {
   const whatsappNumber = "6282241590417";
   
-  const handleBooking = (serviceName: string, packageName: string) => {
-    const message = `Halo! Saya tertarik dengan jasa ${serviceName} - Paket ${packageName}. Bisa kasih info lebih lanjut?`;
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+  const handleBooking = (serviceName: string, packageName: string, event?: React.MouseEvent) => {
+    try {
+      // Prevent default behavior and event bubbling
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      const message = `Halo! Saya tertarik dengan jasa ${serviceName} - Paket ${packageName}. Bisa kasih info lebih lanjut?`;
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+      
+      console.log('Opening WhatsApp URL:', whatsappUrl);
+      
+      // Try to open in new window
+      const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      
+      // Fallback if popup blocked
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        console.log('Popup blocked, using fallback method');
+        window.location.href = whatsappUrl;
+      } else {
+        toast.success('Membuka WhatsApp...', {
+          description: 'Anda akan diarahkan ke WhatsApp'
+        });
+      }
+    } catch (error) {
+      console.error('Error opening WhatsApp:', error);
+      toast.error('Gagal membuka WhatsApp', {
+        description: 'Silakan coba lagi atau hubungi langsung ke 082241590417'
+      });
+    }
   };
 
   const photographyPackages = [
@@ -186,7 +214,7 @@ const Services = () => {
                   <Button 
                     className="w-full group"
                     variant={pkg.popular ? "default" : "outline"}
-                    onClick={() => handleBooking("Photography", pkg.name)}
+                    onClick={(e) => handleBooking("Photography", pkg.name, e)}
                   >
                     <MessageCircle className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
                     Pesan via WhatsApp
@@ -255,7 +283,7 @@ const Services = () => {
                   <Button 
                     className="w-full group"
                     variant={pkg.popular ? "default" : "outline"}
-                    onClick={() => handleBooking("Website Builder", pkg.name)}
+                    onClick={(e) => handleBooking("Website Builder", pkg.name, e)}
                   >
                     <MessageCircle className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
                     Pesan via WhatsApp
@@ -282,11 +310,7 @@ const Services = () => {
                 size="lg"
                 variant="default"
                 className="group"
-                onClick={() => {
-                  const message = "Halo! Saya mau konsultasi dulu tentang jasa yang tersedia. Bisa bantu?";
-                  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-                  window.open(whatsappUrl, '_blank');
-                }}
+                onClick={(e) => handleBooking("Konsultasi", "General", e)}
               >
                 <MessageCircle className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
                 Chat di WhatsApp Sekarang!
