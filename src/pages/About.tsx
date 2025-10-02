@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 const About = () => {
   const handleWhatsApp = (message: string) => {
-    const phoneNumber = "6281234567890"; // Ganti dengan nomor WhatsApp yang benar
+    const phoneNumber = "6282241590417";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     
     toast.success("Redirecting ke WhatsApp...");
