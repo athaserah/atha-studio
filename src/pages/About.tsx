@@ -3,8 +3,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Award, Users, Clock, Star, Heart, Palette, Zap } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { toast } from "sonner";
 
 const About = () => {
+  const handleWhatsApp = (message: string) => {
+    const phoneNumber = "6281234567890"; // Ganti dengan nomor WhatsApp yang benar
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    
+    toast.success("Redirecting ke WhatsApp...");
+    window.open(whatsappUrl, '_blank');
+  };
+
   const skills = [
     { name: "Portrait Photography", level: 95 },
     { name: "Landscape Photography", level: 90 },
@@ -56,10 +65,8 @@ const About = () => {
                 {" "}Atha Studio
               </span>
             </h1>
-            <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 leading-relaxed">
-              Gue fotografer yang passionate banget udah 5 tahun lebih ngejalanin bisnis ini. 
-              Style gue gabungin visi artistik sama presisi teknis yang bikin hasil foto lu 
-              jadi timeless dan punya cerita yang kuat banget.
+            <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 leading-relaxed text-left">
+              Gue Arki. Suka banget mainin pixel di website biar cakep, dan seneng banget nangkep momen di sekitar biar abadi. Udah lama sih gue ngulik-ngulik beginian, jadi santai aja, gue jamin hasilnya nggak bakal ngecewain! Yuk, gabung bareng bikin project keren atau nangkep momen epic! Lo butuh website keren? Atau butuh foto yang vibey? Pas banget, lo di tempat yang tepat!
             </p>
             
             <div className="space-y-4 mb-8">
@@ -78,11 +85,19 @@ const About = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="hero" size="lg">
+              <Button 
+                variant="hero" 
+                size="lg"
+                onClick={() => handleWhatsApp("Halo! Saya mau booking sesi foto nih!")}
+              >
                 <Camera className="h-5 w-5" />
                 Gas Booking!
               </Button>
-              <Button variant="outline" size="lg">
+              <Button 
+                variant="outline" 
+                size="lg"
+                onClick={() => handleWhatsApp("Halo! Saya mau lihat portfolio kamu dong!")}
+              >
                 Liat Portfolio
               </Button>
             </div>
@@ -196,11 +211,19 @@ const About = () => {
             Yuk collab bareng buat abadikan momen spesial lu dan wujudin visi kreatif yang kece!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="hero" size="lg">
+            <Button 
+              variant="hero" 
+              size="lg"
+              onClick={() => handleWhatsApp("Halo! Saya mau booking sesi foto nih!")}
+            >
               <Camera className="h-5 w-5" />
               Gas Booking Sesi Foto
             </Button>
-            <Button variant="premium" size="lg">
+            <Button 
+              variant="premium" 
+              size="lg"
+              onClick={() => handleWhatsApp("Halo! Saya mau minta quote untuk website nih!")}
+            >
               Minta Quote Website
             </Button>
           </div>
