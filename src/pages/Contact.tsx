@@ -53,27 +53,27 @@ const Contact = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "hello@chronolens.pro",
-      href: "mailto:hello@chronolens.pro"
+      value: "athadiary@gmail.com",
+      href: "mailto:athadiary@gmail.com"
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+62 812-3456-7890",
-      href: "tel:+6281234567890"
+      value: "+6282241590417",
+      href: "tel:+6282241590417"
     },
     {
       icon: MapPin,
       label: "Location",
-      value: "Jakarta, Indonesia",
+      value: "Jogja, Indonesia",
       href: "https://maps.google.com"
     }
   ];
 
   const socialLinks = [
-    { icon: Instagram, href: "#", label: "@chronolens.pro" },
-    { icon: Twitter, href: "#", label: "@chronolens" },
-    { icon: Facebook, href: "#", label: "ChronoLens Pro" }
+    { icon: Instagram, href: "https://www.instagram.com/atha_diary21/", label: "@atha_diary21" },
+    { icon: Facebook, href: "https://web.facebook.com/AthaDiary21/?locale=id_ID", label: "AthaDiary21" },
+    { icon: Twitter, href: "https://www.threads.com/@athadiary21", label: "@athadiary21" }
   ];
 
   const photoPackages = [
