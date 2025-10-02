@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { Menu, X, Camera, User, Mail, Image, LogIn, Settings } from "lucide-react";
+import { Menu, X, Home, User, Mail, Image, LogIn, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import athaStudioLogo from "@/assets/atha-studio-logo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,7 +11,7 @@ const Navbar = () => {
   const { user, isAdmin } = useAuth();
 
   const navItems = [
-    { href: "/", label: "Beranda", icon: Camera },
+    { href: "/", label: "Beranda", icon: Home },
     { href: "/gallery", label: "Galeri Kece", icon: Image },
     { href: "/about", label: "Tentang Gue", icon: User },
     { href: "/contact", label: "Hit Me Up", icon: Mail },
@@ -23,11 +24,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <Camera className="h-8 w-8 text-primary group-hover:scale-110 transition-transform duration-300" />
-            <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              ChronoLens Pro
-            </span>
+          <Link to="/" className="flex items-center group">
+            <img 
+              src={athaStudioLogo} 
+              alt="Atha Studio Logo" 
+              className="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+            />
           </Link>
 
           {/* Desktop Navigation */}
