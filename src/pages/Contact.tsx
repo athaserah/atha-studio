@@ -53,13 +53,13 @@ const Contact = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "athadiary@gmail.com",
-      href: "mailto:athadiary@gmail.com"
+      value: "athadiary21@gmail.com",
+      href: "mailto:athadiary21@gmail.com"
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+6282241590417",
+      value: "+62 82241590417",
       href: "tel:+6282241590417"
     },
     {
@@ -72,8 +72,7 @@ const Contact = () => {
 
   const socialLinks = [
     { icon: Instagram, href: "https://www.instagram.com/atha_diary21/", label: "@atha_diary21" },
-    { icon: Facebook, href: "https://web.facebook.com/AthaDiary21/?locale=id_ID", label: "AthaDiary21" },
-    { icon: Twitter, href: "https://www.threads.com/@athadiary21", label: "@athadiary21" }
+    { icon: Facebook, href: "https://web.facebook.com/AthaDiary21/?locale=id_ID", label: "AthaDiary21" }
   ];
 
   const photoPackages = [
