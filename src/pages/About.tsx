@@ -53,7 +53,7 @@ const About = () => {
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 lg:mb-6">
               Tentang
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                {" "}ChronoLens Pro
+                {" "}Atha Studio
               </span>
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 leading-relaxed">
