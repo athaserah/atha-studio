@@ -14,6 +14,7 @@ const Navbar = () => {
     { href: "/", label: "Beranda", icon: Home },
     { href: "/gallery", label: "Galeri Kece", icon: Image },
     { href: "/about", label: "Tentang Gue", icon: User },
+    { href: "/pricing", label: "Harga", icon: Mail },
     { href: "/contact", label: "Hit Me Up", icon: Mail },
   ];
 
