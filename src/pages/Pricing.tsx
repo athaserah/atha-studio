@@ -1,252 +1,319 @@
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Star, MessageCircle } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
-const pricingPackages = [
-  {
-    name: "Paket Basic",
-    price: "500K - 1JT",
-    description: "Cocok untuk foto wisuda, family photo, atau event kecil",
-    features: [
-      "Durasi 1-2 jam",
-      "1 fotografer profesional",
-      "50-100 foto edited",
-      "Hasil dalam 3-5 hari kerja",
-      "Free konsultasi",
-      "Online gallery"
-    ],
-    popular: false,
-    services: ["Wisuda", "Family Photo", "Event Kecil"]
-  },
-  {
-    name: "Paket Premium",
-    price: "1.5JT - 3JT",
-    description: "Untuk prewedding, birthday party, atau event bisnis",
-    features: [
-      "Durasi 3-4 jam",
-      "2 fotografer profesional",
-      "150-250 foto edited",
-      "Video cinematic 1-2 menit",
-      "Hasil dalam 7-10 hari kerja",
-      "Free konsultasi & mood board",
-      "Online gallery + USB",
-      "1x revisi minor"
-    ],
-    popular: true,
-    services: ["Prewedding", "Birthday", "Corporate Event"]
-  },
-  {
-    name: "Paket Wedding",
-    price: "3JT - 8JT",
-    description: "Dokumentasi lengkap hari spesial Anda",
-    features: [
-      "Full day coverage",
-      "3-4 fotografer & videografer",
-      "400+ foto edited",
-      "Video cinematic 5-10 menit",
-      "Same day edit",
-      "Hasil dalam 14 hari kerja",
-      "Album foto premium (opsional)",
-      "Free prewedding session",
-      "Unlimited revisi",
-      "Drone shot (tergantung lokasi)"
-    ],
-    popular: false,
-    services: ["Wedding", "Engagement", "Akad & Resepsi"]
-  },
-  {
-    name: "Website UMKM",
-    price: "2JT - 5JT",
-    description: "Website profesional untuk bisnis Anda",
-    features: [
-      "Desain custom & responsive",
-      "Domain & hosting 1 tahun",
-      "5-10 halaman",
-      "SEO optimization",
-      "Google Maps integration",
-      "WhatsApp integration",
-      "Admin panel",
-      "Free maintenance 3 bulan",
-      "Free konsultasi branding"
-    ],
-    popular: false,
-    services: ["Landing Page", "Company Profile", "E-Commerce"]
-  }
-];
-
-const addOns = [
-  "Foto cetak ukuran besar (mulai dari 100K)",
-  "Album foto premium (mulai dari 500K)",
-  "Video extended cut (300K/menit tambahan)",
-  "Makeup artist (mulai dari 500K)",
-  "Dekorasi tambahan (custom)",
-  "Drone coverage (500K - 1JT)"
-];
-
-const faqs = [
-  {
-    q: "Bagaimana cara booking?",
-    a: "Hubungi kami via WhatsApp atau form kontak. Setelah diskusi kebutuhan, kami akan kirim invoice dan setelah DP 30% dibayar, jadwal Anda terkonfirmasi."
-  },
-  {
-    q: "Berapa lama hasil foto jadi?",
-    a: "Tergantung paket: Basic (3-5 hari), Premium (7-10 hari), Wedding (14 hari). Untuk urgent bisa request fast editing dengan biaya tambahan."
-  },
-  {
-    q: "Apakah bisa request revisi?",
-    a: "Ya! Paket Basic: konsultasi sebelum sesi. Paket Premium: 1x revisi minor. Paket Wedding: unlimited revisi untuk memastikan Anda 100% puas."
-  },
-  {
-    q: "Apakah ada biaya transportasi?",
-    a: "Untuk wilayah Yogyakarta gratis. Luar kota akan ada biaya transport yang akan diinformasikan saat booking."
-  },
-  {
-    q: "Bagaimana sistem pembayaran?",
-    a: "DP 30% untuk booking konfirmasi, pelunasan sebelum/saat hari H. Terima transfer bank, e-wallet, atau cash."
-  },
-  {
-    q: "File mentah bisa didapat?",
-    a: "File mentah tidak kami berikan. Kami deliver hasil edited terbaik. Semua file edited Anda terima dalam resolusi tinggi untuk cetak."
-  }
-];
+import { Check, Camera, Code, MessageCircle } from "lucide-react";
+import { toast } from "sonner";
 
 const Pricing = () => {
-  const handleWhatsAppClick = (packageName: string) => {
-    const message = encodeURIComponent(
-      `Halo, saya tertarik dengan ${packageName}. Bisa info lebih lanjut?`
-    );
-    window.open(`https://wa.me/6281234567890?text=${message}`, "_blank");
+  const whatsappNumber = "6282241590417";
+  
+  const handleBooking = (serviceName: string, packageName: string, event?: React.MouseEvent) => {
+    try {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      const message = `Halo! Saya tertarik dengan jasa ${serviceName} - Paket ${packageName}. Bisa kasih info lebih lanjut?`;
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+      
+      const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        window.location.href = whatsappUrl;
+      } else {
+        toast.success('Membuka WhatsApp...', {
+          description: 'Anda akan diarahkan ke WhatsApp'
+        });
+      }
+    } catch (error) {
+      toast.error('Gagal membuka WhatsApp', {
+        description: 'Silakan coba lagi atau hubungi langsung ke 082241590417'
+      });
+    }
   };
+
+  const photographyPackages = [
+    {
+      name: "Basic",
+      price: "250.000",
+      description: "Perfect untuk konten media sosial dan portfolio pribadi",
+      features: [
+        "Durasi sesi 1 jam",
+        "1 lokasi pilihan",
+        "20 foto edited",
+        "Resolusi Full HD",
+        "File digital via Google Drive",
+        "Revisi minor 1x"
+      ],
+      gradient: "from-blue-500 to-cyan-500",
+      popular: false
+    },
+    {
+      name: "Standard",
+      price: "500.000",
+      description: "Cocok untuk acara kecil dan dokumentasi spesial",
+      features: [
+        "Durasi sesi 2 jam",
+        "2 lokasi pilihan",
+        "50 foto edited",
+        "Resolusi 4K",
+        "File digital + USB branded",
+        "Revisi 2x",
+        "Bonus 10 foto filter vintage"
+      ],
+      gradient: "from-purple-500 to-pink-500",
+      popular: true
+    },
+    {
+      name: "Premium",
+      price: "1.000.000",
+      description: "Paket lengkap untuk acara besar dan produksi profesional",
+      features: [
+        "Durasi sesi full day (8 jam)",
+        "Unlimited lokasi",
+        "100+ foto edited",
+        "Resolusi 6K RAW",
+        "File digital + USB + Photobook",
+        "Unlimited revisi",
+        "Behind the scenes video",
+        "2 photographer + assistant"
+      ],
+      gradient: "from-orange-500 to-red-500",
+      popular: false
+    }
+  ];
+
+  const websitePackages = [
+    {
+      name: "Landing Page",
+      price: "700.000",
+      description: "Website satu halaman yang powerful untuk bisnis kecil",
+      features: [
+        "Design modern & responsive",
+        "5 section konten",
+        "Contact form terintegrasi",
+        "Google Maps integration",
+        "SEO optimization basic",
+        "Mobile friendly",
+        "Free domain 1 tahun",
+        "Hosting 1 tahun",
+        "Maintenance 1 bulan"
+      ],
+      gradient: "from-green-500 to-emerald-500",
+      popular: false
+    },
+    {
+      name: "Company Profile",
+      price: "1.500.000",
+      description: "Website multi-halaman untuk company profile profesional",
+      features: [
+        "Design custom & responsive",
+        "5-7 halaman",
+        "Gallery foto/video",
+        "Blog/News section",
+        "WhatsApp integration",
+        "SEO optimization advanced",
+        "Social media integration",
+        "Free domain 1 tahun",
+        "Hosting 1 tahun",
+        "Maintenance 3 bulan",
+        "SSL Certificate"
+      ],
+      gradient: "from-indigo-500 to-purple-500",
+      popular: true
+    },
+    {
+      name: "Full Website",
+      price: "3.000.000",
+      description: "Website lengkap dengan fitur kompleks dan dashboard admin",
+      features: [
+        "Design custom premium",
+        "Unlimited halaman",
+        "Admin dashboard",
+        "User authentication",
+        "Database integration",
+        "E-commerce ready",
+        "Payment gateway",
+        "Advanced SEO",
+        "Analytics integration",
+        "Free domain 1 tahun",
+        "Hosting premium 1 tahun",
+        "Maintenance 6 bulan",
+        "Training & documentation"
+      ],
+      gradient: "from-pink-500 to-rose-500",
+      popular: false
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       
       <main className="container mx-auto px-4 py-8 mt-16">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Paket & Harga
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Pilih paket yang sesuai dengan kebutuhan Anda. Harga bisa disesuaikan dengan budget dan permintaan khusus.
-          </p>
-          <div className="mt-6 inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full">
-            <Star className="w-4 h-4 fill-current" />
-            <span className="text-sm font-semibold">Promo Bulan Ini: Diskon 15% untuk booking sebelum akhir bulan!</span>
+        {/* Photography Services */}
+        <div className="mb-16 lg:mb-24">
+          <div className="text-center mb-8 lg:mb-12 fade-in">
+            <div className="flex justify-center mb-4">
+              <Camera className="h-10 w-10 lg:h-12 lg:w-12 text-primary" />
+            </div>
+            <h1 className="text-3xl lg:text-5xl font-bold mb-4">
+              Jasa Photography
+              <span className="block bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Profesional & Kece!
+              </span>
+            </h1>
+            <p className="text-base lg:text-xl text-muted-foreground max-w-3xl mx-auto">
+              Abadikan momen spesial lu dengan hasil foto yang bikin semua orang ngiri! 
+              Dari sesi foto personal sampai dokumentasi acara besar, semua dikerjain dengan maksimal.
+            </p>
           </div>
-        </div>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {pricingPackages.map((pkg) => (
-            <Card 
-              key={pkg.name} 
-              className={`relative ${pkg.popular ? 'border-primary shadow-lg scale-105' : ''}`}
-            >
-              {pkg.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
-                    Paling Populer
-                  </span>
-                </div>
-              )}
-              
-              <CardHeader>
-                <CardTitle>{pkg.name}</CardTitle>
-                <CardDescription>{pkg.description}</CardDescription>
-                <div className="mt-4">
-                  <span className="text-3xl font-bold">{pkg.price}</span>
-                </div>
-              </CardHeader>
-
-              <CardContent>
-                <ul className="space-y-3">
-                  {pkg.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <div className="mt-6 pt-4 border-t">
-                  <p className="text-xs text-muted-foreground mb-2">Cocok untuk:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {pkg.services.map((service, idx) => (
-                      <span 
-                        key={idx}
-                        className="text-xs bg-muted px-2 py-1 rounded"
-                      >
-                        {service}
-                      </span>
-                    ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {photographyPackages.map((pkg, index) => (
+              <Card 
+                key={pkg.name}
+                className={`relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-glow ${
+                  pkg.popular ? 'border-primary border-2' : ''
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {pkg.popular && (
+                  <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-bold">
+                    PALING LAKU
                   </div>
-                </div>
-              </CardContent>
-
-              <CardFooter>
-                <Button 
-                  className="w-full"
-                  variant={pkg.popular ? "default" : "outline"}
-                  onClick={() => handleWhatsAppClick(pkg.name)}
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Tanya via WhatsApp
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-
-        {/* Add-ons */}
-        <section className="mb-16 bg-muted/30 rounded-lg p-8">
-          <h2 className="text-2xl font-bold mb-6 text-center">Tambahan (Add-ons)</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            {addOns.map((addon, idx) => (
-              <div key={idx} className="flex items-start gap-2">
-                <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-sm">{addon}</span>
-              </div>
+                )}
+                
+                <div className={`h-2 bg-gradient-to-r ${pkg.gradient}`} />
+                
+                <CardHeader>
+                  <CardTitle className="text-2xl">{pkg.name}</CardTitle>
+                  <CardDescription className="text-base">{pkg.description}</CardDescription>
+                  <div className="mt-4">
+                    <span className="text-4xl font-bold">Rp {pkg.price}</span>
+                  </div>
+                </CardHeader>
+                
+                <CardContent>
+                  <ul className="space-y-3">
+                    {pkg.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2">
+                        <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                
+                <CardFooter>
+                  <Button 
+                    className="w-full group"
+                    variant={pkg.popular ? "default" : "outline"}
+                    onClick={(e) => handleBooking("Photography", pkg.name, e)}
+                  >
+                    <MessageCircle className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
+                    Pesan via WhatsApp
+                  </Button>
+                </CardFooter>
+              </Card>
             ))}
           </div>
-        </section>
+        </div>
 
-        {/* FAQ */}
-        <section className="max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center">Pertanyaan Sering Ditanya</h2>
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, idx) => (
-              <AccordionItem key={idx} value={`item-${idx}`}>
-                <AccordionTrigger className="text-left">
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent>
-                  {faq.a}
-                </AccordionContent>
-              </AccordionItem>
+        {/* Website Builder Services */}
+        <div className="mb-16 lg:mb-24">
+          <div className="text-center mb-8 lg:mb-12 fade-in">
+            <div className="flex justify-center mb-4">
+              <Code className="h-10 w-10 lg:h-12 lg:w-12 text-accent" />
+            </div>
+            <h2 className="text-3xl lg:text-5xl font-bold mb-4">
+              Jasa Website Builder
+              <span className="block bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
+                Bikin Bisnis Naik Level!
+              </span>
+            </h2>
+            <p className="text-base lg:text-xl text-muted-foreground max-w-3xl mx-auto">
+              Website profesional yang bikin bisnis lu keliatan kredibel dan modern. 
+              Dari landing page simpel sampai website kompleks dengan dashboard admin, semua bisa gue handle!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {websitePackages.map((pkg, index) => (
+              <Card 
+                key={pkg.name}
+                className={`relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-glow ${
+                  pkg.popular ? 'border-accent border-2' : ''
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {pkg.popular && (
+                  <div className="absolute top-4 right-4 bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-bold">
+                    RECOMMENDED
+                  </div>
+                )}
+                
+                <div className={`h-2 bg-gradient-to-r ${pkg.gradient}`} />
+                
+                <CardHeader>
+                  <CardTitle className="text-2xl">{pkg.name}</CardTitle>
+                  <CardDescription className="text-base">{pkg.description}</CardDescription>
+                  <div className="mt-4">
+                    <span className="text-4xl font-bold">Rp {pkg.price}</span>
+                  </div>
+                </CardHeader>
+                
+                <CardContent>
+                  <ul className="space-y-3">
+                    {pkg.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2">
+                        <Check className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                
+                <CardFooter>
+                  <Button 
+                    className="w-full group"
+                    variant={pkg.popular ? "default" : "outline"}
+                    onClick={(e) => handleBooking("Website Builder", pkg.name, e)}
+                  >
+                    <MessageCircle className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
+                    Pesan via WhatsApp
+                  </Button>
+                </CardFooter>
+              </Card>
             ))}
-          </Accordion>
-        </section>
+          </div>
+        </div>
 
-        {/* CTA */}
-        <section className="text-center bg-primary/5 rounded-lg p-8">
-          <h2 className="text-2xl font-bold mb-4">Masih Bingung Pilih Paket?</h2>
-          <p className="text-muted-foreground mb-6">
-            Konsultasi gratis dengan kami untuk menentukan paket terbaik sesuai kebutuhan dan budget Anda
-          </p>
-          <Button size="lg" onClick={() => handleWhatsAppClick("Konsultasi Gratis")}>
-            <MessageCircle className="w-5 h-5 mr-2" />
-            Konsultasi Gratis Sekarang
-          </Button>
-        </section>
+        {/* CTA Section */}
+        <div className="text-center">
+          <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">
+            <CardHeader>
+              <CardTitle className="text-2xl lg:text-3xl">
+                Masih Bingung Pilih Paket?
+              </CardTitle>
+              <CardDescription className="text-base lg:text-lg">
+                Langsung aja chat gue di WhatsApp, kita diskusi paket mana yang paling cocok buat kebutuhan lu!
+              </CardDescription>
+            </CardHeader>
+            <CardFooter className="justify-center">
+              <Button 
+                size="lg"
+                variant="default"
+                className="group"
+                onClick={(e) => handleBooking("Konsultasi", "General", e)}
+              >
+                <MessageCircle className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
+                Chat di WhatsApp Sekarang!
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
       </main>
     </div>
   );
