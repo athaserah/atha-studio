@@ -10,6 +10,8 @@ import Gallery from "./pages/Gallery";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Pricing from "./pages/Pricing";
+import PromoWedding from "./pages/PromoWedding";
+import PaketWisuda from "./pages/PaketWisuda";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import AdminPanel from "./pages/AdminPanel";
@@ -30,6 +32,8 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/promo-wedding" element={<PromoWedding />} />
+            <Route path="/paket-wisuda" element={<PaketWisuda />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={
               <ProtectedRoute>

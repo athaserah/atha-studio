@@ -16,48 +16,99 @@ export type Database = {
     Tables: {
       bookings: {
         Row: {
+          booking_date: string | null
           budget_range: string
           created_at: string
           customer_email: string
           customer_name: string
           customer_phone: string
+          deposit_amount: number | null
           event_date: string | null
           event_location: string | null
           id: string
           message: string | null
+          notes: string | null
           package_type: string
+          payment_status: string | null
+          preferred_time: string | null
           service_type: string
           status: string | null
+          total_amount: number | null
           updated_at: string
         }
         Insert: {
+          booking_date?: string | null
           budget_range: string
           created_at?: string
           customer_email: string
           customer_name: string
           customer_phone: string
+          deposit_amount?: number | null
           event_date?: string | null
           event_location?: string | null
           id?: string
           message?: string | null
+          notes?: string | null
           package_type: string
+          payment_status?: string | null
+          preferred_time?: string | null
           service_type: string
           status?: string | null
+          total_amount?: number | null
           updated_at?: string
         }
         Update: {
+          booking_date?: string | null
           budget_range?: string
           created_at?: string
           customer_email?: string
           customer_name?: string
           customer_phone?: string
+          deposit_amount?: number | null
           event_date?: string | null
           event_location?: string | null
           id?: string
           message?: string | null
+          notes?: string | null
           package_type?: string
+          payment_status?: string | null
+          preferred_time?: string | null
           service_type?: string
           status?: string | null
+          total_amount?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean
+          name: string | null
+          source: string | null
+          subscribed_at: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          is_active?: boolean
+          name?: string | null
+          source?: string | null
+          subscribed_at?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean
+          name?: string | null
+          source?: string | null
+          subscribed_at?: string
           updated_at?: string
         }
         Relationships: []
