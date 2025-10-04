@@ -3,6 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Camera, Code, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const Pricing = () => {
   const whatsappNumber = "6282241590417";
@@ -291,7 +297,7 @@ const Pricing = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="text-center">
+        <div className="mb-16 lg:mb-24 text-center">
           <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">
             <CardHeader>
               <CardTitle className="text-2xl lg:text-3xl">
@@ -314,6 +320,90 @@ const Pricing = () => {
             </CardFooter>
           </Card>
         </div>
+
+        {/* FAQ Section */}
+        <section className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-8 text-center">Pertanyaan Sering Ditanya</h2>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="text-left">
+                Bagaimana cara booking?
+              </AccordionTrigger>
+              <AccordionContent>
+                Hubungi kami via WhatsApp atau form kontak. Setelah diskusi kebutuhan, kami akan kirim invoice dan setelah DP 30% dibayar, jadwal Anda terkonfirmasi.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="text-left">
+                Berapa lama hasil foto/website jadi?
+              </AccordionTrigger>
+              <AccordionContent>
+                <strong>Photography:</strong> Basic (3-5 hari), Standard (7 hari), Premium (14 hari).<br/>
+                <strong>Website:</strong> Landing Page (7-10 hari), Company Profile (14-21 hari), Full Website (30-45 hari).<br/>
+                Untuk urgent bisa request fast delivery dengan biaya tambahan.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-3">
+              <AccordionTrigger className="text-left">
+                Apakah bisa request revisi?
+              </AccordionTrigger>
+              <AccordionContent>
+                Ya! Photography Basic: 1x revisi minor, Standard: 2x revisi, Premium: unlimited revisi.<br/>
+                Website semua paket include revisi hingga Anda puas dengan hasilnya.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-4">
+              <AccordionTrigger className="text-left">
+                Apakah ada biaya transportasi/domain/hosting?
+              </AccordionTrigger>
+              <AccordionContent>
+                <strong>Photography:</strong> Untuk wilayah Yogyakarta gratis. Luar kota ada biaya transport yang akan diinformasikan saat booking.<br/>
+                <strong>Website:</strong> Semua paket sudah include domain dan hosting untuk 1 tahun pertama. Tahun berikutnya biaya renewal sekitar 200K-500K/tahun tergantung paket.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-5">
+              <AccordionTrigger className="text-left">
+                Bagaimana sistem pembayaran?
+              </AccordionTrigger>
+              <AccordionContent>
+                DP 30% untuk booking konfirmasi, pelunasan sebelum/saat hari H (photography) atau sebelum launching (website). Terima transfer bank, e-wallet, atau cash.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-6">
+              <AccordionTrigger className="text-left">
+                File mentah/source code bisa didapat?
+              </AccordionTrigger>
+              <AccordionContent>
+                <strong>Photography:</strong> File mentah tidak kami berikan. Semua file edited Anda terima dalam resolusi tinggi untuk cetak.<br/>
+                <strong>Website:</strong> Source code bisa diberikan dengan biaya tambahan atau upgrade ke paket yang lebih tinggi.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-7">
+              <AccordionTrigger className="text-left">
+                Apakah ada garansi?
+              </AccordionTrigger>
+              <AccordionContent>
+                <strong>Photography:</strong> Garansi kepuasan 100%. Jika hasil tidak memuaskan, kami akan re-shoot gratis (terms & conditions apply).<br/>
+                <strong>Website:</strong> Garansi bug-free selama masa maintenance. Setelah itu bisa extend maintenance dengan biaya bulanan.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-8">
+              <AccordionTrigger className="text-left">
+                Bisa custom paket sesuai budget?
+              </AccordionTrigger>
+              <AccordionContent>
+                Tentu! Harga yang tertera adalah range standard. Kita bisa diskusi dan sesuaikan paket dengan budget dan kebutuhan Anda. Chat langsung via WhatsApp untuk konsultasi gratis.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </section>
       </main>
     </div>
   );
