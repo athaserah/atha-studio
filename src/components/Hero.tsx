@@ -101,37 +101,7 @@ const Hero = () => {
 
             {/* Right Content - Services Preview (Hidden on mobile, shown on desktop) */}
             <div className="hidden lg:block slide-up">
-              <div className="grid grid-cols-1 gap-6">
-                <div className="group p-6 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-glow">
-                  <div className="flex items-start space-x-4">
-                    <div className="p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                      <Camera className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Jasa Fotoan Kece</h3>
-                      <p className="text-muted-foreground text-sm mb-3">
-                        Sesi foto profesional yang bikin lu auto percaya diri
-                      </p>
-                      <div className="text-primary font-semibold">Mulai Rp 250.000</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="group p-6 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-glow">
-                  <div className="flex items-start space-x-4">
-                    <div className="p-3 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors duration-300">
-                      <Award className="h-6 w-6 text-accent" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Bikin Website Kece</h3>
-                      <p className="text-muted-foreground text-sm mb-3">
-                        Website lengkap yang bikin bisnis lu naik level
-                      </p>
-                      <div className="text-accent font-semibold">Mulai Rp 700.000</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>
