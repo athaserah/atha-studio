@@ -66,7 +66,7 @@ const About = () => {
               </span>
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 leading-relaxed text-left">
-              Gue Arki. Suka banget mainin pixel di website biar cakep, dan seneng banget nangkep momen di sekitar biar abadi. Udah lama sih gue ngulik-ngulik beginian, jadi santai aja, gue jamin hasilnya nggak bakal ngecewain! Yuk, gabung bareng bikin project keren atau nangkep momen epic! Lo butuh website keren? Atau butuh foto yang vibey? Pas banget, lo di tempat yang tepat!
+              Gue Arki. Seneng banget nangkep momen di sekitar biar abadi. Udah lama sih gue ngulik-ngulik fotografi, jadi santai aja, gue jamin hasilnya nggak bakal ngecewain! Yuk, gabung bareng buat nangkep momen epic! Lo butuh foto yang vibey? Pas banget, lo di tempat yang tepat!
             </p>
             
             <div className="space-y-4 mb-8">
@@ -208,7 +208,7 @@ const About = () => {
             Siap Bikin Sesuatu yang Kece?
           </h2>
           <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 max-w-2xl mx-auto">
-            Yuk collab bareng buat abadikan momen spesial lu dan wujudin visi kreatif yang kece!
+            Yuk collab bareng buat abadikan momen spesial lu!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
@@ -218,13 +218,6 @@ const About = () => {
             >
               <Camera className="h-5 w-5" />
               Gas Booking Sesi Foto
-            </Button>
-            <Button 
-              variant="premium" 
-              size="lg"
-              onClick={() => handleWhatsApp("Halo! Saya mau minta quote untuk website nih!")}
-            >
-              Minta Quote Website
             </Button>
           </div>
         </div>

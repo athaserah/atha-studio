@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Camera, Code, MessageCircle } from "lucide-react";
+import { Check, Camera, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import {
   Accordion,
@@ -90,68 +90,6 @@ const Pricing = () => {
     }
   ];
 
-  const websitePackages = [
-    {
-      name: "Landing Page",
-      price: "700.000",
-      description: "Website satu halaman yang powerful untuk bisnis kecil",
-      features: [
-        "Design modern & responsive",
-        "5 section konten",
-        "Contact form terintegrasi",
-        "Google Maps integration",
-        "SEO optimization basic",
-        "Mobile friendly",
-        "Free domain 1 tahun",
-        "Hosting 1 tahun",
-        "Maintenance 1 bulan"
-      ],
-      gradient: "from-green-500 to-emerald-500",
-      popular: false
-    },
-    {
-      name: "Company Profile",
-      price: "1.500.000",
-      description: "Website multi-halaman untuk company profile profesional",
-      features: [
-        "Design custom & responsive",
-        "5-7 halaman",
-        "Gallery foto/video",
-        "Blog/News section",
-        "WhatsApp integration",
-        "SEO optimization advanced",
-        "Social media integration",
-        "Free domain 1 tahun",
-        "Hosting 1 tahun",
-        "Maintenance 3 bulan",
-        "SSL Certificate"
-      ],
-      gradient: "from-indigo-500 to-purple-500",
-      popular: true
-    },
-    {
-      name: "Full Website",
-      price: "3.000.000",
-      description: "Website lengkap dengan fitur kompleks dan dashboard admin",
-      features: [
-        "Design custom premium",
-        "Unlimited halaman",
-        "Admin dashboard",
-        "User authentication",
-        "Database integration",
-        "E-commerce ready",
-        "Payment gateway",
-        "Advanced SEO",
-        "Analytics integration",
-        "Free domain 1 tahun",
-        "Hosting premium 1 tahun",
-        "Maintenance 6 bulan",
-        "Training & documentation"
-      ],
-      gradient: "from-pink-500 to-rose-500",
-      popular: false
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -227,75 +165,6 @@ const Pricing = () => {
           </div>
         </div>
 
-        {/* Website Builder Services */}
-        <div className="mb-16 lg:mb-24">
-          <div className="text-center mb-8 lg:mb-12 fade-in">
-            <div className="flex justify-center mb-4">
-              <Code className="h-10 w-10 lg:h-12 lg:w-12 text-accent" />
-            </div>
-            <h2 className="text-3xl lg:text-5xl font-bold mb-4">
-              Jasa Website Builder
-              <span className="block bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
-                Bikin Bisnis Naik Level!
-              </span>
-            </h2>
-            <p className="text-base lg:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Website profesional yang bikin bisnis lu keliatan kredibel dan modern. 
-              Dari landing page simpel sampai website kompleks dengan dashboard admin, semua bisa gue handle!
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {websitePackages.map((pkg, index) => (
-              <Card 
-                key={pkg.name}
-                className={`relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-glow ${
-                  pkg.popular ? 'border-accent border-2' : ''
-                }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {pkg.popular && (
-                  <div className="absolute top-4 right-4 bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-bold">
-                    RECOMMENDED
-                  </div>
-                )}
-                
-                <div className={`h-2 bg-gradient-to-r ${pkg.gradient}`} />
-                
-                <CardHeader>
-                  <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                  <CardDescription className="text-base">{pkg.description}</CardDescription>
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold">Rp {pkg.price}</span>
-                  </div>
-                </CardHeader>
-                
-                <CardContent>
-                  <ul className="space-y-3">
-                    {pkg.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-                
-                <CardFooter>
-                  <Button 
-                    className="w-full group"
-                    variant={pkg.popular ? "default" : "outline"}
-                    onClick={(e) => handleBooking("Website Builder", pkg.name, e)}
-                  >
-                    <MessageCircle className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                    Pesan via WhatsApp
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </div>
-
         {/* CTA Section */}
         <div className="mb-16 lg:mb-24 text-center">
           <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">
@@ -336,12 +205,10 @@ const Pricing = () => {
 
             <AccordionItem value="item-2">
               <AccordionTrigger className="text-left">
-                Berapa lama hasil foto/website jadi?
+                Berapa lama hasil foto jadi?
               </AccordionTrigger>
               <AccordionContent>
-                <strong>Photography:</strong> Basic (3-5 hari), Standard (7 hari), Premium (14 hari).<br/>
-                <strong>Website:</strong> Landing Page (7-10 hari), Company Profile (14-21 hari), Full Website (30-45 hari).<br/>
-                Untuk urgent bisa request fast delivery dengan biaya tambahan.
+                Basic (3-5 hari), Standard (7 hari), Premium (14 hari). Untuk urgent bisa request fast delivery dengan biaya tambahan.
               </AccordionContent>
             </AccordionItem>
 
@@ -350,18 +217,16 @@ const Pricing = () => {
                 Apakah bisa request revisi?
               </AccordionTrigger>
               <AccordionContent>
-                Ya! Photography Basic: 1x revisi minor, Standard: 2x revisi, Premium: unlimited revisi.<br/>
-                Website semua paket include revisi hingga Anda puas dengan hasilnya.
+                Ya! Basic: 1x revisi minor, Standard: 2x revisi, Premium: unlimited revisi.
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="item-4">
               <AccordionTrigger className="text-left">
-                Apakah ada biaya transportasi/domain/hosting?
+                Apakah ada biaya transportasi?
               </AccordionTrigger>
               <AccordionContent>
-                <strong>Photography:</strong> Untuk wilayah Yogyakarta gratis. Luar kota ada biaya transport yang akan diinformasikan saat booking.<br/>
-                <strong>Website:</strong> Semua paket sudah include domain dan hosting untuk 1 tahun pertama. Tahun berikutnya biaya renewal sekitar 200K-500K/tahun tergantung paket.
+                Untuk wilayah Yogyakarta gratis. Luar kota ada biaya transport yang akan diinformasikan saat booking.
               </AccordionContent>
             </AccordionItem>
 
@@ -370,17 +235,16 @@ const Pricing = () => {
                 Bagaimana sistem pembayaran?
               </AccordionTrigger>
               <AccordionContent>
-                DP 30% untuk booking konfirmasi, pelunasan sebelum/saat hari H (photography) atau sebelum launching (website). Terima transfer bank, e-wallet, atau cash.
+                DP 30% untuk booking konfirmasi, pelunasan sebelum/saat hari H. Terima transfer bank, e-wallet, atau cash.
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="item-6">
               <AccordionTrigger className="text-left">
-                File mentah/source code bisa didapat?
+                File mentah bisa didapat?
               </AccordionTrigger>
               <AccordionContent>
-                <strong>Photography:</strong> File mentah tidak kami berikan. Semua file edited Anda terima dalam resolusi tinggi untuk cetak.<br/>
-                <strong>Website:</strong> Source code bisa diberikan dengan biaya tambahan atau upgrade ke paket yang lebih tinggi.
+                File mentah tidak kami berikan. Semua file edited Anda terima dalam resolusi tinggi untuk cetak.
               </AccordionContent>
             </AccordionItem>
 
@@ -389,8 +253,7 @@ const Pricing = () => {
                 Apakah ada garansi?
               </AccordionTrigger>
               <AccordionContent>
-                <strong>Photography:</strong> Garansi kepuasan 100%. Jika hasil tidak memuaskan, kami akan re-shoot gratis (terms & conditions apply).<br/>
-                <strong>Website:</strong> Garansi bug-free selama masa maintenance. Setelah itu bisa extend maintenance dengan biaya bulanan.
+                Garansi kepuasan 100%. Jika hasil tidak memuaskan, kami akan re-shoot gratis (terms & conditions apply).
               </AccordionContent>
             </AccordionItem>
 

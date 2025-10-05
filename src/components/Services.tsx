@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Camera, Code, Check, MessageCircle } from "lucide-react";
+import { Camera, Check, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 
@@ -90,69 +90,6 @@ const Services = () => {
     }
   ];
 
-  const websitePackages = [
-    {
-      name: "Landing Page",
-      price: "700.000",
-      description: "Website satu halaman yang powerful untuk bisnis kecil",
-      features: [
-        "Design modern & responsive",
-        "5 section konten",
-        "Contact form terintegrasi",
-        "Google Maps integration",
-        "SEO optimization basic",
-        "Mobile friendly",
-        "Free domain 1 tahun",
-        "Hosting 1 tahun",
-        "Maintenance 1 bulan"
-      ],
-      gradient: "from-green-500 to-emerald-500",
-      popular: false
-    },
-    {
-      name: "Company Profile",
-      price: "1.500.000",
-      description: "Website multi-halaman untuk company profile profesional",
-      features: [
-        "Design custom & responsive",
-        "5-7 halaman",
-        "Gallery foto/video",
-        "Blog/News section",
-        "WhatsApp integration",
-        "SEO optimization advanced",
-        "Social media integration",
-        "Free domain 1 tahun",
-        "Hosting 1 tahun",
-        "Maintenance 3 bulan",
-        "SSL Certificate"
-      ],
-      gradient: "from-indigo-500 to-purple-500",
-      popular: true
-    },
-    {
-      name: "Full Website",
-      price: "3.000.000",
-      description: "Website lengkap dengan fitur kompleks dan dashboard admin",
-      features: [
-        "Design custom premium",
-        "Unlimited halaman",
-        "Admin dashboard",
-        "User authentication",
-        "Database integration",
-        "E-commerce ready",
-        "Payment gateway",
-        "Advanced SEO",
-        "Analytics integration",
-        "Free domain 1 tahun",
-        "Hosting premium 1 tahun",
-        "Maintenance 6 bulan",
-        "Training & documentation"
-      ],
-      gradient: "from-pink-500 to-rose-500",
-      popular: false
-    }
-  ];
-
   return (
     <section className="py-12 lg:py-20 bg-gradient-to-b from-background to-secondary/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -215,75 +152,6 @@ const Services = () => {
                     className="w-full group"
                     variant={pkg.popular ? "default" : "outline"}
                     onClick={(e) => handleBooking("Photography", pkg.name, e)}
-                  >
-                    <MessageCircle className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                    Pesan via WhatsApp
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Website Builder Services */}
-        <div>
-          <div className="text-center mb-8 lg:mb-12 fade-in">
-            <div className="flex justify-center mb-4">
-              <Code className="h-10 w-10 lg:h-12 lg:w-12 text-accent" />
-            </div>
-            <h2 className="text-3xl lg:text-5xl font-bold mb-4">
-              Jasa Website Builder
-              <span className="block bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
-                Bikin Bisnis Naik Level!
-              </span>
-            </h2>
-            <p className="text-base lg:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Website profesional yang bikin bisnis lu keliatan kredibel dan modern. 
-              Dari landing page simpel sampai website kompleks dengan dashboard admin, semua bisa gue handle!
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {websitePackages.map((pkg, index) => (
-              <Card 
-                key={pkg.name}
-                className={`relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-glow ${
-                  pkg.popular ? 'border-accent border-2' : ''
-                }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {pkg.popular && (
-                  <div className="absolute top-4 right-4 bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-bold">
-                    RECOMMENDED
-                  </div>
-                )}
-                
-                <div className={`h-2 bg-gradient-to-r ${pkg.gradient}`} />
-                
-                <CardHeader>
-                  <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                  <CardDescription className="text-base">{pkg.description}</CardDescription>
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold">Rp {pkg.price}</span>
-                  </div>
-                </CardHeader>
-                
-                <CardContent>
-                  <ul className="space-y-3">
-                    {pkg.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-                
-                <CardFooter>
-                  <Button 
-                    className="w-full group"
-                    variant={pkg.popular ? "default" : "outline"}
-                    onClick={(e) => handleBooking("Website Builder", pkg.name, e)}
                   >
                     <MessageCircle className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
                     Pesan via WhatsApp
