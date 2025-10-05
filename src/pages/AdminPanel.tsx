@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useToast } from '@/hooks/use-toast';
 import { Trash2, Edit, Plus, Users, BookOpen, Image } from 'lucide-react';
 import Navbar from '@/components/Navbar';
+import AdminAboutManager from '@/components/AdminAboutManager';
 
 interface Profile {
   id: string;
@@ -352,7 +353,7 @@ export default function AdminPanel() {
       </div>
 
       <Tabs defaultValue="bookings" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="bookings" className="flex items-center gap-2">
             <BookOpen className="h-4 w-4" />
             Pesanan ({bookings.length})
@@ -360,6 +361,10 @@ export default function AdminPanel() {
           <TabsTrigger value="photos" className="flex items-center gap-2">
             <Image className="h-4 w-4" />
             Foto ({photos.length})
+          </TabsTrigger>
+          <TabsTrigger value="about" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            About
           </TabsTrigger>
           <TabsTrigger value="users" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
@@ -581,6 +586,10 @@ export default function AdminPanel() {
               </Table>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="about">
+          <AdminAboutManager />
         </TabsContent>
       </Tabs>
       </div>

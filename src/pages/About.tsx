@@ -1,11 +1,79 @@
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Award, Users, Clock, Star, Heart, Palette, Zap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Achievement {
+  id: string;
+  icon_name: string;
+  value: string;
+  label: string;
+  sort_order: number;
+}
+
+interface Skill {
+  id: string;
+  skill_name: string;
+  percentage: number;
+  sort_order: number;
+}
+
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  specialties: string[];
+  sort_order: number;
+}
+
+interface Content {
+  section_key: string;
+  title: string | null;
+  subtitle: string | null;
+  description: string | null;
+  button_text: string | null;
+}
 
 const About = () => {
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [heroContent, setHeroContent] = useState<Content | null>(null);
+  const [ctaContent, setCtaContent] = useState<Content | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAllData();
+  }, []);
+
+  const fetchAllData = async () => {
+    try {
+      const [achievementsRes, skillsRes, servicesRes, contentRes] = await Promise.all([
+        supabase.from('about_achievements').select('*').order('sort_order'),
+        supabase.from('about_skills').select('*').order('sort_order'),
+        supabase.from('about_services').select('*').order('sort_order'),
+        supabase.from('about_content').select('*')
+      ]);
+
+      if (achievementsRes.data) setAchievements(achievementsRes.data);
+      if (skillsRes.data) setSkills(skillsRes.data);
+      if (servicesRes.data) setServices(servicesRes.data);
+      if (contentRes.data) {
+        setHeroContent(contentRes.data.find(c => c.section_key === 'hero') || null);
+        setCtaContent(contentRes.data.find(c => c.section_key === 'cta') || null);
+      }
+    } catch (error) {
+      console.error('Error fetching about data:', error);
+      toast.error('Gagal memuat data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleWhatsApp = (message: string) => {
     const phoneNumber = "6282241590417";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
@@ -14,42 +82,20 @@ const About = () => {
     window.open(whatsappUrl, '_blank');
   };
 
-  const skills = [
-    { name: "Portrait Photography", level: 95 },
-    { name: "Landscape Photography", level: 90 },
-    { name: "Wedding Photography", level: 92 },
-    { name: "Product Photography", level: 88 },
-    { name: "Photo Editing", level: 96 },
-    { name: "Studio Lighting", level: 89 },
-  ];
+  const iconMap: { [key: string]: any } = {
+    Award, Users, Camera, Clock, Star, Heart, Palette, Zap
+  };
 
-  const services = [
-    {
-      icon: Camera,
-      title: "Professional Photography",
-      description: "Capturing life's precious moments with artistic vision and technical excellence.",
-      specialties: ["Portraits", "Weddings", "Events", "Commercial"]
-    },
-    {
-      icon: Palette,
-      title: "Photo Enhancement",
-      description: "Advanced editing and retouching services to make your photos truly stunning.",
-      specialties: ["Color Grading", "Retouching", "Artistic Effects", "Restoration"]
-    },
-    {
-      icon: Zap,
-      title: "Automation Tools",
-      description: "Cutting-edge tools for watermarking, batch processing, and AI enhancement.",
-      specialties: ["Watermarking", "Batch Resize", "AI Enhancement", "Quality Control"]
-    },
-  ];
-
-  const achievements = [
-    { icon: Award, value: "25+", label: "Award Kece" },
-    { icon: Users, value: "500+", label: "Client Bahagia" },
-    { icon: Camera, value: "10K+", label: "Foto Udah Diabadiin" },
-    { icon: Clock, value: "5+", label: "Tahun Pengalaman" },
-  ];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Memuat data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -60,13 +106,16 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16 lg:mb-20">
           <div className="fade-in">
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 lg:mb-6">
-              Tentang
+              {heroContent?.title || 'Tentang'}
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 {" "}Atha Studio
               </span>
             </h1>
+            {heroContent?.subtitle && (
+              <p className="text-xl font-semibold text-primary mb-4">{heroContent.subtitle}</p>
+            )}
             <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 leading-relaxed text-left">
-              Gue Arki. Seneng banget nangkep momen di sekitar biar abadi. Udah lama sih gue ngulik-ngulik fotografi, jadi santai aja, gue jamin hasilnya nggak bakal ngecewain! Yuk, gabung bareng buat nangkep momen epic! Lo butuh foto yang vibey? Pas banget, lo di tempat yang tepat!
+              {heroContent?.description || 'Memuat konten...'}
             </p>
             
             <div className="space-y-4 mb-8">
@@ -123,9 +172,9 @@ const About = () => {
         {/* Achievements */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-16 lg:mb-20 fade-in">
           {achievements.map((achievement, index) => {
-            const Icon = achievement.icon;
+            const Icon = iconMap[achievement.icon_name] || Camera;
             return (
-              <Card key={achievement.label} className="text-center hover:shadow-glow transition-all duration-300 hover:scale-105">
+              <Card key={achievement.id} className="text-center hover:shadow-glow transition-all duration-300 hover:scale-105">
                 <CardContent className="p-6">
                   <Icon className="h-12 w-12 text-primary mx-auto mb-4" />
                   <div className="text-3xl font-bold text-foreground mb-2">{achievement.value}</div>
@@ -143,16 +192,16 @@ const About = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
             {skills.map((skill, index) => (
-              <div key={skill.name} className="space-y-2">
+              <div key={skill.id} className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="font-medium">{skill.name}</span>
-                  <span className="text-primary font-semibold">{skill.level}%</span>
+                  <span className="font-medium">{skill.skill_name}</span>
+                  <span className="text-primary font-semibold">{skill.percentage}%</span>
                 </div>
                 <div className="w-full bg-secondary rounded-full h-2">
                   <div
                     className="bg-gradient-to-r from-primary to-accent h-2 rounded-full transition-all duration-1000 ease-out"
                     style={{ 
-                      width: `${skill.level}%`,
+                      width: `${skill.percentage}%`,
                       animationDelay: `${index * 0.2}s`
                     }}
                   />
@@ -169,10 +218,10 @@ const About = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {services.map((service, index) => {
-              const Icon = service.icon;
+              const Icon = Camera; // Default icon untuk services
               return (
                 <Card 
-                  key={service.title} 
+                  key={service.id} 
                   className="group hover:shadow-glow transition-all duration-300 hover:scale-105"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
@@ -203,24 +252,26 @@ const About = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-16 lg:mt-20 p-6 lg:p-12 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl">
-          <h2 className="text-2xl lg:text-3xl font-bold mb-4">
-            Siap Bikin Sesuatu yang Kece?
-          </h2>
-          <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 max-w-2xl mx-auto">
-            Yuk collab bareng buat abadikan momen spesial lu!
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              variant="hero" 
-              size="lg"
-              onClick={() => handleWhatsApp("Halo! Saya mau booking sesi foto nih!")}
-            >
-              <Camera className="h-5 w-5" />
-              Gas Booking Sesi Foto
-            </Button>
+        {ctaContent && (
+          <div className="text-center mt-16 lg:mt-20 p-6 lg:p-12 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl">
+            <h2 className="text-2xl lg:text-3xl font-bold mb-4">
+              {ctaContent.title || 'Siap Bikin Sesuatu yang Kece?'}
+            </h2>
+            <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 max-w-2xl mx-auto">
+              {ctaContent.description || 'Yuk collab bareng buat abadikan momen spesial lu!'}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                variant="hero" 
+                size="lg"
+                onClick={() => handleWhatsApp("Halo! Saya mau booking sesi foto nih!")}
+              >
+                <Camera className="h-5 w-5" />
+                {ctaContent.button_text || 'Gas Booking Sesi Foto'}
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
         </div>
       </div>
     </div>
