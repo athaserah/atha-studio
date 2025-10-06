@@ -200,6 +200,36 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_stats: {
+        Row: {
+          created_at: string
+          icon_name: string
+          id: string
+          label: string
+          sort_order: number
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          icon_name: string
+          id?: string
+          label: string
+          sort_order?: number
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          created_at?: string
+          icon_name?: string
+          id?: string
+          label?: string
+          sort_order?: number
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           created_at: string

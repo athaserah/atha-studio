@@ -2,24 +2,46 @@ import { Button } from "@/components/ui/button";
 import { Camera, Star, Award, Users, Image, User, Mail, Settings, Grid3X3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-photography.jpg";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import * as LucideIcons from "lucide-react";
+
+interface HeroStat {
+  id: string;
+  icon_name: string;
+  value: string;
+  label: string;
+  sort_order: number;
+}
+
 const Hero = () => {
-  const stats = [{
-    icon: Camera,
-    label: "Foto Udah Diabadiin",
-    value: "10K+"
-  }, {
-    icon: Users,
-    label: "Client Bahagia",
-    value: "500+"
-  }, {
-    icon: Award,
-    label: "Award Kece",
-    value: "25+"
-  }, {
-    icon: Star,
-    label: "Rating Sultan",
-    value: "4.9"
-  }];
+  const [heroStats, setHeroStats] = useState<HeroStat[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('hero_stats')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+      setHeroStats(data || []);
+    } catch (error) {
+      console.error('Error fetching hero stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getIcon = (iconName: string) => {
+    const Icon = (LucideIcons as any)[iconName];
+    return Icon ? Icon : Camera;
+  };
   const menuItems = [{
     href: "/gallery",
     label: "Galeri Kece",
@@ -84,18 +106,22 @@ const Hero = () => {
 
               {/* Stats - Mobile Optimized */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                {stats.map((stat, index) => {
-                const Icon = stat.icon;
-                return <div key={stat.label} className="text-center group hover:scale-105 transition-transform duration-300 p-3 lg:p-0" style={{
-                  animationDelay: `${index * 0.1}s`
-                }}>
+                {loading ? (
+                  <div className="col-span-2 lg:col-span-4 text-center text-muted-foreground">Loading...</div>
+                ) : (
+                  heroStats.map((stat, index) => {
+                    const Icon = getIcon(stat.icon_name);
+                    return <div key={stat.id} className="text-center group hover:scale-105 transition-transform duration-300 p-3 lg:p-0" style={{
+                      animationDelay: `${index * 0.1}s`
+                    }}>
                       <div className="flex justify-center mb-2">
                         <Icon className="h-6 w-6 lg:h-8 lg:w-8 text-primary group-hover:text-accent transition-colors duration-300" />
                       </div>
                       <div className="text-xl lg:text-2xl font-bold text-foreground">{stat.value}</div>
                       <div className="text-xs lg:text-sm text-muted-foreground">{stat.label}</div>
                     </div>;
-              })}
+                  })
+                )}
               </div>
             </div>
 
