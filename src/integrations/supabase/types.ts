@@ -200,6 +200,86 @@ export type Database = {
         }
         Relationships: []
       }
+      client_galleries: {
+        Row: {
+          booking_id: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_galleries_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gallery_photos: {
+        Row: {
+          created_at: string | null
+          gallery_id: string
+          id: string
+          is_downloadable: boolean | null
+          photo_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          gallery_id: string
+          id?: string
+          is_downloadable?: boolean | null
+          photo_id: string
+        }
+        Update: {
+          created_at?: string | null
+          gallery_id?: string
+          id?: string
+          is_downloadable?: boolean | null
+          photo_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gallery_photos_gallery_id_fkey"
+            columns: ["gallery_id"]
+            isOneToOne: false
+            referencedRelation: "client_galleries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gallery_photos_photo_id_fkey"
+            columns: ["photo_id"]
+            isOneToOne: false
+            referencedRelation: "photos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hero_stats: {
         Row: {
           created_at: string
@@ -229,6 +309,97 @@ export type Database = {
           value?: string
         }
         Relationships: []
+      }
+      invoice_items: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          invoice_id: string
+          quantity: number | null
+          total: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          invoice_id: string
+          quantity?: number | null
+          total: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          invoice_id?: string
+          quantity?: number | null
+          total?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          amount: number
+          booking_id: string
+          created_at: string | null
+          due_date: string | null
+          id: string
+          invoice_number: string
+          issued_date: string | null
+          notes: string | null
+          paid_amount: number | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          booking_id: string
+          created_at?: string | null
+          due_date?: string | null
+          id?: string
+          invoice_number: string
+          issued_date?: string | null
+          notes?: string | null
+          paid_amount?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          booking_id?: string
+          created_at?: string | null
+          due_date?: string | null
+          id?: string
+          invoice_number?: string
+          issued_date?: string | null
+          notes?: string | null
+          paid_amount?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       newsletter_subscribers: {
         Row: {
@@ -314,6 +485,33 @@ export type Database = {
         }
         Relationships: []
       }
+      price_calculator_logs: {
+        Row: {
+          created_at: string | null
+          id: string
+          selections: Json
+          service_type: string
+          total_price: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          selections: Json
+          service_type: string
+          total_price: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          selections?: Json
+          service_type?: string
+          total_price?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -344,6 +542,33 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      quiz_results: {
+        Row: {
+          answers: Json
+          created_at: string | null
+          email: string | null
+          id: string
+          recommended_package: string
+          user_id: string | null
+        }
+        Insert: {
+          answers: Json
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          recommended_package: string
+          user_id?: string | null
+        }
+        Update: {
+          answers?: Json
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          recommended_package?: string
+          user_id?: string | null
         }
         Relationships: []
       }

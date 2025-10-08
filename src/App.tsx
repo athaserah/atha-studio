@@ -12,6 +12,8 @@ import Contact from "./pages/Contact";
 import Pricing from "./pages/Pricing";
 import PromoWedding from "./pages/PromoWedding";
 import PaketWisuda from "./pages/PaketWisuda";
+import PriceCalculator from "./pages/PriceCalculator";
+import PackageQuiz from "./pages/PackageQuiz";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import AdminPanel from "./pages/AdminPanel";
@@ -34,6 +36,8 @@ const App = () => (
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/promo-wedding" element={<PromoWedding />} />
             <Route path="/paket-wisuda" element={<PaketWisuda />} />
+            <Route path="/price-calculator" element={<PriceCalculator />} />
+            <Route path="/package-quiz" element={<PackageQuiz />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={
               <ProtectedRoute>

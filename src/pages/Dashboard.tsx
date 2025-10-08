@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Camera, Globe, User, Settings } from 'lucide-react';
 import Navbar from '@/components/Navbar';
+import { Download, FileText } from 'lucide-react';
 
 interface Profile {
   id: string;
@@ -30,12 +31,32 @@ interface Booking {
   created_at: string;
 }
 
+interface Invoice {
+  id: string;
+  invoice_number: string;
+  amount: number;
+  paid_amount: number;
+  status: string;
+  due_date: string;
+  issued_date: string;
+  booking_id: string;
+}
+
+interface Gallery {
+  id: string;
+  title: string;
+  description: string;
+  photo_count?: number;
+}
+
 export default function Dashboard() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [galleries, setGalleries] = useState<Gallery[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -47,6 +68,8 @@ export default function Dashboard() {
     if (user) {
       fetchProfile();
       fetchBookings();
+      fetchInvoices();
+      fetchGalleries();
     }
   }, [user, loading, navigate]);
 
@@ -91,6 +114,43 @@ export default function Dashboard() {
       });
     } finally {
       setLoadingData(false);
+    }
+  };
+
+  const fetchInvoices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('invoices')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setInvoices(data || []);
+    } catch (error: any) {
+      console.error('Error fetching invoices:', error);
+    }
+  };
+
+  const fetchGalleries = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('client_galleries')
+        .select(`
+          *,
+          gallery_photos(count)
+        `)
+        .eq('user_id', user?.id)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setGalleries(data?.map(g => ({
+        ...g,
+        photo_count: g.gallery_photos?.[0]?.count || 0
+      })) || []);
+    } catch (error: any) {
+      console.error('Error fetching galleries:', error);
     }
   };
 
@@ -163,10 +223,12 @@ export default function Dashboard() {
         </div>
 
         <Tabs defaultValue="bookings" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="bookings">Pesanan Gue</TabsTrigger>
-            <TabsTrigger value="photos">Koleksi Foto</TabsTrigger>
-            <TabsTrigger value="profile">Profil Gue</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 md:grid-cols-5">
+            <TabsTrigger value="bookings">Pesanan</TabsTrigger>
+            <TabsTrigger value="galleries">Galeri</TabsTrigger>
+            <TabsTrigger value="invoices">Invoice</TabsTrigger>
+            <TabsTrigger value="photos" className="hidden md:block">Koleksi</TabsTrigger>
+            <TabsTrigger value="profile">Profil</TabsTrigger>
           </TabsList>
 
           <TabsContent value="bookings" className="space-y-4">
@@ -222,6 +284,116 @@ export default function Dashboard() {
                               {booking.event_date || 'Belum ditentukan'}
                             </p>
                           </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="galleries" className="space-y-4">
+            <div className="grid gap-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Galeri Pribadi Gue</h2>
+                <Badge variant="secondary">{galleries.length} galeri</Badge>
+              </div>
+              
+              {galleries.length === 0 ? (
+                <Card>
+                  <CardContent className="flex flex-col items-center justify-center py-12">
+                    <Camera className="h-12 w-12 text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">Belum ada galeri pribadi nih</p>
+                    <p className="text-sm text-muted-foreground mt-2">Admin akan membuat galeri setelah acara selesai</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid gap-4 md:grid-cols-2">
+                  {galleries.map((gallery) => (
+                    <Card key={gallery.id} className="hover:border-primary transition-colors cursor-pointer">
+                      <CardHeader>
+                        <CardTitle className="text-lg">{gallery.title}</CardTitle>
+                        <p className="text-sm text-muted-foreground">{gallery.description}</p>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <Camera className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">{gallery.photo_count || 0} foto</span>
+                          </div>
+                          <Button size="sm" variant="outline">
+                            <Download className="h-4 w-4 mr-2" />
+                            Lihat & Download
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="invoices" className="space-y-4">
+            <div className="grid gap-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Invoice Gue</h2>
+                <Badge variant="secondary">{invoices.length} invoice</Badge>
+              </div>
+              
+              {invoices.length === 0 ? (
+                <Card>
+                  <CardContent className="flex flex-col items-center justify-center py-12">
+                    <FileText className="h-12 w-12 text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">Belum ada invoice</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid gap-4">
+                  {invoices.map((invoice) => (
+                    <Card key={invoice.id}>
+                      <CardHeader>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <CardTitle className="text-lg">{invoice.invoice_number}</CardTitle>
+                            <p className="text-sm text-muted-foreground">
+                              Tanggal: {new Date(invoice.issued_date).toLocaleDateString('id-ID')}
+                            </p>
+                          </div>
+                          <Badge variant={invoice.status === 'paid' ? 'default' : invoice.status === 'pending' ? 'secondary' : 'destructive'}>
+                            {invoice.status === 'paid' ? 'Lunas' : invoice.status === 'pending' ? 'Belum Bayar' : 'Terlambat'}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Total:</span>
+                            <span className="font-semibold">
+                              Rp {invoice.amount.toLocaleString('id-ID')}
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Dibayar:</span>
+                            <span>Rp {invoice.paid_amount.toLocaleString('id-ID')}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Sisa:</span>
+                            <span className="font-semibold text-primary">
+                              Rp {(invoice.amount - invoice.paid_amount).toLocaleString('id-ID')}
+                            </span>
+                          </div>
+                          {invoice.due_date && (
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">Jatuh Tempo:</span>
+                              <span>{new Date(invoice.due_date).toLocaleDateString('id-ID')}</span>
+                            </div>
+                          )}
+                          <Button variant="outline" size="sm" className="w-full mt-2">
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Invoice
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
