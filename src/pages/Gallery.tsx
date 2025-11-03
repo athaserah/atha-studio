@@ -38,12 +38,12 @@ const Gallery = () => {
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
             Galeri
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              {" "}Foto Kece
+              {" "}Fotografi
             </span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Jelajahi koleksi foto-foto kece gue dari berbagai kategori. 
-            Setiap gambar punya cerita unik yang udah gue abadiin lewat lensa.
+            Jelajahi koleksi foto profesional kami dari berbagai kategori. 
+            Setiap gambar bercerita dan diabadikan dengan penuh perhatian terhadap detail.
           </p>
         </div>
 
@@ -55,7 +55,7 @@ const Gallery = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Cari foto di sini bos..."
+                placeholder="Cari foto..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
@@ -218,9 +218,9 @@ const Gallery = () => {
         {!isLoading && filteredPhotos.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📷</div>
-            <h3 className="text-2xl font-semibold mb-2">Waduh, foto gak ketemu nih</h3>
+            <h3 className="text-2xl font-semibold mb-2">Foto tidak ditemukan</h3>
             <p className="text-muted-foreground">
-              Coba adjust kata kunci pencarian atau filter lu
+              Coba sesuaikan kata kunci pencarian atau filter kategori Anda
             </p>
           </div>
         )}

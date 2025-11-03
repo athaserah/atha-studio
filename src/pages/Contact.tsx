@@ -153,6 +153,16 @@ const Contact = () => {
 
       if (error) throw error;
 
+      // Track conversion
+      if (typeof window !== 'undefined') {
+        import('@/utils/analytics').then(({ trackFormSubmit }) => {
+          trackFormSubmit('contact_form', {
+            service: validatedData.service,
+            package: validatedData.package
+          });
+        });
+      }
+
       toast({
         title: "Pemesanan berhasil!",
         description: "Terima kasih, kami akan menghubungi Anda segera.",
@@ -194,14 +204,14 @@ const Contact = () => {
         {/* Header */}
         <div className="text-center mb-16 fade-in">
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            Hit Me
+            Hubungi
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              {" "}Up Dong!
+              {" "}Kami
             </span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Siap wujudin visi lu jadi kenyataan? Gas kontak gue buat jasa foto 
-            atau bikin website. Gue siap bantu lu bikin sesuatu yang amazing!
+            Siap mewujudkan visi Anda? Hubungi kami untuk jasa fotografi 
+            atau pembuatan website. Tim kami siap membantu mewujudkan ide Anda!
           </p>
         </div>
 
@@ -213,7 +223,7 @@ const Contact = () => {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Mail className="h-5 w-5 text-primary" />
-                  <span>Info Kontak</span>
+                  <span>Informasi Kontak</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -239,7 +249,7 @@ const Contact = () => {
             {/* Social Media */}
             <Card>
               <CardHeader>
-                <CardTitle>Follow Gue</CardTitle>
+                <CardTitle>Follow Kami</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-3">
@@ -266,7 +276,7 @@ const Contact = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <Camera className="h-5 w-5 text-primary" />
-                    <span>Paket Fotoan Kece</span>
+                    <span>Paket Fotografi</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -307,7 +317,7 @@ const Contact = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <Globe className="h-5 w-5 text-primary" />
-                    <span>Paket Website Kece</span>
+                    <span>Paket Website</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -344,7 +354,7 @@ const Contact = () => {
           {/* Contact Form */}
           <Card className="slide-up order-1 lg:order-2">
             <CardHeader>
-              <CardTitle>Kirim Pesan ke Gue</CardTitle>
+              <CardTitle>Kirim Pesan</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">

@@ -44,27 +44,27 @@ const Hero = () => {
   };
   const menuItems = [{
     href: "/gallery",
-    label: "Galeri Kece",
+    label: "Galeri Foto",
     icon: Image,
-    description: "Liat karya foto terbaik gue",
+    description: "Lihat karya terbaik kami",
     color: "from-purple-500 to-pink-500"
   }, {
     href: "/about",
-    label: "Tentang Gue",
+    label: "Tentang Kami",
     icon: User,
-    description: "Kenalan sama fotografer kece ini",
+    description: "Kenali tim profesional kami",
     color: "from-blue-500 to-cyan-500"
   }, {
     href: "/contact",
-    label: "Hit Me Up",
+    label: "Hubungi Kami",
     icon: Mail,
-    description: "Booking fotoan atau tanya-tanya",
+    description: "Konsultasi & booking",
     color: "from-green-500 to-emerald-500"
   }, {
     href: "/auth",
-    label: "Masuk/Daftar",
+    label: "Login / Daftar",
     icon: Settings,
-    description: "Login atau bikin akun baru",
+    description: "Akses dashboard klien",
     color: "from-orange-500 to-red-500"
   }];
   return <>
@@ -82,24 +82,24 @@ const Hero = () => {
             {/* Left Content */}
             <div className="text-center lg:text-left fade-in">
               <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight mb-4 lg:mb-6">
-                Abadikan Momen
+                Abadikan Momen Berharga
                 <span className="block bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Kece Lu!
+                  Anda Selamanya
                 </span>
               </h1>
               <p className="text-lg sm:text-xl text-muted-foreground mb-6 lg:mb-8 max-w-2xl mx-auto lg:mx-0">
-                Jasa foto profesional yang bikin lu auto jadi sultan konten! 
-                Dari portrait kece sampai website yang bikin branding lu naik level.
+                Jasa fotografi profesional untuk wedding, portrait, wisuda & acara spesial. 
+                Hasil berkualitas tinggi dengan harga terjangkau mulai dari Rp 250.000.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center lg:justify-start mb-8 lg:mb-12">
                 <Button variant="hero" size="lg" className="group w-full sm:w-auto">
                   <Camera className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300 mr-2" />
-                  Gas Booking Fotoan!
+                  Konsultasi Gratis
                 </Button>
                 <Button variant="premium" size="lg" className="w-full sm:w-auto" asChild>
                   <Link to="/gallery">
-                    Liat Karya Gue
+                    Lihat Portfolio
                   </Link>
                 </Button>
               </div>
@@ -150,13 +150,13 @@ const Hero = () => {
               <Grid3X3 className="h-8 w-8 lg:h-12 lg:w-12 text-primary" />
             </div>
             <h2 className="text-3xl lg:text-5xl font-bold mb-4">
-              Jelajahi Semua Menu
+              Jelajahi Layanan
               <span className="block bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Website Kece Gue!
+                Fotografi Kami
               </span>
             </h2>
             <p className="text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Pilih menu yang lu mau, semua udah gue siapin buat experience terbaik!
+              Temukan berbagai layanan fotografi profesional yang kami tawarkan untuk kebutuhan Anda
             </p>
           </div>
 

@@ -14,7 +14,14 @@ const Services = () => {
         event.stopPropagation();
       }
 
-      const message = `Halo! Saya tertarik dengan jasa ${serviceName} - Paket ${packageName}. Bisa kasih info lebih lanjut?`;
+      // Track conversion
+      if (typeof window !== 'undefined') {
+        import('@/utils/analytics').then(({ trackWhatsAppClick }) => {
+          trackWhatsAppClick(serviceName, packageName, 'services_section');
+        });
+      }
+
+      const message = `Halo! Saya tertarik dengan layanan ${serviceName} - Paket ${packageName}. Mohon informasi lebih lanjut.`;
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
       
       console.log('Opening WhatsApp URL:', whatsappUrl);
@@ -100,14 +107,14 @@ const Services = () => {
               <Camera className="h-10 w-10 lg:h-12 lg:w-12 text-primary" />
             </div>
             <h2 className="text-3xl lg:text-5xl font-bold mb-4">
-              Jasa Photography
+              Paket Fotografi
               <span className="block bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Profesional & Kece!
+                Profesional
               </span>
             </h2>
             <p className="text-base lg:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Abadikan momen spesial lu dengan hasil foto yang bikin semua orang ngiri! 
-              Dari sesi foto personal sampai dokumentasi acara besar, semua dikerjain dengan maksimal.
+              Paket fotografi berkualitas tinggi untuk berbagai kebutuhan. 
+              Dari sesi personal hingga dokumentasi acara besar, kami siap membantu.
             </p>
           </div>
 
@@ -167,10 +174,10 @@ const Services = () => {
           <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">
             <CardHeader>
               <CardTitle className="text-2xl lg:text-3xl">
-                Masih Bingung Pilih Paket?
+                Butuh Konsultasi Paket?
               </CardTitle>
               <CardDescription className="text-base lg:text-lg">
-                Langsung aja chat gue di WhatsApp, kita diskusi paket mana yang paling cocok buat kebutuhan lu!
+                Hubungi kami via WhatsApp untuk konsultasi gratis. Tim kami siap membantu memilih paket yang sesuai kebutuhan Anda.
               </CardDescription>
             </CardHeader>
             <CardFooter className="justify-center">
@@ -181,7 +188,7 @@ const Services = () => {
                 onClick={(e) => handleBooking("Konsultasi", "General", e)}
               >
                 <MessageCircle className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-                Chat di WhatsApp Sekarang!
+                Konsultasi Gratis via WhatsApp
               </Button>
             </CardFooter>
           </Card>

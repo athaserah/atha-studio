@@ -121,15 +121,15 @@ const About = () => {
             <div className="space-y-4 mb-8">
               <div className="flex items-center space-x-3">
                 <Heart className="h-5 w-5 text-primary" />
-                <span>Passionate banget buat capture emosi yang autentik</span>
+                <span>Passionate dalam menangkap emosi autentik</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Star className="h-5 w-5 text-primary" />
-                <span>Komitmen banget buat kasih kualitas yang exceptional</span>
+                <span>Komitmen memberikan kualitas terbaik</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Zap className="h-5 w-5 text-primary" />
-                <span>Pake teknologi cutting-edge yang bikin hasil makin kece</span>
+                <span>Menggunakan teknologi fotografi modern</span>
               </div>
             </div>
 
@@ -137,17 +137,17 @@ const About = () => {
               <Button 
                 variant="hero" 
                 size="lg"
-                onClick={() => handleWhatsApp("Halo! Saya mau booking sesi foto nih!")}
+                onClick={() => handleWhatsApp("Halo! Saya ingin booking sesi foto.")}
               >
                 <Camera className="h-5 w-5" />
-                Gas Booking!
+                Booking Sekarang
               </Button>
               <Button 
                 variant="outline" 
                 size="lg"
-                onClick={() => handleWhatsApp("Halo! Saya mau lihat portfolio kamu dong!")}
+                onClick={() => handleWhatsApp("Halo! Saya ingin melihat portfolio lengkap.")}
               >
-                Liat Portfolio
+                Lihat Portfolio
               </Button>
             </div>
           </div>
@@ -188,7 +188,7 @@ const About = () => {
         {/* Skills */}
         <div className="mb-16 lg:mb-20 slide-up">
           <h2 className="text-2xl lg:text-3xl font-bold text-center mb-8 lg:mb-12">
-            Skill & Keahlian Gue
+            Skill & Keahlian
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
             {skills.map((skill, index) => (
@@ -214,7 +214,7 @@ const About = () => {
         {/* Services */}
         <div className="fade-in">
           <h2 className="text-2xl lg:text-3xl font-bold text-center mb-8 lg:mb-12">
-            Yang Gue Tawarkan
+            Layanan Kami
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {services.map((service, index) => {
@@ -255,19 +255,19 @@ const About = () => {
         {ctaContent && (
           <div className="text-center mt-16 lg:mt-20 p-6 lg:p-12 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl">
             <h2 className="text-2xl lg:text-3xl font-bold mb-4">
-              {ctaContent.title || 'Siap Bikin Sesuatu yang Kece?'}
+              {ctaContent.title || 'Siap Memulai Proyek Fotografi?'}
             </h2>
             <p className="text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 max-w-2xl mx-auto">
-              {ctaContent.description || 'Yuk collab bareng buat abadikan momen spesial lu!'}
+              {ctaContent.description || 'Mari berkolaborasi untuk mengabadikan momen spesial Anda!'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 variant="hero" 
                 size="lg"
-                onClick={() => handleWhatsApp("Halo! Saya mau booking sesi foto nih!")}
+                onClick={() => handleWhatsApp("Halo! Saya ingin booking sesi foto.")}
               >
                 <Camera className="h-5 w-5" />
-                {ctaContent.button_text || 'Gas Booking Sesi Foto'}
+                {ctaContent.button_text || 'Booking Sesi Foto'}
               </Button>
             </div>
           </div>
