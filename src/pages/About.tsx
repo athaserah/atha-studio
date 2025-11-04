@@ -4,8 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Award, Users, Clock, Star, Heart, Palette, Zap } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import SEOHead from "@/components/SEOHead";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 interface Achievement {
   id: string;
@@ -99,6 +101,11 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead 
+        title="Tentang Kami - Fotografer Profesional Yogyakarta | Atha Studio"
+        description="Kenali lebih dekat Atha Studio, jasa fotografi profesional di Yogyakarta dengan pengalaman 5+ tahun. Spesialis wedding, portrait, dan event photography."
+        keywords="tentang atha studio, fotografer jogja, fotografer profesional yogyakarta, jasa foto wedding"
+      />
       <Navbar />
       <div className="pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -154,10 +161,12 @@ const About = () => {
 
           <div className="slide-up">
             <div className="relative overflow-hidden lg:overflow-visible rounded-2xl">
-              <img
+              <OptimizedImage
                 src="https://res.cloudinary.com/dfjvcvbsn/image/upload/v1754012379/514418398_1243307167528963_507092194719317945_n_kndack.jpg"
-                alt="Photographer Portrait"
-                className="w-full max-w-md mx-auto rounded-2xl shadow-2xl"
+                alt="Fotografer Profesional Atha Studio Yogyakarta"
+                className="max-w-md mx-auto rounded-2xl shadow-2xl"
+                aspectRatio="3/4"
+                priority
               />
               <div className="absolute bottom-4 right-4 lg:-bottom-6 lg:-right-6 bg-primary text-primary-foreground p-4 rounded-xl shadow-lg">
                 <div className="text-center">

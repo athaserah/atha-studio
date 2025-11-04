@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Filter, Heart, Download, Share2, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { usePhotos } from "@/hooks/usePhotos";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 const Gallery = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
@@ -82,9 +84,14 @@ const Gallery = () => {
 
         {/* Loading State */}
         {isLoading && (
-          <div className="flex justify-center items-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <span className="ml-2 text-muted-foreground">Loading foto...</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(9)].map((_, i) => (
+              <div key={i} className="space-y-3">
+                <Skeleton className="h-64 w-full rounded-lg" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+              </div>
+            ))}
           </div>
         )}
 
@@ -98,10 +105,11 @@ const Gallery = () => {
                   className="gallery-item cursor-pointer group"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <img
+                  <OptimizedImage
                     src={photo.image_url}
                     alt={photo.title}
-                    className="w-full h-64 object-cover rounded-lg"
+                    className="h-64 rounded-lg"
+                    aspectRatio="4/3"
                   />
                   
                   {/* Overlay Content */}

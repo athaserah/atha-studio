@@ -15,6 +15,7 @@ const Navbar = () => {
     { href: "/gallery", label: "Galeri", icon: Image },
     { href: "/about", label: "Tentang Kami", icon: User },
     { href: "/pricing", label: "Harga", icon: Mail },
+    { href: "/blog", label: "Blog", icon: Mail },
     { href: "/contact", label: "Kontak", icon: Mail },
   ];
 

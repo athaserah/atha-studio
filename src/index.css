@@ -1,91 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Photography Portfolio Design System */
+
 @layer base {
   :root {
-    /* Core Photography Brand Colors */
-    --background: 220 15% 7%;
-    --foreground: 45 25% 95%;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    /* Custom gradient colors */
+    --gradient-start: 240 5.9% 10%;
+    --gradient-end: 240 4.8% 30%;
     
-    /* Card & Surface Colors */
-    --card: 220 15% 9%;
-    --card-foreground: 45 15% 92%;
-    
-    /* Interactive Elements */
-    --popover: 220 15% 12%;
-    --popover-foreground: 45 15% 92%;
-    
-    /* Primary Brand - Elegant Gold */
-    --primary: 43 74% 66%;
-    --primary-foreground: 220 15% 7%;
-    --primary-glow: 43 74% 76%;
-    
-    /* Secondary - Sophisticated Charcoal */
-    --secondary: 220 15% 15%;
-    --secondary-foreground: 45 15% 92%;
-    
-    /* Muted Elements */
-    --muted: 220 15% 12%;
-    --muted-foreground: 45 8% 65%;
-    
-    /* Accent - Warm Amber */
-    --accent: 38 92% 50%;
-    --accent-foreground: 220 15% 7%;
-    
-    /* Status Colors */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 45 15% 92%;
-    
-    /* Form & Border Colors */
-    --border: 220 15% 18%;
-    --input: 220 15% 15%;
-    --ring: 43 74% 66%;
-    
-    /* Premium Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(220 15% 7%), hsl(220 15% 12%));
-    --gradient-card: linear-gradient(145deg, hsl(220 15% 9%), hsl(220 15% 12%));
-    --gradient-accent: linear-gradient(135deg, hsl(43 74% 66%), hsl(38 92% 50%));
-    --gradient-overlay: linear-gradient(180deg, transparent, hsl(220 15% 7% / 0.8));
-    
-    /* Photography Specific Colors */
-    --gallery-hover: 43 74% 66%;
-    --watermark: 43 74% 66%;
-    --price-highlight: 38 92% 50%;
-    
-    /* Shadows & Effects */
-    --shadow-elegant: 0 25px 50px -12px hsl(220 15% 7% / 0.4);
-    --shadow-glow: 0 0 40px hsl(43 74% 66% / 0.15);
-    --shadow-card: 0 10px 30px -10px hsl(220 15% 7% / 0.3);
-    
-    /* Animation & Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    
-    --radius: 0.75rem;
+    /* Shadow with color */
+    --shadow-glow: 0 10px 40px -10px hsl(var(--primary) / 0.3);
   }
 
-  .light {
-    --background: 45 25% 97%;
-    --foreground: 220 15% 15%;
-    --card: 45 25% 99%;
-    --card-foreground: 220 15% 15%;
-    --popover: 45 25% 99%;
-    --popover-foreground: 220 15% 15%;
-    --primary: 43 74% 46%;
-    --primary-foreground: 45 25% 97%;
-    --secondary: 45 15% 92%;
-    --secondary-foreground: 220 15% 15%;
-    --muted: 45 15% 94%;
-    --muted-foreground: 220 8% 35%;
-    --accent: 38 92% 40%;
-    --accent-foreground: 45 25% 97%;
-    --border: 45 15% 88%;
-    --input: 45 15% 92%;
-    --ring: 43 74% 46%;
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    /* Custom gradient colors for dark mode */
+    --gradient-start: 0 0% 98%;
+    --gradient-end: 240 5% 80%;
+    
+    /* Shadow with color for dark mode */
+    --shadow-glow: 0 10px 40px -10px hsl(var(--primary) / 0.5);
   }
 }
 
@@ -95,112 +82,134 @@
   }
   
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    overflow-x: hidden;
-    max-width: 100%;
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "ss01", "ss02", "cv05", "cv10";
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
-    @apply font-medium tracking-tight;
+    font-family: 'Playfair Display', 'Inter', serif;
+    font-weight: 700;
   }
-  
-  /* Smooth scrolling and prevent horizontal overflow */
+
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
   }
-  
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
+    height: 10px;
   }
-  
+
   ::-webkit-scrollbar-track {
-    @apply bg-background;
+    @apply bg-secondary;
   }
-  
+
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted rounded-full;
+    @apply bg-primary rounded-lg;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary;
+    @apply bg-primary/80;
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary)) hsl(var(--secondary));
   }
 }
 
 @layer components {
-  /* Gallery hover effects */
   .gallery-item {
-    @apply relative overflow-hidden rounded-lg transition-transform duration-500 hover:scale-105;
+    @apply relative overflow-hidden rounded-lg bg-card border border-border transition-all duration-300 hover:shadow-lg;
   }
-  
+
   .gallery-item::before {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 z-10;
+    @apply absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 z-10;
   }
-  
+
   .gallery-item:hover::before {
     @apply opacity-100;
   }
-  
-  /* Elegant animations */
+
   .fade-in {
     animation: fadeIn 0.6s ease-out forwards;
   }
-  
+
   .slide-up {
     animation: slideUp 0.8s ease-out forwards;
   }
-  
-  .glow-effect {
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.3);
-  }
 
-  /* Mobile-first responsive utilities */
-  .mobile-padding {
-    @apply px-4 sm:px-6 lg:px-8;
+  .glow-effect {
+    box-shadow: var(--shadow-glow);
   }
   
-  .mobile-text {
+  /* Mobile-first responsive utilities */
+  .container-responsive {
+    @apply w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto;
+  }
+  
+  .section-spacing {
+    @apply py-12 sm:py-16 lg:py-20;
+  }
+  
+  .py-section {
+    @apply py-12 sm:py-16 lg:py-20;
+  }
+  
+  /* Text utilities optimized for mobile */
+  .text-responsive {
     @apply text-base sm:text-lg lg:text-xl;
   }
   
-  .mobile-heading {
+  .heading-responsive {
     @apply text-2xl sm:text-3xl lg:text-4xl;
   }
   
-  .mobile-hero-heading {
-    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl;
+  /* Grid utilities with better mobile spacing */
+  .grid-responsive {
+    @apply grid gap-4 sm:gap-6 lg:gap-8;
   }
   
-  /* Mobile-first grid */
-  .mobile-grid {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
-  }
-  
-  .mobile-menu-grid {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
-  }
-  
-  /* Touch-friendly interactive elements */
+  /* Touch-friendly buttons and interactive elements */
   .touch-target {
-    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+    @apply min-h-[44px] min-w-[44px];
   }
   
-  /* Mobile-optimized cards */
-  .mobile-card {
-    @apply p-4 sm:p-6 lg:p-8 rounded-xl bg-card border border-border;
-  }
-  
-  /* Responsive spacing */
-  .mobile-section-padding {
-    @apply py-8 sm:py-12 lg:py-16 xl:py-20;
+  /* Card improvements for mobile */
+  .card-mobile {
+    @apply rounded-lg sm:rounded-xl p-4 sm:p-6 lg:p-8;
   }
   
   .mobile-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Loading skeleton improvements */
+  .skeleton-text {
+    @apply h-4 bg-muted rounded animate-pulse;
+  }
+  
+  .skeleton-image {
+    @apply w-full bg-muted rounded animate-pulse;
+  }
+  
+  /* Better image aspect ratios */
+  .aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+  
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+  
+  .aspect-portrait {
+    aspect-ratio: 3 / 4;
   }
 }
 
@@ -226,12 +235,32 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+/* Improved text selection */
+::selection {
+  @apply bg-primary text-primary-foreground;
+}
 
-  body {
-    @apply bg-background text-foreground;
-  }
+/* Better focus styles for accessibility */
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
+
+/* Prevent layout shift during image loading */
+img[loading="lazy"] {
+  min-height: 200px;
+}
+
+/* Better line clamping */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
