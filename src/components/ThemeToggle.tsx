@@ -22,16 +22,22 @@ export const ThemeToggle = () => {
 
   return (
     <Button
-      variant="ghost"
-      size="icon"
+      variant="outline"
+      size="default"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="touch-target"
+      className="touch-target gap-2 border-2"
       aria-label="Toggle theme"
     >
       {theme === "dark" ? (
-        <Sun className="h-5 w-5 text-foreground transition-all" />
+        <>
+          <Sun className="h-5 w-5 transition-all" />
+          <span className="hidden sm:inline">Light</span>
+        </>
       ) : (
-        <Moon className="h-5 w-5 text-foreground transition-all" />
+        <>
+          <Moon className="h-5 w-5 transition-all" />
+          <span className="hidden sm:inline">Dark</span>
+        </>
       )}
     </Button>
   );
