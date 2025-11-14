@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Menu, X, Home, User, Mail, Image, LogIn, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import athaStudioLogo from "@/assets/atha-studio-logo.png";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -66,6 +67,7 @@ const Navbar = () => {
                 <span>Admin Panel</span>
               </Link>
             )}
+            <ThemeToggle />
             {user ? (
               <Button variant="premium" size="sm" asChild>
                 <Link to="/dashboard">
@@ -84,7 +86,8 @@ const Navbar = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="sm"
