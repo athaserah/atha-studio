@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Trash2, Edit, Plus, Users, BookOpen, Image } from 'lucide-react';
+import { Trash2, Edit, Plus, Users, BookOpen, Image, Upload, X } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import AdminAboutManager from '@/components/AdminAboutManager';
 import { AdminHeroManager } from '@/components/AdminHeroManager';
@@ -628,6 +628,10 @@ function PhotoDialog({
   onSave: (photo: any) => void; 
   onClose: () => void; 
 }) {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const [uploading, setUploading] = React.useState(false);
+  const [previewUrl, setPreviewUrl] = React.useState(photo?.image_url || '');
   const [formData, setFormData] = React.useState({
     title: photo?.title || '',
     description: photo?.description || '',
@@ -637,6 +641,72 @@ function PhotoDialog({
     is_featured: photo?.is_featured || false,
     sort_order: photo?.sort_order || 0
   });
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Error",
+        description: "File harus berupa gambar",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate file size (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: "Error",
+        description: "Ukuran file maksimal 10MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      setUploading(true);
+      
+      // Create unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `${user?.id}/${fileName}`;
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('photos')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) throw error;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('photos')
+        .getPublicUrl(filePath);
+
+      setFormData(prev => ({ ...prev, image_url: publicUrl }));
+      setPreviewUrl(publicUrl);
+
+      toast({
+        title: "Berhasil!",
+        description: "Foto berhasil diupload"
+      });
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Gagal upload foto",
+        variant: "destructive"
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -649,16 +719,80 @@ function PhotoDialog({
   };
 
   return (
-    <DialogContent className="sm:max-w-[425px]">
+    <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
       <DialogHeader>
-        <DialogTitle>{photo ? 'Edit Photo' : 'Add New Photo'}</DialogTitle>
+        <DialogTitle>{photo ? 'Edit Foto' : 'Tambah Foto Baru'}</DialogTitle>
         <DialogDescription>
-          {photo ? 'Update photo details' : 'Add a new photo to the gallery'}
+          {photo ? 'Update detail foto' : 'Upload foto baru ke galeri'}
         </DialogDescription>
       </DialogHeader>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Upload Section */}
+        <div className="space-y-2">
+          <Label>Upload Foto</Label>
+          <div className="border-2 border-dashed border-border rounded-lg p-4">
+            {previewUrl ? (
+              <div className="relative">
+                <img 
+                  src={previewUrl} 
+                  alt="Preview" 
+                  className="w-full h-48 object-cover rounded"
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  className="absolute top-2 right-2"
+                  onClick={() => {
+                    setPreviewUrl('');
+                    setFormData(prev => ({ ...prev, image_url: '' }));
+                  }}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : (
+              <div className="text-center">
+                <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-2" />
+                <div className="text-sm text-muted-foreground mb-2">
+                  Klik untuk upload atau drag & drop
+                </div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  disabled={uploading}
+                  className="cursor-pointer"
+                />
+                {uploading && (
+                  <div className="mt-2 text-sm text-muted-foreground">
+                    Mengupload...
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            atau masukkan URL gambar di bawah
+          </p>
+        </div>
+
         <div>
-          <Label htmlFor="title">Title</Label>
+          <Label htmlFor="image_url">URL Gambar (opsional)</Label>
+          <Input
+            id="image_url"
+            type="url"
+            value={formData.image_url}
+            onChange={(e) => {
+              setFormData(prev => ({ ...prev, image_url: e.target.value }));
+              setPreviewUrl(e.target.value);
+            }}
+            placeholder="https://example.com/image.jpg"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="title">Judul</Label>
           <Input
             id="title"
             value={formData.title}
@@ -666,34 +800,28 @@ function PhotoDialog({
             required
           />
         </div>
+
         <div>
-          <Label htmlFor="image_url">Image URL</Label>
-          <Input
-            id="image_url"
-            type="url"
-            value={formData.image_url}
-            onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">Deskripsi</Label>
           <Textarea
             id="description"
             value={formData.description}
             onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
           />
         </div>
+
         <div>
-          <Label htmlFor="category">Category</Label>
+          <Label htmlFor="category">Kategori</Label>
           <Input
             id="category"
             value={formData.category}
             onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+            placeholder="wedding, portrait, product"
           />
         </div>
+
         <div>
-          <Label htmlFor="tags">Tags (comma separated)</Label>
+          <Label htmlFor="tags">Tags (pisahkan dengan koma)</Label>
           <Input
             id="tags"
             value={formData.tags}
@@ -701,8 +829,9 @@ function PhotoDialog({
             placeholder="wedding, portrait, outdoor"
           />
         </div>
+
         <div>
-          <Label htmlFor="sort_order">Sort Order</Label>
+          <Label htmlFor="sort_order">Urutan Tampil</Label>
           <Input
             id="sort_order"
             type="number"
@@ -710,18 +839,23 @@ function PhotoDialog({
             onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) }))}
           />
         </div>
+
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
             id="is_featured"
             checked={formData.is_featured}
             onChange={(e) => setFormData(prev => ({ ...prev, is_featured: e.target.checked }))}
+            className="rounded border-border"
           />
-          <Label htmlFor="is_featured">Featured Photo</Label>
+          <Label htmlFor="is_featured">Foto Unggulan</Label>
         </div>
+
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-          <Button type="submit">{photo ? 'Update' : 'Create'}</Button>
+          <Button type="button" variant="outline" onClick={onClose}>Batal</Button>
+          <Button type="submit" disabled={!formData.image_url || uploading}>
+            {photo ? 'Update' : 'Simpan'}
+          </Button>
         </DialogFooter>
       </form>
     </DialogContent>
