@@ -108,8 +108,9 @@ const Gallery = () => {
                   <OptimizedImage
                     src={photo.image_url}
                     alt={photo.title}
-                    className="h-64 rounded-lg"
+                    className="h-64 rounded-lg bg-muted"
                     aspectRatio="4/3"
+                    objectFit="contain"
                   />
                   
                   {/* Overlay Content */}
