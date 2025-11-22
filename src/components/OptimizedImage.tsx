@@ -8,6 +8,7 @@ interface OptimizedImageProps {
   className?: string;
   aspectRatio?: string;
   priority?: boolean;
+  objectFit?: 'cover' | 'contain';
 }
 
 export const OptimizedImage = ({ 
@@ -15,7 +16,8 @@ export const OptimizedImage = ({
   alt, 
   className, 
   aspectRatio = '16/9',
-  priority = false 
+  priority = false,
+  objectFit = 'cover'
 }: OptimizedImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
@@ -56,7 +58,8 @@ export const OptimizedImage = ({
           alt={alt}
           loading={priority ? 'eager' : 'lazy'}
           className={cn(
-            "w-full h-full object-cover transition-opacity duration-500",
+            "w-full h-full transition-opacity duration-500",
+            objectFit === 'cover' ? 'object-cover' : 'object-contain',
             isLoaded ? "opacity-100" : "opacity-0"
           )}
           onLoad={() => setIsLoaded(true)}

@@ -16,6 +16,7 @@ import { Trash2, Edit, Plus, Users, BookOpen, Image, Upload, X } from 'lucide-re
 import Navbar from '@/components/Navbar';
 import AdminAboutManager from '@/components/AdminAboutManager';
 import { AdminHeroManager } from '@/components/AdminHeroManager';
+import { ImageCropDialog } from '@/components/ImageCropDialog';
 
 interface Profile {
   id: string;
@@ -632,6 +633,8 @@ function PhotoDialog({
   const { user } = useAuth();
   const [uploading, setUploading] = React.useState(false);
   const [previewUrl, setPreviewUrl] = React.useState(photo?.image_url || '');
+  const [cropDialogOpen, setCropDialogOpen] = React.useState(false);
+  const [originalImage, setOriginalImage] = React.useState<string>('');
   const [formData, setFormData] = React.useState({
     title: photo?.title || '',
     description: photo?.description || '',
@@ -642,7 +645,7 @@ function PhotoDialog({
     sort_order: photo?.sort_order || 0
   });
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -666,20 +669,30 @@ function PhotoDialog({
       return;
     }
 
+    // Read file and open crop dialog
+    const reader = new FileReader();
+    reader.onload = () => {
+      setOriginalImage(reader.result as string);
+      setCropDialogOpen(true);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCropComplete = async (croppedBlob: Blob) => {
     try {
       setUploading(true);
       
       // Create unique filename
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
       const filePath = `${user?.id}/${fileName}`;
 
-      // Upload to Supabase Storage
+      // Upload cropped image to Supabase Storage
       const { data, error } = await supabase.storage
         .from('photos')
-        .upload(filePath, file, {
+        .upload(filePath, croppedBlob, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false,
+          contentType: 'image/jpeg'
         });
 
       if (error) throw error;
@@ -694,7 +707,7 @@ function PhotoDialog({
 
       toast({
         title: "Berhasil!",
-        description: "Foto berhasil diupload"
+        description: "Foto berhasil dioptimasi dan diupload"
       });
     } catch (error: any) {
       console.error('Upload error:', error);
@@ -760,7 +773,7 @@ function PhotoDialog({
                 <Input
                   type="file"
                   accept="image/*"
-                  onChange={handleFileUpload}
+                  onChange={handleFileSelect}
                   disabled={uploading}
                   className="cursor-pointer"
                 />
@@ -858,6 +871,14 @@ function PhotoDialog({
           </Button>
         </DialogFooter>
       </form>
+
+      {/* Crop Dialog */}
+      <ImageCropDialog
+        open={cropDialogOpen}
+        onClose={() => setCropDialogOpen(false)}
+        imageSrc={originalImage}
+        onCropComplete={handleCropComplete}
+      />
     </DialogContent>
   );
 }
