@@ -152,9 +152,11 @@ const About = () => {
               <Button 
                 variant="outline" 
                 size="lg"
-                onClick={() => handleWhatsApp("Halo! Saya ingin melihat portfolio lengkap.")}
+                asChild
               >
-                Lihat Portfolio
+                <a href="https://athadiary.my.id" target="_blank" rel="noopener noreferrer">
+                  Lihat Portfolio
+                </a>
               </Button>
             </div>
           </div>

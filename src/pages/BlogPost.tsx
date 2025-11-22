@@ -133,11 +133,11 @@ const BlogPost = () => {
                     Konsultasi Gratis
                   </Button>
                 </Link>
-                <Link to="/gallery">
-                  <Button size="lg" variant="outline">
+                <Button size="lg" variant="outline" asChild>
+                  <a href="https://athadiary.my.id" target="_blank" rel="noopener noreferrer">
                     Lihat Portfolio
-                  </Button>
-                </Link>
+                  </a>
+                </Button>
               </div>
             </div>
           </div>
