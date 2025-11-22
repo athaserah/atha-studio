@@ -97,11 +97,11 @@ const Hero = () => {
                   <Camera className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300 mr-2" />
                   Konsultasi Gratis
                 </Button>
-                <Button variant="premium" size="lg" className="w-full sm:w-auto" asChild>
-                  <Link to="/gallery">
-                    Lihat Portfolio
-                  </Link>
-                </Button>
+              <Button variant="premium" size="lg" className="w-full sm:w-auto" asChild>
+                <a href="https://athadiary.my.id" target="_blank" rel="noopener noreferrer">
+                  Lihat Portfolio
+                </a>
+              </Button>
               </div>
 
               {/* Stats - Mobile Optimized */}
