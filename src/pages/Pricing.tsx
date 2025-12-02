@@ -20,7 +20,7 @@ const Pricing = () => {
         event.stopPropagation();
       }
 
-      const message = `Halo! Saya tertarik dengan jasa ${serviceName} - Paket ${packageName}. Bisa kasih info lebih lanjut?`;
+      const message = `Halo! Saya tertarik dengan layanan ${serviceName} - Paket ${packageName}. Mohon informasi lebih lanjut mengenai paket ini.`;
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
       
       const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
@@ -43,7 +43,7 @@ const Pricing = () => {
     {
       name: "Basic",
       price: "250.000",
-      description: "Perfect untuk konten media sosial dan portfolio pribadi",
+      description: "Ideal untuk konten media sosial dan portfolio pribadi",
       features: [
         "Durasi sesi 1 jam",
         "1 lokasi pilihan",
@@ -103,14 +103,14 @@ const Pricing = () => {
               <Camera className="h-10 w-10 lg:h-12 lg:w-12 text-primary" />
             </div>
             <h1 className="text-3xl lg:text-5xl font-bold mb-4">
-              Jasa Photography
+              Layanan Fotografi
               <span className="block bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Profesional & Kece!
+                Profesional
               </span>
             </h1>
             <p className="text-base lg:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Abadikan momen spesial lu dengan hasil foto yang bikin semua orang ngiri! 
-              Dari sesi foto personal sampai dokumentasi acara besar, semua dikerjain dengan maksimal.
+              Abadikan momen spesial Anda dengan hasil foto berkualitas tinggi. 
+              Dari sesi foto personal hingga dokumentasi acara besar, kami memberikan layanan terbaik untuk kebutuhan Anda.
             </p>
           </div>
 
@@ -125,7 +125,7 @@ const Pricing = () => {
               >
                 {pkg.popular && (
                   <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-bold">
-                    PALING LAKU
+                    TERPOPULER
                   </div>
                 )}
                 
@@ -170,10 +170,10 @@ const Pricing = () => {
           <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">
             <CardHeader>
               <CardTitle className="text-2xl lg:text-3xl">
-                Masih Bingung Pilih Paket?
+                Butuh Konsultasi?
               </CardTitle>
               <CardDescription className="text-base lg:text-lg">
-                Langsung aja chat gue di WhatsApp, kita diskusi paket mana yang paling cocok buat kebutuhan lu!
+                Hubungi kami via WhatsApp untuk konsultasi gratis. Tim kami siap membantu Anda memilih paket yang sesuai dengan kebutuhan.
               </CardDescription>
             </CardHeader>
             <CardFooter className="justify-center">
@@ -184,7 +184,7 @@ const Pricing = () => {
                 onClick={(e) => handleBooking("Konsultasi", "General", e)}
               >
                 <MessageCircle className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-                Chat di WhatsApp Sekarang!
+                Konsultasi via WhatsApp
               </Button>
             </CardFooter>
           </Card>
@@ -259,10 +259,10 @@ const Pricing = () => {
 
             <AccordionItem value="item-8">
               <AccordionTrigger className="text-left">
-                Bisa custom paket sesuai budget?
+                Apakah bisa custom paket sesuai budget?
               </AccordionTrigger>
               <AccordionContent>
-                Tentu! Harga yang tertera adalah range standard. Kita bisa diskusi dan sesuaikan paket dengan budget dan kebutuhan Anda. Chat langsung via WhatsApp untuk konsultasi gratis.
+                Tentu! Harga yang tertera adalah range standard. Kami dapat mendiskusikan dan menyesuaikan paket dengan budget dan kebutuhan Anda. Hubungi kami langsung via WhatsApp untuk konsultasi gratis.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

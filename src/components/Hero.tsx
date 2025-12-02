@@ -82,13 +82,13 @@ const Hero = () => {
             {/* Left Content */}
             <div className="text-center lg:text-left fade-in">
               <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight mb-4 lg:mb-6">
-                Abadikan Momen Berharga
+                Abadikan Momen Berharga{" "}
                 <span className="block bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Anda Selamanya
+                  dengan Sentuhan Artistik
                 </span>
               </h1>
               <p className="text-lg sm:text-xl text-muted-foreground mb-6 lg:mb-8 max-w-2xl mx-auto lg:mx-0">
-                Jasa fotografi profesional untuk wedding, portrait, wisuda & acara spesial. 
+                Layanan fotografi profesional untuk wedding, portrait, dan dokumentasi acara spesial Anda. 
                 Hasil berkualitas tinggi dengan harga terjangkau mulai dari Rp 250.000.
               </p>
               
@@ -140,66 +140,6 @@ const Hero = () => {
         <div className="hidden lg:block absolute top-1/2 right-20 w-3 h-3 bg-primary rounded-full opacity-50 animate-pulse" style={{
         animationDelay: '2s'
       }} />
-      </section>
-
-      {/* Menu Home Section - Mobile First */}
-      <section className="py-12 lg:py-20 bg-gradient-to-b from-background to-secondary/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 lg:mb-12">
-            <div className="flex justify-center mb-4">
-              <Grid3X3 className="h-8 w-8 lg:h-12 lg:w-12 text-primary" />
-            </div>
-            <h2 className="text-3xl lg:text-5xl font-bold mb-4">
-              Jelajahi Layanan
-              <span className="block bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Fotografi Kami
-              </span>
-            </h2>
-            <p className="text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Temukan berbagai layanan fotografi profesional yang kami tawarkan untuk kebutuhan Anda
-            </p>
-          </div>
-
-          {/* Menu Grid - Mobile First Design */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            {menuItems.map((item, index) => {
-            const Icon = item.icon;
-            return <Link key={item.href} to={item.href} className="group relative overflow-hidden rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:scale-105 hover:shadow-glow" style={{
-              animationDelay: `${index * 0.1}s`
-            }}>
-                  {/* Background Gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
-                  
-                  <div className="relative p-6 lg:p-8">
-                    <div className="flex items-center space-x-4 mb-4">
-                      <div className={`p-3 rounded-xl bg-gradient-to-br ${item.color} group-hover:scale-110 transition-transform duration-300`}>
-                        <Icon className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg lg:text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
-                          {item.label}
-                        </h3>
-                      </div>
-                    </div>
-                    
-                    <p className="text-sm lg:text-base text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                      {item.description}
-                    </p>
-                    
-                    {/* Hover Arrow */}
-                    <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                      <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                        <span className="text-primary">→</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>;
-          })}
-          </div>
-
-          {/* Mobile Services Preview - Only shown on mobile */}
-          
-        </div>
       </section>
     </>;
 };
