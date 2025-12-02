@@ -9,44 +9,24 @@ import { HelpCircle } from "lucide-react";
 
 const faqs = [
   {
-    question: "Berapa lama proses editing foto setelah sesi pemotretan?",
-    answer: "Proses editing biasanya memakan waktu 7-14 hari kerja tergantung paket yang dipilih. Untuk paket premium, kami menyediakan express editing 3-5 hari kerja dengan tambahan biaya."
+    question: "Bagaimana cara booking dan sistem pembayaran?",
+    answer: "Hubungi kami via WhatsApp atau form kontak untuk konsultasi. Setelah diskusi kebutuhan, kami akan kirim invoice. Pembayaran DP 30% untuk booking tanggal, pelunasan 70% maksimal H-3 sebelum acara. Kami menerima transfer bank dan e-wallet."
   },
   {
-    question: "Apakah bisa request tema atau style foto tertentu?",
-    answer: "Tentu saja! Kami sangat terbuka dengan permintaan khusus. Anda bisa share referensi foto atau mood board yang diinginkan saat konsultasi awal. Tim kami akan berusaha mewujudkan visi Anda."
+    question: "Berapa lama proses editing dan pengiriman hasil foto?",
+    answer: "Waktu editing tergantung paket: Basic (3-5 hari), Standard (7 hari), Premium (14 hari). Untuk kebutuhan urgent, tersedia layanan express editing dengan biaya tambahan."
   },
   {
     question: "Berapa jumlah foto yang akan diterima?",
-    answer: "Jumlah foto tergantung paket yang dipilih. Paket Basic (50-75 foto edited), Paket Standard (100-150 foto edited), Paket Premium (200-300 foto edited + all raw files). Semua dalam resolusi tinggi."
+    answer: "Jumlah foto sesuai paket yang dipilih. Semua foto diberikan dalam resolusi tinggi dan sudah melalui proses editing profesional. Detail jumlah foto ada di setiap paket layanan."
   },
   {
     question: "Apakah ada biaya tambahan untuk lokasi di luar kota?",
-    answer: "Untuk lokasi dalam radius 10km dari Yogyakarta tidak ada biaya tambahan. Untuk lokasi lebih jauh, akan dikenakan biaya transportasi dan akomodasi yang akan kami diskusikan terlebih dahulu."
+    answer: "Untuk wilayah Yogyakarta tidak ada biaya tambahan. Untuk lokasi luar kota, akan ada biaya transportasi dan akomodasi yang akan kami informasikan saat konsultasi."
   },
   {
-    question: "Bagaimana sistem pembayaran dan booking?",
-    answer: "Pembayaran dilakukan dengan sistem DP 30% untuk booking tanggal, dan pelunasan 70% maksimal H-3 sebelum acara. Kami menerima transfer bank (BCA, Mandiri, BRI) dan e-wallet (GoPay, OVO, Dana)."
-  },
-  {
-    question: "Apakah fotografer bisa datang untuk site survey lokasi?",
-    answer: "Ya, untuk paket Premium kami menyediakan layanan site survey gratis. Untuk paket lainnya, site survey bisa dilakukan dengan tambahan biaya atau via video call untuk diskusi lokasi."
-  },
-  {
-    question: "Bagaimana jika cuaca buruk di hari pemotretan outdoor?",
-    answer: "Kami akan monitor prakiraan cuaca H-3 dan H-1. Jika kondisi tidak memungkinkan, kami akan tawarkan reschedule tanpa biaya tambahan atau alternatif indoor venue jika tersedia."
-  },
-  {
-    question: "Apakah hasil foto bisa digunakan untuk komersial?",
-    answer: "Untuk penggunaan personal tidak ada batasan. Jika ingin digunakan untuk keperluan komersial (iklan, publikasi media, dll), mohon diskusikan terlebih dahulu karena ada tambahan biaya untuk commercial rights."
-  },
-  {
-    question: "Berapa lama foto akan disimpan oleh fotografer?",
-    answer: "Kami menyimpan all files (edited + raw) selama 1 tahun setelah pengiriman. Setelah itu, kami sarankan untuk menyimpan backup sendiri. Jika butuh reprint setelah 1 tahun, bisa request dengan biaya admin."
-  },
-  {
-    question: "Apakah bisa menambah jam pemotretan di hari H?",
-    answer: "Bisa, dengan syarat tim kami tidak ada jadwal di jam berikutnya. Biaya overtime adalah 200rb/jam untuk 1 fotografer. Mohon konfirmasi minimal 1 jam sebelum waktu berakhir agar kami bisa adjust schedule."
+    question: "Apakah bisa request style atau tema foto tertentu?",
+    answer: "Tentu! Kami terbuka dengan permintaan khusus. Anda dapat berbagi referensi foto atau mood board yang diinginkan saat konsultasi. Tim kami akan mewujudkan visi Anda dengan hasil terbaik."
   }
 ];
 

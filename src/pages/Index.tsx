@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
-import ClientLogos from "@/components/ClientLogos";
 import Testimonials from "@/components/Testimonials";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { FeaturedWork } from "@/components/FeaturedWork";
+import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { FAQ } from "@/components/FAQ";
+import { CTASection } from "@/components/CTASection";
+import { Footer } from "@/components/Footer";
 import SEOHead, { photographyBusinessSchema } from "@/components/SEOHead";
 import { trackPageView } from "@/utils/analytics";
 const Index = () => {
@@ -21,9 +23,12 @@ const Index = () => {
         
         <Services />
         <FeaturedWork />
+        <WhyChooseUs />
         <Testimonials />
         <FAQ />
+        <CTASection />
         <NewsletterSignup />
+        <Footer />
       </div>
     </>;
 };
