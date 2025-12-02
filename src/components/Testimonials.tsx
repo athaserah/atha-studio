@@ -30,11 +30,16 @@ const Testimonials = () => {
     }
   });
   if (isLoading) {
-    return <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Kata Mereka
-          </h2>
+    return <section className="py-16 lg:py-24 bg-gradient-to-b from-secondary/20 to-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              Kata{" "}
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Klien Kami
+              </span>
+            </h2>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map(i => <Card key={i} className="animate-pulse">
                 <CardContent className="p-6 h-64 bg-muted/50" />
@@ -48,14 +53,26 @@ const Testimonials = () => {
   }
 
   return (
-    <section className="py-16 px-4 bg-muted/30">
-      <div className="container mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          Testimoni Klien
-        </h2>
+    <section className="py-16 lg:py-24 bg-gradient-to-b from-secondary/20 to-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12 fade-in">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            Kata{" "}
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Klien Kami
+            </span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Kepuasan klien adalah prioritas utama kami. Simak pengalaman mereka bekerja sama dengan Atha Studio.
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((testimonial) => (
-            <Card key={testimonial.id} className="hover:shadow-glow transition-all duration-300">
+          {testimonials.map((testimonial, index) => (
+            <Card 
+              key={testimonial.id} 
+              className="hover:shadow-glow transition-all duration-300 hover:-translate-y-1 slide-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               <CardContent className="p-6">
                 <div className="flex items-start gap-4 mb-4">
                   {testimonial.client_photo_url ? (
