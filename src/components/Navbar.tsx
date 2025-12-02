@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { Menu, X, Home, User, Mail, Image, LogIn, Settings } from "lucide-react";
+import { Menu, X, Home, User, Mail, Camera, LogIn, Settings, MessageCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import athaStudioLogo from "@/assets/atha-studio-logo.png";
 import { ThemeToggle } from "./ThemeToggle";
@@ -13,11 +13,10 @@ const Navbar = () => {
 
   const navItems = [
     { href: "/", label: "Beranda", icon: Home },
-    { href: "/gallery", label: "Galeri", icon: Image },
-    { href: "/about", label: "Tentang Kami", icon: User },
-    { href: "/pricing", label: "Harga", icon: Mail },
-    { href: "/blog", label: "Blog", icon: Mail },
-    { href: "/contact", label: "Kontak", icon: Mail },
+    { href: "/gallery", label: "Portfolio", icon: Camera },
+    { href: "/pricing", label: "Layanan", icon: Camera },
+    { href: "/about", label: "Tentang", icon: User },
+    { href: "/contact", label: "Kontak", icon: MessageCircle },
   ];
 
   const isActive = (path: string) => location.pathname === path;

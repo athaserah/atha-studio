@@ -6,7 +6,6 @@ import ClientLogos from "@/components/ClientLogos";
 import Testimonials from "@/components/Testimonials";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { FeaturedWork } from "@/components/FeaturedWork";
-import { VideoPortfolio } from "@/components/VideoPortfolio";
 import { FAQ } from "@/components/FAQ";
 import SEOHead, { photographyBusinessSchema } from "@/components/SEOHead";
 import { trackPageView } from "@/utils/analytics";
@@ -22,7 +21,6 @@ const Index = () => {
         
         <Services />
         <FeaturedWork />
-        <VideoPortfolio />
         <Testimonials />
         <FAQ />
         <NewsletterSignup />

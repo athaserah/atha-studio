@@ -21,7 +21,7 @@ const Services = () => {
         });
       }
 
-      const message = `Halo! Saya tertarik dengan layanan ${serviceName} - Paket ${packageName}. Mohon informasi lebih lanjut.`;
+      const message = `Halo! Saya tertarik dengan layanan ${serviceName} - Paket ${packageName}. Mohon informasi lebih lanjut mengenai paket ini.`;
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
       
       console.log('Opening WhatsApp URL:', whatsappUrl);
@@ -50,7 +50,7 @@ const Services = () => {
     {
       name: "Basic",
       price: "250.000",
-      description: "Perfect untuk konten media sosial dan portfolio pribadi",
+      description: "Ideal untuk konten media sosial dan portfolio pribadi",
       features: [
         "Durasi sesi 1 jam",
         "1 lokasi pilihan",
@@ -129,7 +129,7 @@ const Services = () => {
               >
                 {pkg.popular && (
                   <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-bold">
-                    PALING LAKU
+                    TERPOPULER
                   </div>
                 )}
                 
@@ -174,10 +174,10 @@ const Services = () => {
           <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">
             <CardHeader>
               <CardTitle className="text-2xl lg:text-3xl">
-                Butuh Konsultasi Paket?
+                Butuh Konsultasi?
               </CardTitle>
               <CardDescription className="text-base lg:text-lg">
-                Hubungi kami via WhatsApp untuk konsultasi gratis. Tim kami siap membantu memilih paket yang sesuai kebutuhan Anda.
+                Hubungi kami via WhatsApp untuk konsultasi gratis. Tim kami siap membantu Anda memilih paket yang sesuai dengan kebutuhan.
               </CardDescription>
             </CardHeader>
             <CardFooter className="justify-center">
