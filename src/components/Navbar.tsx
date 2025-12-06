@@ -56,13 +56,16 @@ const Navbar = () => {
                 <span>Admin Panel</span>
               </Link>}
             <ThemeToggle />
-            {user ? <Button variant="premium" size="sm" asChild>
+            {user ? <Button variant="default" size="sm" asChild>
                 <Link to="/dashboard">
                   <User className="h-4 w-4" />
                   Dashboard
                 </Link>
-              </Button> : <Button variant="premium" size="sm" asChild>
-                
+              </Button> : <Button variant="default" size="sm" asChild>
+                <Link to="/auth">
+                  <LogIn className="h-4 w-4" />
+                  Masuk
+                </Link>
               </Button>}
           </div>
 

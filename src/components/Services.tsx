@@ -59,7 +59,6 @@ const Services = () => {
         "File digital via Google Drive",
         "Revisi minor 1x"
       ],
-      gradient: "from-blue-500 to-cyan-500",
       popular: false
     },
     {
@@ -75,7 +74,6 @@ const Services = () => {
         "Revisi 2x",
         "Bonus 10 foto filter vintage"
       ],
-      gradient: "from-purple-500 to-pink-500",
       popular: true
     },
     {
@@ -92,7 +90,6 @@ const Services = () => {
         "Behind the scenes video",
         "2 photographer + assistant"
       ],
-      gradient: "from-orange-500 to-red-500",
       popular: false
     }
   ];
@@ -122,8 +119,8 @@ const Services = () => {
             {photographyPackages.map((pkg, index) => (
               <Card 
                 key={pkg.name}
-                className={`relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-glow ${
-                  pkg.popular ? 'border-primary border-2' : ''
+                className={`relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-glow bg-card ${
+                  pkg.popular ? 'border-primary border-2 ring-2 ring-primary/20' : 'border-border'
                 }`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
@@ -133,13 +130,13 @@ const Services = () => {
                   </div>
                 )}
                 
-                <div className={`h-2 bg-gradient-to-r ${pkg.gradient}`} />
+                <div className="h-2 bg-primary" />
                 
                 <CardHeader>
-                  <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                  <CardDescription className="text-base">{pkg.description}</CardDescription>
+                  <CardTitle className="text-2xl text-foreground">{pkg.name}</CardTitle>
+                  <CardDescription className="text-base text-muted-foreground">{pkg.description}</CardDescription>
                   <div className="mt-4">
-                    <span className="text-4xl font-bold">Rp {pkg.price}</span>
+                    <span className="text-4xl font-bold text-foreground">Rp {pkg.price}</span>
                   </div>
                 </CardHeader>
                 
@@ -148,7 +145,7 @@ const Services = () => {
                     {pkg.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-2">
                         <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
+                        <span className="text-sm text-foreground">{feature}</span>
                       </li>
                     ))}
                   </ul>
