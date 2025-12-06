@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Camera, Star, Award, Users, Image, User, Mail, Settings, Grid3X3 } from "lucide-react";
+import { Camera } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-photography.jpg";
 import { useEffect, useState } from "react";
@@ -42,31 +42,6 @@ const Hero = () => {
     const Icon = (LucideIcons as any)[iconName];
     return Icon ? Icon : Camera;
   };
-  const menuItems = [{
-    href: "/gallery",
-    label: "Galeri Foto",
-    icon: Image,
-    description: "Lihat karya terbaik kami",
-    color: "from-purple-500 to-pink-500"
-  }, {
-    href: "/about",
-    label: "Tentang Kami",
-    icon: User,
-    description: "Kenali tim profesional kami",
-    color: "from-blue-500 to-cyan-500"
-  }, {
-    href: "/contact",
-    label: "Hubungi Kami",
-    icon: Mail,
-    description: "Konsultasi & booking",
-    color: "from-green-500 to-emerald-500"
-  }, {
-    href: "/auth",
-    label: "Login / Daftar",
-    icon: Settings,
-    description: "Akses dashboard klien",
-    color: "from-orange-500 to-red-500"
-  }];
   return <>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
