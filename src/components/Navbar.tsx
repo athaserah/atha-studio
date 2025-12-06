@@ -57,10 +57,7 @@ const Navbar = () => {
               </Link>}
             <ThemeToggle />
             {user ? <Button variant="default" size="sm" asChild>
-                <Link to="/dashboard">
-                  <User className="h-4 w-4" />
-                  Dashboard
-                </Link>
+                
               </Button> : <Button variant="default" size="sm" asChild>
                 <Link to="/auth">
                   <LogIn className="h-4 w-4" />
