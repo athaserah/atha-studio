@@ -56,14 +56,6 @@ const Navbar = () => {
                 <span>Admin Panel</span>
               </Link>}
             <ThemeToggle />
-            {user ? <Button variant="default" size="sm" asChild>
-                
-              </Button> : <Button variant="default" size="sm" asChild>
-                <Link to="/auth">
-                  <LogIn className="h-4 w-4" />
-                  Masuk
-                </Link>
-              </Button>}
           </div>
 
           {/* Mobile menu button */}
@@ -89,19 +81,6 @@ const Navbar = () => {
                   <Settings className="h-5 w-5" />
                   <span>Admin Panel</span>
                 </Link>}
-              <div className="px-4 pt-2">
-                {user ? <Button variant="premium" className="w-full" asChild>
-                    <Link to="/dashboard">
-                      <User className="h-4 w-4" />
-                      Dashboard
-                    </Link>
-                  </Button> : <Button variant="premium" className="w-full" asChild>
-                    <Link to="/auth">
-                      <LogIn className="h-4 w-4" />
-                      Masuk
-                    </Link>
-                  </Button>}
-              </div>
             </div>
           </div>}
       </div>
