@@ -24,7 +24,7 @@ export const Footer = () => {
             {/* Social Media */}
             <div className="flex space-x-4">
               <a 
-                href="https://instagram.com" 
+                href="https://instagram.com/athadiary21/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 group"
@@ -32,7 +32,7 @@ export const Footer = () => {
                 <Instagram className="h-5 w-5 group-hover:scale-110 transition-transform" />
               </a>
               <a 
-                href="https://facebook.com" 
+                href="https://web.facebook.com/AthaDiary21/?locale=id_ID" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 group"
@@ -40,7 +40,7 @@ export const Footer = () => {
                 <Facebook className="h-5 w-5 group-hover:scale-110 transition-transform" />
               </a>
               <a 
-                href="https://youtube.com" 
+                href="https://www.youtube.com/@Atha21-w5i" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 group"
@@ -118,7 +118,7 @@ export const Footer = () => {
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 <a href="mailto:info@athastudio.id" className="hover:text-primary transition-colors">
-                  info@athastudio.id
+                  athadiary21@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
