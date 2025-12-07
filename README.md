@@ -1,73 +1,108 @@
-# Welcome to your Lovable project
+# Atha Studio
 
-## Project info
+![Version](https://img.shields.io/badge/version-1.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg) ![Status](https://img.shields.io/badge/status-active-success.svg)
 
-**URL**: https://lovable.dev/projects/6a6d2969-c1cd-45c3-ab9d-6a5eb5da382e
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-## How can I edit this code?
+Atha Studio adalah aplikasi web modern untuk studio fotografi yang dibangun menggunakan React, TypeScript, dan Vite. Aplikasi ini menyediakan fitur lengkap mulai dari portofolio galeri, pemesanan paket (Wisuda, Pernikahan), kalkulator harga, blog, hingga panel administrasi untuk pengelolaan konten.
 
-There are several ways of editing your application.
+## 🚀 Fitur Utama
 
-**Use Lovable**
+* **Galeri Foto:** Tampilan portofolio yang responsif dan interaktif.
+* **Pemesanan & Paket:** Halaman khusus untuk berbagai paket layanan (Wedding, Wisuda).
+* **Kalkulator Harga:** Fitur estimasi harga untuk layanan kustom.
+* **Blog:** Bagian artikel dan berita terbaru.
+* **Admin Panel:** Dashboard terproteksi untuk mengelola konten website.
+* **Otentikasi:** Sistem login aman menggunakan Supabase Auth.
+* **PWA Support:** Dapat diinstal sebagai Progressive Web App.
+* **Desain Responsif:** Tampilan optimal di desktop dan mobile.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6a6d2969-c1cd-45c3-ab9d-6a5eb5da382e) and start prompting.
+## 🛠 Teknologi yang Digunakan
 
-Changes made via Lovable will be committed automatically to this repo.
+Proyek ini dibangun menggunakan teknologi terkini (Modern Stack):
 
-**Use your preferred IDE**
+* **Core:** [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/)
+* **Styling & UI:** [Tailwind CSS](https://tailwindcss.com/), [Shadcn UI](https://ui.shadcn.com/) (berbasis Radix UI), [Lucide React](https://lucide.dev/) (Ikon)
+* **State Management & Data Fetching:** [TanStack Query](https://tanstack.com/query)
+* **Backend & Database:** [Supabase](https://supabase.com/)
+* **Form & Validasi:** [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/)
+* **Routing:** [React Router DOM](https://reactrouter.com/)
+* **Charts:** [Recharts](https://recharts.org/)
+* **Utilities:** `date-fns`, `sonner` (Toast notifications), `react-easy-crop`.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## ⚙️ Persyaratan Sistem
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Sebelum memulai, pastikan Anda telah menginstal:
 
-Follow these steps:
+* [Node.js](https://nodejs.org/) (Versi LTS disarankan)
+* npm (biasanya terinstal bersama Node.js) atau bun/yarn
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 📦 Cara Instalasi
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1.  **Clone repositori ini**
+    ```bash
+    git clone [https://github.com/username-anda/atha-studio.git](https://github.com/username-anda/atha-studio.git)
+    cd atha-studio
+    ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2.  **Instal dependensi**
+    ```bash
+    npm install
+    ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+3.  **Konfigurasi Environment Variables**
+    Buat file `.env` di root proyek dan tambahkan konfigurasi Supabase Anda (lihat panduan di bawah).
+
+4.  **Jalankan Server Development**
+    ```bash
+    npm run dev
+    ```
+    Aplikasi akan berjalan di `http://localhost:8080` (atau port yang tersedia).
+
+## 🔐 Konfigurasi Lingkungan (.env)
+
+Aplikasi ini memerlukan koneksi ke Supabase. Buat file bernama `.env` di direktori root proyek dan isi dengan kredensial berikut:
+
+```env
+VITE_SUPABASE_PROJECT_ID="your_supabase_project_id"
+VITE_SUPABASE_URL="[https://your-project-id.supabase.co](https://your-project-id.supabase.co)"
+VITE_SUPABASE_PUBLISHABLE_KEY="your_supabase_anon_key"
+````
+
+> **Catatan:** Pastikan untuk tidak mengunggah file `.env` yang berisi kunci rahasia ke repositori publik. Gunakan `.env.example` sebagai referensi jika berkolaborasi dalam tim.
+
+## 📜 Skrip Tersedia
+
+Dalam direktori proyek, Anda dapat menjalankan perintah berikut:
+
+  * `npm run dev`: Menjalankan aplikasi dalam mode pengembangan.
+  * `npm run build`: Membangun aplikasi untuk produksi ke folder `dist`.
+  * `npm run preview`: Meninjau hasil build produksi secara lokal.
+  * `npm run lint`: Menjalankan ESLint untuk memeriksa masalah kode.
+
+## 📱 Struktur Proyek
+
+Struktur folder utama proyek:
+
+```
+src/
+├── components/     # Komponen UI yang dapat digunakan kembali (Shadcn, dll)
+├── hooks/          # Custom React Hooks (useAuth, usePhotos, dll)
+├── integrations/   # Konfigurasi layanan pihak ketiga (Supabase)
+├── pages/          # Halaman-halaman aplikasi (Home, Gallery, Admin, dll)
+├── types/          # Definisi tipe TypeScript
+├── utils/          # Fungsi utilitas
+└── App.tsx         # Komponen utama dan konfigurasi Routing
 ```
 
-**Edit a file directly in GitHub**
+## 📄 Lisensi
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-**Use GitHub Codespaces**
+## 🧑‍💻 Creator
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/6a6d2969-c1cd-45c3-ab9d-6a5eb5da382e) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+#### Atha Diary
+#### My Portfolio : https://athadiary.my.id
