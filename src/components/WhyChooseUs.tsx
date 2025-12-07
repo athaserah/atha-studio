@@ -11,7 +11,7 @@ const benefits = [
   {
     icon: Users,
     title: "Tim Berpengalaman",
-    description: "Fotografer profesional dengan pengalaman lebih dari 5 tahun di berbagai jenis acara"
+    description: "Fotografer profesional dengan pengalaman lebih dari 1 tahun di berbagai jenis acara"
   },
   {
     icon: Clock,
