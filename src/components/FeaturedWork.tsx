@@ -1,37 +1,59 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Camera } from "lucide-react";
+import { ArrowRight, Camera, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { OptimizedImage } from "./OptimizedImage";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 
-const featuredProjects = [
-  {
-    id: 1,
-    title: "Wedding Intimate Citra & Budi",
-    category: "Wedding",
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800",
-    description: "Pernikahan intimate di villa Ubud dengan 50 tamu undangan",
-    tags: ["Wedding", "Outdoor", "Intimate"]
-  },
-  {
-    id: 2,
-    title: "Corporate Event Bank Mandiri",
-    category: "Corporate",
-    image: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800",
-    description: "Dokumentasi acara launching produk baru di Jakarta Convention Center",
-    tags: ["Corporate", "Event", "Professional"]
-  },
-  {
-    id: 3,
-    title: "Product Photography E-Commerce",
-    category: "Product",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800",
-    description: "Sesi foto produk fashion untuk online store",
-    tags: ["Product", "Commercial", "E-Commerce"]
-  }
-];
+interface FeaturedPhoto {
+  id: string;
+  title: string;
+  description: string | null;
+  image_url: string;
+  category: string | null;
+  tags: string[] | null;
+}
 
 export const FeaturedWork = () => {
+  const { data: featuredPhotos, isLoading, refetch } = useQuery({
+    queryKey: ['featured-photos'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('photos')
+        .select('id, title, description, image_url, category, tags')
+        .eq('is_featured', true)
+        .order('sort_order', { ascending: true })
+        .limit(3);
+      
+      if (error) throw error;
+      return data as FeaturedPhoto[];
+    },
+  });
+
+  // Real-time subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel('featured-photos-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'photos'
+        },
+        () => {
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetch]);
+
   return (
     <section className="py-section bg-secondary/20">
       <div className="container-responsive">
@@ -51,40 +73,56 @@ export const FeaturedWork = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {featuredProjects.map((project, index) => (
-            <div
-              key={project.id}
-              className="group cursor-pointer"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="relative overflow-hidden rounded-xl mb-4 shadow-lg hover:shadow-2xl transition-all duration-500">
-                <OptimizedImage
-                  src={project.image}
-                  alt={project.title}
-                  className="h-80"
-                  aspectRatio="4/5"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <Badge variant="secondary" className="mb-2 bg-white/20 text-white">
-                      {project.category}
-                    </Badge>
-                    <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                    <p className="text-sm text-white/90 mb-3">{project.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-xs border-white/30 text-white">
-                          {tag}
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : featuredPhotos && featuredPhotos.length > 0 ? (
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {featuredPhotos.map((photo, index) => (
+              <div
+                key={photo.id}
+                className="group cursor-pointer"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="relative overflow-hidden rounded-xl mb-4 shadow-lg hover:shadow-2xl transition-all duration-500">
+                  <OptimizedImage
+                    src={photo.image_url}
+                    alt={photo.title}
+                    className="h-80"
+                    aspectRatio="4/5"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      {photo.category && (
+                        <Badge variant="secondary" className="mb-2 bg-white/20 text-white">
+                          {photo.category}
                         </Badge>
-                      ))}
+                      )}
+                      <h3 className="text-xl font-bold mb-2">{photo.title}</h3>
+                      {photo.description && (
+                        <p className="text-sm text-white/90 mb-3">{photo.description}</p>
+                      )}
+                      {photo.tags && photo.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {photo.tags.slice(0, 3).map((tag) => (
+                            <Badge key={tag} variant="outline" className="text-xs border-white/30 text-white">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 text-muted-foreground">
+            <p>Belum ada foto unggulan. Tandai foto sebagai "Featured" di Admin Panel.</p>
+          </div>
+        )}
 
         <div className="text-center">
           <Link to="/gallery">
