@@ -10,15 +10,17 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Trash2, Edit, Plus, Users, BookOpen, Image, Upload, X, 
-  ArrowLeft, LayoutGrid, Star, User, Shield, Camera
+  ArrowLeft, LayoutGrid, Star, User, Shield, Camera, TrendingUp, Activity, Calendar
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import AdminAboutManager from '@/components/AdminAboutManager';
 import { AdminHeroManager } from '@/components/AdminHeroManager';
 import { ImageCropDialog } from '@/components/ImageCropDialog';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
 
 interface Profile {
   id: string;
@@ -221,6 +223,45 @@ export default function AdminPanel() {
     );
   }
 
+  // Generate activity data for charts
+  const getActivityData = () => {
+    const last7Days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      const dayBookings = bookings.filter(b => b.created_at.startsWith(dateStr)).length;
+      const dayPhotos = photos.filter(p => p.created_at.startsWith(dateStr)).length;
+      last7Days.push({
+        date: date.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit' }),
+        aktivitas: dayBookings + dayPhotos,
+      });
+    }
+    return last7Days;
+  };
+
+  const getCategoryData = () => {
+    const categories: { [key: string]: number } = {};
+    photos.forEach(photo => {
+      const cat = photo.category || 'Uncategorized';
+      categories[cat] = (categories[cat] || 0) + 1;
+    });
+    return Object.entries(categories).map(([name, value]) => ({ name, value }));
+  };
+
+  const getStatusData = () => {
+    return [
+      { name: 'Pending', value: bookings.filter(b => b.status === 'pending').length },
+      { name: 'Confirmed', value: bookings.filter(b => b.status === 'confirmed').length },
+      { name: 'Cancelled', value: bookings.filter(b => b.status === 'cancelled').length },
+    ].filter(item => item.value > 0);
+  };
+
+  const COLORS = ['hsl(var(--primary))', 'hsl(142, 76%, 36%)', 'hsl(0, 84%, 60%)', 'hsl(221, 83%, 53%)', 'hsl(262, 83%, 58%)'];
+  const activityData = getActivityData();
+  const totalActivity = activityData.reduce((sum, d) => sum + d.aktivitas, 0);
+  const avgDaily = (totalActivity / 7).toFixed(1);
+
   // Dashboard View - Card Grid like reference
   if (activeSection === 'dashboard') {
     return (
@@ -232,6 +273,154 @@ export default function AdminPanel() {
             <p className="text-muted-foreground">Kelola konten website Atha Studio</p>
           </div>
 
+          {/* Quick Stats Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <Card className="border-l-4 border-l-primary">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Aktivitas</p>
+                    <p className="text-2xl font-bold">{totalActivity}</p>
+                    <p className="text-xs text-muted-foreground">dalam 7 hari terakhir</p>
+                  </div>
+                  <Activity className="h-8 w-8 text-primary opacity-50" />
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-l-4 border-l-green-500">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Rata-rata Harian</p>
+                    <p className="text-2xl font-bold">{avgDaily}</p>
+                    <p className="text-xs text-muted-foreground">aktivitas per hari</p>
+                  </div>
+                  <TrendingUp className="h-8 w-8 text-green-500 opacity-50" />
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-l-4 border-l-blue-500">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Foto Unggulan</p>
+                    <p className="text-2xl font-bold">{photos.filter(p => p.is_featured).length}</p>
+                    <p className="text-xs text-muted-foreground">dari {photos.length} foto</p>
+                  </div>
+                  <Star className="h-8 w-8 text-blue-500 opacity-50" />
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-l-4 border-l-purple-500">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Pesanan Baru</p>
+                    <p className="text-2xl font-bold">{bookings.filter(b => b.status === 'pending').length}</p>
+                    <p className="text-xs text-muted-foreground">menunggu konfirmasi</p>
+                  </div>
+                  <Calendar className="h-8 w-8 text-purple-500 opacity-50" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Activity Chart */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-lg">Aktivitas Harian</CardTitle>
+              <CardDescription>Grafik aktivitas admin per hari</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={activityData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis dataKey="date" className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                    <YAxis className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--background))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }} 
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="aktivitas" 
+                      stroke="hsl(var(--primary))" 
+                      strokeWidth={2}
+                      dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Charts Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Status Distribution */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Status Pesanan</CardTitle>
+                <CardDescription>Distribusi status booking</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={getStatusData()}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={40}
+                        outerRadius={70}
+                        paddingAngle={5}
+                        dataKey="value"
+                        label={({ name, value }) => `${name}: ${value}`}
+                      >
+                        {getStatusData().map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Category Distribution */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Kategori Foto</CardTitle>
+                <CardDescription>Distribusi foto per kategori</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={getCategoryData()}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis dataKey="name" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} />
+                      <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--background))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px'
+                        }} 
+                      />
+                      <Bar dataKey="value" fill="hsl(142, 76%, 36%)" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Navigation Cards */}
+          <h2 className="text-lg font-semibold mb-4">Menu Admin</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {adminMenuItems.map((item) => {
               const Icon = item.icon;
@@ -265,34 +454,6 @@ export default function AdminPanel() {
                 </Card>
               );
             })}
-          </div>
-
-          {/* Quick Stats */}
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <Card className="bg-primary/5 border-primary/20">
-              <CardContent className="p-4 text-center">
-                <div className="text-3xl font-bold text-primary">{bookings.filter(b => b.status === 'pending').length}</div>
-                <p className="text-sm text-muted-foreground">Pesanan Pending</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-green-500/5 border-green-500/20">
-              <CardContent className="p-4 text-center">
-                <div className="text-3xl font-bold text-green-600">{bookings.filter(b => b.status === 'confirmed').length}</div>
-                <p className="text-sm text-muted-foreground">Dikonfirmasi</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-blue-500/5 border-blue-500/20">
-              <CardContent className="p-4 text-center">
-                <div className="text-3xl font-bold text-blue-600">{photos.length}</div>
-                <p className="text-sm text-muted-foreground">Total Foto</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-purple-500/5 border-purple-500/20">
-              <CardContent className="p-4 text-center">
-                <div className="text-3xl font-bold text-purple-600">{profiles.length}</div>
-                <p className="text-sm text-muted-foreground">Pengguna</p>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
@@ -431,8 +592,27 @@ export default function AdminPanel() {
                       <CardContent className="p-4">
                         <h3 className="font-medium truncate">{photo.title}</h3>
                         <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{photo.description}</p>
-                        <div className="flex items-center gap-2 mb-3">
+                        <div className="flex items-center justify-between mb-3">
                           <Badge variant="outline" className="text-xs">{photo.category || 'Uncategorized'}</Badge>
+                          {/* Toggle Featured */}
+                          <div className="flex items-center gap-2">
+                            <Label htmlFor={`featured-${photo.id}`} className="text-xs text-muted-foreground">
+                              <Star className={`h-4 w-4 ${photo.is_featured ? 'text-yellow-500 fill-yellow-500' : ''}`} />
+                            </Label>
+                            <Switch 
+                              id={`featured-${photo.id}`}
+                              checked={photo.is_featured}
+                              onCheckedChange={async (checked) => {
+                                try {
+                                  const { error } = await supabase.from('photos').update({ is_featured: checked }).eq('id', photo.id);
+                                  if (error) throw error;
+                                  toast({ title: checked ? "Ditandai unggulan" : "Dihapus dari unggulan" });
+                                } catch (error: any) {
+                                  toast({ title: "Error", description: error.message, variant: "destructive" });
+                                }
+                              }}
+                            />
+                          </div>
                         </div>
                         <div className="flex gap-2">
                           <Button variant="outline" size="sm" className="flex-1" onClick={() => { setEditingPhoto(photo); setIsDialogOpen(true); }}>
