@@ -221,6 +221,19 @@ export default function AdminPanel() {
     }
   };
 
+  const createBooking = async (bookingData: Omit<Booking, 'id' | 'created_at'>) => {
+    try {
+      const { error } = await supabase.from('bookings').insert([bookingData]);
+      if (error) throw error;
+      toast({ title: "Berhasil", description: "Pesanan ditambahkan" });
+      setIsBookingDialogOpen(false);
+      setEditingBooking(null);
+      fetchAllData();
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+  };
+
   const generateInvoiceNumber = async (bookingId: string) => {
     try {
       const { data, error } = await supabase.rpc('generate_invoice_number');
@@ -692,12 +705,20 @@ export default function AdminPanel() {
         {/* Bookings Section with Modern Table */}
         {activeSection === 'bookings' && (
           <Card className="glass-card animate-fade-in">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-primary" />
-                <CardTitle className="text-xl">Manajemen Pesanan</CardTitle>
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <BookOpen className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-xl">Manajemen Pesanan</CardTitle>
+                </div>
+                <CardDescription>Lihat dan kelola pesanan pelanggan</CardDescription>
               </div>
-              <CardDescription>Lihat dan kelola pesanan pelanggan</CardDescription>
+              <Button 
+                onClick={() => { setEditingBooking(null); setIsBookingDialogOpen(true); }}
+                className="bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
+              >
+                <Plus className="h-4 w-4 mr-2" /> Tambah Pesanan
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto -mx-6 px-6">
@@ -820,15 +841,23 @@ export default function AdminPanel() {
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-primary" />
-                Edit Pesanan
+                {editingBooking ? 'Edit Pesanan' : 'Tambah Pesanan Baru'}
               </DialogTitle>
               <DialogDescription>
-                Update detail pesanan dan invoice
+                {editingBooking ? 'Update detail pesanan dan invoice' : 'Masukkan detail pesanan pelanggan'}
               </DialogDescription>
             </DialogHeader>
             <BookingEditDialog
               booking={editingBooking}
-              onSave={updateBooking}
+              onSave={(idOrData: any, data?: any) => {
+                if (typeof idOrData === 'string') {
+                  // Update mode: idOrData is booking ID
+                  updateBooking(idOrData, data);
+                } else {
+                  // Create mode: idOrData is booking data
+                  createBooking(idOrData);
+                }
+              }}
               onClose={() => { setIsBookingDialogOpen(false); setEditingBooking(null); }}
               onGenerateInvoice={generateInvoiceNumber}
             />
@@ -1731,7 +1760,7 @@ const TestimonialDialogForm: React.FC<TestimonialDialogFormProps> = ({ testimoni
 // BookingEditDialog Component
 interface BookingEditDialogProps {
   booking: Booking | null;
-  onSave: (id: string, data: Partial<Booking>) => void;
+  onSave: (id: string, data: Partial<Booking>) => void | ((data: Omit<Booking, 'id' | 'created_at'>) => void);
   onClose: () => void;
   onGenerateInvoice: (id: string) => void;
 }
@@ -1790,9 +1819,8 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!booking) return;
 
-    const updateData: Partial<Booking> = {
+    const bookingData = {
       customer_name: formData.customer_name,
       customer_email: formData.customer_email,
       customer_phone: formData.customer_phone,
@@ -1815,10 +1843,14 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
       admin_notes: formData.admin_notes || null,
     };
 
-    onSave(booking.id, updateData);
+    if (booking) {
+      // Update existing booking
+      onSave(booking.id, bookingData);
+    } else {
+      // Create new booking
+      onSave(bookingData as any);
+    }
   };
-
-  if (!booking) return null;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
@@ -1953,7 +1985,7 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
       <div className="space-y-4">
         <div className="flex items-center justify-between border-b pb-2">
           <h3 className="font-semibold text-lg">Informasi Invoice</h3>
-          {!formData.invoice_number && (
+          {!formData.invoice_number && booking && (
             <Button
               type="button"
               variant="outline"
