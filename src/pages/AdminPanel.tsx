@@ -751,8 +751,13 @@ export default function AdminPanel() {
                           <Button 
                             variant="outline" 
                             size="sm" 
-                            className="flex-1 hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors" 
-                            onClick={() => { setEditingPhoto(photo); setIsDialogOpen(true); }}
+                            className="flex-1 hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors relative z-10" 
+                            onClick={(e) => { 
+                              e.stopPropagation();
+                              console.log('Edit button clicked for photo:', photo.id);
+                              setEditingPhoto(photo); 
+                              setIsDialogOpen(true); 
+                            }}
                           >
                             <Edit className="h-4 w-4 mr-1" /> Edit
                           </Button>
