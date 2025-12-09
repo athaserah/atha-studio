@@ -14,12 +14,13 @@ import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Trash2, Edit, Plus, Users, BookOpen, Image, Upload, X, 
-  ArrowLeft, LayoutGrid, Star, User, Shield, Camera, TrendingUp, Activity, Calendar, Sparkles
+  ArrowLeft, LayoutGrid, Star, User, Shield, Camera, TrendingUp, Activity, Calendar, Sparkles, FileText
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import AdminAboutManager from '@/components/AdminAboutManager';
 import { AdminHeroManager } from '@/components/AdminHeroManager';
 import { ImageCropDialog } from '@/components/ImageCropDialog';
+import { Invoice } from '@/components/Invoice';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
 
 interface Profile {
@@ -45,6 +46,17 @@ interface Booking {
   message: string;
   status: string;
   created_at: string;
+  // Invoice fields
+  invoice_number?: string | null;
+  total_price?: number | null;
+  deposit_amount?: number | null;
+  deposit_paid?: boolean;
+  full_payment_paid?: boolean;
+  payment_method?: string | null;
+  payment_notes?: string | null;
+  invoice_date?: string | null;
+  due_date?: string | null;
+  admin_notes?: string | null;
 }
 
 interface Photo {
@@ -109,6 +121,11 @@ export default function AdminPanel() {
   
   const [editingTestimonial, setEditingTestimonial] = React.useState<Testimonial | null>(null);
   const [isTestimonialDialogOpen, setIsTestimonialDialogOpen] = React.useState(false);
+  
+  const [editingBooking, setEditingBooking] = React.useState<Booking | null>(null);
+  const [isBookingDialogOpen, setIsBookingDialogOpen] = React.useState(false);
+  const [viewingInvoice, setViewingInvoice] = React.useState<Booking | null>(null);
+  const [isInvoiceDialogOpen, setIsInvoiceDialogOpen] = React.useState(false);
 
   React.useEffect(() => {
     fetchAllData();
@@ -185,6 +202,40 @@ export default function AdminPanel() {
       const { error } = await supabase.from('bookings').delete().eq('id', bookingId);
       if (error) throw error;
       toast({ title: "Berhasil", description: "Pesanan dihapus" });
+      fetchAllData();
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+  };
+
+  const updateBooking = async (bookingId: string, bookingData: Partial<Booking>) => {
+    try {
+      const { error } = await supabase.from('bookings').update(bookingData).eq('id', bookingId);
+      if (error) throw error;
+      toast({ title: "Berhasil", description: "Pesanan diperbarui" });
+      setIsBookingDialogOpen(false);
+      setEditingBooking(null);
+      fetchAllData();
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+  };
+
+  const generateInvoiceNumber = async (bookingId: string) => {
+    try {
+      const { data, error } = await supabase.rpc('generate_invoice_number');
+      if (error) throw error;
+      
+      const invoiceNumber = data as string;
+      const invoiceDate = new Date().toISOString().split('T')[0];
+      
+      await updateBooking(bookingId, {
+        invoice_number: invoiceNumber,
+        invoice_date: invoiceDate,
+        status: 'invoiced'
+      });
+      
+      toast({ title: "Berhasil", description: `Invoice ${invoiceNumber} dibuat` });
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     }
@@ -719,14 +770,39 @@ export default function AdminPanel() {
                           </TableCell>
                           <TableCell className="font-medium text-foreground">{booking.budget_range}</TableCell>
                           <TableCell>
-                            <Button 
-                              variant="destructive" 
-                              size="sm" 
-                              onClick={() => deleteBooking(booking.id)}
-                              className="hover:scale-105 transition-transform"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <div className="flex gap-2">
+                              {booking.invoice_number && (
+                                <Button 
+                                  variant="secondary" 
+                                  size="sm" 
+                                  onClick={() => { setViewingInvoice(booking); setIsInvoiceDialogOpen(true); }}
+                                  className="hover:bg-secondary/80 transition-colors"
+                                  title="View Invoice"
+                                >
+                                  <FileText className="h-4 w-4" />
+                                </Button>
+                              )}
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={() => { setEditingBooking(booking); setIsBookingDialogOpen(true); }}
+                                className="hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="destructive" 
+                                size="sm" 
+                                onClick={() => {
+                                  if (confirm('Yakin ingin menghapus pesanan ini?')) {
+                                    deleteBooking(booking.id);
+                                  }
+                                }}
+                                className="hover:scale-105 transition-transform"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))
@@ -737,6 +813,43 @@ export default function AdminPanel() {
             </CardContent>
           </Card>
         )}
+
+        {/* Booking Edit Dialog */}
+        <Dialog open={isBookingDialogOpen} onOpenChange={setIsBookingDialogOpen}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                Edit Pesanan
+              </DialogTitle>
+              <DialogDescription>
+                Update detail pesanan dan invoice
+              </DialogDescription>
+            </DialogHeader>
+            <BookingEditDialog
+              booking={editingBooking}
+              onSave={updateBooking}
+              onClose={() => { setIsBookingDialogOpen(false); setEditingBooking(null); }}
+              onGenerateInvoice={generateInvoiceNumber}
+            />
+          </DialogContent>
+        </Dialog>
+
+        {/* Invoice View Dialog */}
+        <Dialog open={isInvoiceDialogOpen} onOpenChange={setIsInvoiceDialogOpen}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-primary" />
+                Invoice - {viewingInvoice?.invoice_number}
+              </DialogTitle>
+              <DialogDescription>
+                View and print invoice
+              </DialogDescription>
+            </DialogHeader>
+            {viewingInvoice && <Invoice booking={viewingInvoice} />}
+          </DialogContent>
+        </Dialog>
 
         {/* Photos Section with Modern Grid */}
         {activeSection === 'photos' && (
@@ -1609,6 +1722,365 @@ const TestimonialDialogForm: React.FC<TestimonialDialogFormProps> = ({ testimoni
         </Button>
         <Button type="submit" className="bg-gradient-to-r from-primary to-accent">
           {testimonial ? 'Update Testimoni' : 'Tambah Testimoni'}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
+};
+
+// BookingEditDialog Component
+interface BookingEditDialogProps {
+  booking: Booking | null;
+  onSave: (id: string, data: Partial<Booking>) => void;
+  onClose: () => void;
+  onGenerateInvoice: (id: string) => void;
+}
+
+const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, onClose, onGenerateInvoice }) => {
+  const [formData, setFormData] = React.useState({
+    customer_name: '',
+    customer_email: '',
+    customer_phone: '',
+    service_type: '',
+    package_type: '',
+    event_date: '',
+    event_location: '',
+    budget_range: '',
+    message: '',
+    status: 'pending',
+    // Invoice fields
+    invoice_number: '',
+    total_price: '',
+    deposit_amount: '',
+    deposit_paid: false,
+    full_payment_paid: false,
+    payment_method: '',
+    payment_notes: '',
+    invoice_date: '',
+    due_date: '',
+    admin_notes: '',
+  });
+
+  React.useEffect(() => {
+    if (booking) {
+      setFormData({
+        customer_name: booking.customer_name,
+        customer_email: booking.customer_email,
+        customer_phone: booking.customer_phone,
+        service_type: booking.service_type,
+        package_type: booking.package_type,
+        event_date: booking.event_date || '',
+        event_location: booking.event_location || '',
+        budget_range: booking.budget_range,
+        message: booking.message || '',
+        status: booking.status,
+        invoice_number: booking.invoice_number || '',
+        total_price: booking.total_price?.toString() || '',
+        deposit_amount: booking.deposit_amount?.toString() || '',
+        deposit_paid: booking.deposit_paid || false,
+        full_payment_paid: booking.full_payment_paid || false,
+        payment_method: booking.payment_method || '',
+        payment_notes: booking.payment_notes || '',
+        invoice_date: booking.invoice_date || '',
+        due_date: booking.due_date || '',
+        admin_notes: booking.admin_notes || '',
+      });
+    }
+  }, [booking]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!booking) return;
+
+    const updateData: Partial<Booking> = {
+      customer_name: formData.customer_name,
+      customer_email: formData.customer_email,
+      customer_phone: formData.customer_phone,
+      service_type: formData.service_type,
+      package_type: formData.package_type,
+      event_date: formData.event_date || null,
+      event_location: formData.event_location || null,
+      budget_range: formData.budget_range,
+      message: formData.message || null,
+      status: formData.status,
+      invoice_number: formData.invoice_number || null,
+      total_price: formData.total_price ? parseFloat(formData.total_price) : null,
+      deposit_amount: formData.deposit_amount ? parseFloat(formData.deposit_amount) : null,
+      deposit_paid: formData.deposit_paid,
+      full_payment_paid: formData.full_payment_paid,
+      payment_method: formData.payment_method || null,
+      payment_notes: formData.payment_notes || null,
+      invoice_date: formData.invoice_date || null,
+      due_date: formData.due_date || null,
+      admin_notes: formData.admin_notes || null,
+    };
+
+    onSave(booking.id, updateData);
+  };
+
+  if (!booking) return null;
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+      {/* Customer Information */}
+      <div className="space-y-4">
+        <h3 className="font-semibold text-lg border-b pb-2">Informasi Pelanggan</h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="customer_name">Nama Pelanggan *</Label>
+            <Input
+              id="customer_name"
+              value={formData.customer_name}
+              onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="customer_phone">No. Telepon *</Label>
+            <Input
+              id="customer_phone"
+              value={formData.customer_phone}
+              onChange={(e) => setFormData({ ...formData, customer_phone: e.target.value })}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="customer_email">Email *</Label>
+          <Input
+            id="customer_email"
+            type="email"
+            value={formData.customer_email}
+            onChange={(e) => setFormData({ ...formData, customer_email: e.target.value })}
+            required
+          />
+        </div>
+      </div>
+
+      {/* Service Information */}
+      <div className="space-y-4">
+        <h3 className="font-semibold text-lg border-b pb-2">Detail Layanan</h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="service_type">Jenis Layanan *</Label>
+            <Select value={formData.service_type} onValueChange={(value) => setFormData({ ...formData, service_type: value })}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="photography">Photography</SelectItem>
+                <SelectItem value="website">Website Development</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="package_type">Paket *</Label>
+            <Input
+              id="package_type"
+              value={formData.package_type}
+              onChange={(e) => setFormData({ ...formData, package_type: e.target.value })}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="event_date">Tanggal Acara</Label>
+            <Input
+              id="event_date"
+              type="date"
+              value={formData.event_date}
+              onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="budget_range">Budget Range *</Label>
+            <Input
+              id="budget_range"
+              value={formData.budget_range}
+              onChange={(e) => setFormData({ ...formData, budget_range: e.target.value })}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="event_location">Lokasi Acara</Label>
+          <Input
+            id="event_location"
+            value={formData.event_location}
+            onChange={(e) => setFormData({ ...formData, event_location: e.target.value })}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="message">Pesan/Catatan Pelanggan</Label>
+          <Textarea
+            id="message"
+            value={formData.message}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            rows={3}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="status">Status Pesanan *</Label>
+          <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="confirmed">Confirmed</SelectItem>
+              <SelectItem value="in_progress">In Progress</SelectItem>
+              <SelectItem value="invoiced">Invoiced</SelectItem>
+              <SelectItem value="paid">Paid</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="cancelled">Cancelled</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Invoice Information */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between border-b pb-2">
+          <h3 className="font-semibold text-lg">Informasi Invoice</h3>
+          {!formData.invoice_number && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => onGenerateInvoice(booking.id)}
+            >
+              <Plus className="h-4 w-4 mr-1" /> Generate Invoice
+            </Button>
+          )}
+        </div>
+
+        {formData.invoice_number && (
+          <div className="bg-primary/5 p-3 rounded-lg">
+            <p className="text-sm font-medium">Invoice Number: <span className="text-primary">{formData.invoice_number}</span></p>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="total_price">Total Harga (Rp)</Label>
+            <Input
+              id="total_price"
+              type="number"
+              step="0.01"
+              value={formData.total_price}
+              onChange={(e) => setFormData({ ...formData, total_price: e.target.value })}
+              placeholder="0"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="deposit_amount">DP/Deposit (Rp)</Label>
+            <Input
+              id="deposit_amount"
+              type="number"
+              step="0.01"
+              value={formData.deposit_amount}
+              onChange={(e) => setFormData({ ...formData, deposit_amount: e.target.value })}
+              placeholder="0"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="invoice_date">Tanggal Invoice</Label>
+            <Input
+              id="invoice_date"
+              type="date"
+              value={formData.invoice_date}
+              onChange={(e) => setFormData({ ...formData, invoice_date: e.target.value })}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="due_date">Jatuh Tempo</Label>
+            <Input
+              id="due_date"
+              type="date"
+              value={formData.due_date}
+              onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="payment_method">Metode Pembayaran</Label>
+          <Input
+            id="payment_method"
+            value={formData.payment_method}
+            onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
+            placeholder="Transfer Bank, Cash, dll"
+          />
+        </div>
+
+        <div className="flex gap-6">
+          <div className="flex items-center gap-2">
+            <Switch
+              id="deposit_paid"
+              checked={formData.deposit_paid}
+              onCheckedChange={(checked) => setFormData({ ...formData, deposit_paid: checked })}
+            />
+            <Label htmlFor="deposit_paid" className="cursor-pointer">DP Sudah Dibayar</Label>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Switch
+              id="full_payment_paid"
+              checked={formData.full_payment_paid}
+              onCheckedChange={(checked) => setFormData({ ...formData, full_payment_paid: checked })}
+            />
+            <Label htmlFor="full_payment_paid" className="cursor-pointer">Lunas</Label>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="payment_notes">Catatan Pembayaran</Label>
+          <Textarea
+            id="payment_notes"
+            value={formData.payment_notes}
+            onChange={(e) => setFormData({ ...formData, payment_notes: e.target.value })}
+            rows={2}
+            placeholder="Catatan terkait pembayaran..."
+          />
+        </div>
+      </div>
+
+      {/* Admin Notes */}
+      <div className="space-y-4">
+        <h3 className="font-semibold text-lg border-b pb-2">Catatan Admin (Internal)</h3>
+        <div className="space-y-2">
+          <Textarea
+            id="admin_notes"
+            value={formData.admin_notes}
+            onChange={(e) => setFormData({ ...formData, admin_notes: e.target.value })}
+            rows={3}
+            placeholder="Catatan internal untuk admin..."
+          />
+        </div>
+      </div>
+
+      <DialogFooter className="sticky bottom-0 bg-background pt-4 border-t">
+        <Button type="button" variant="outline" onClick={onClose}>
+          Batal
+        </Button>
+        <Button type="submit" className="bg-gradient-to-r from-primary to-accent">
+          Simpan Perubahan
         </Button>
       </DialogFooter>
     </form>
