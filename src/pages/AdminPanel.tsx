@@ -14,7 +14,7 @@ import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Trash2, Edit, Plus, Users, BookOpen, Image, Upload, X, 
-  ArrowLeft, LayoutGrid, Star, User, Shield, Camera, TrendingUp, Activity, Calendar
+  ArrowLeft, LayoutGrid, Star, User, Shield, Camera, TrendingUp, Activity, Calendar, Sparkles
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import AdminAboutManager from '@/components/AdminAboutManager';
@@ -70,12 +70,12 @@ interface UserRole {
 type ActiveSection = 'dashboard' | 'bookings' | 'photos' | 'hero' | 'about' | 'users' | 'roles';
 
 const adminMenuItems = [
-  { id: 'bookings' as const, icon: BookOpen, title: 'Pesanan', description: 'Kelola pesanan pelanggan' },
-  { id: 'photos' as const, icon: Camera, title: 'Galeri Foto', description: 'Kelola foto portfolio' },
-  { id: 'hero' as const, icon: Star, title: 'Hero Stats', description: 'Kelola statistik homepage' },
-  { id: 'about' as const, icon: User, title: 'Halaman About', description: 'Kelola halaman tentang kami' },
-  { id: 'users' as const, icon: Users, title: 'Pengguna', description: 'Lihat data pengguna' },
-  { id: 'roles' as const, icon: Shield, title: 'Hak Akses', description: 'Kelola role pengguna' },
+  { id: 'bookings' as const, icon: BookOpen, title: 'Pesanan', description: 'Kelola pesanan pelanggan', color: 'from-blue-500/20 to-cyan-500/20' },
+  { id: 'photos' as const, icon: Camera, title: 'Galeri Foto', description: 'Kelola foto portfolio', color: 'from-purple-500/20 to-pink-500/20' },
+  { id: 'hero' as const, icon: Star, title: 'Hero Stats', description: 'Kelola statistik homepage', color: 'from-amber-500/20 to-yellow-500/20' },
+  { id: 'about' as const, icon: User, title: 'Halaman About', description: 'Kelola halaman tentang kami', color: 'from-green-500/20 to-emerald-500/20' },
+  { id: 'users' as const, icon: Users, title: 'Pengguna', description: 'Lihat data pengguna', color: 'from-indigo-500/20 to-blue-500/20' },
+  { id: 'roles' as const, icon: Shield, title: 'Hak Akses', description: 'Kelola role pengguna', color: 'from-red-500/20 to-orange-500/20' },
 ];
 
 export default function AdminPanel() {
@@ -214,10 +214,13 @@ export default function AdminPanel() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-gradient-to-b from-background via-secondary/10 to-background">
         <Navbar />
         <div className="flex items-center justify-center min-h-[calc(100vh-4rem)]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Memuat data...</p>
+          </div>
         </div>
       </div>
     );
@@ -262,95 +265,128 @@ export default function AdminPanel() {
   const totalActivity = activityData.reduce((sum, d) => sum + d.aktivitas, 0);
   const avgDaily = (totalActivity / 7).toFixed(1);
 
-  // Dashboard View - Card Grid like reference
+  // Dashboard View with Premium Design
   if (activeSection === 'dashboard') {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-gradient-to-b from-background via-secondary/10 to-background relative overflow-hidden">
+        {/* Background Decoration */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        </div>
+
         <Navbar />
-        <div className="container mx-auto px-4 py-8 pt-24 max-w-6xl">
-          <div className="mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold mb-2">Selamat Datang, Admin</h1>
-            <p className="text-muted-foreground">Kelola konten website Atha Studio</p>
+        <div className="container mx-auto px-4 py-8 pt-24 max-w-7xl relative">
+          {/* Header with Animation */}
+          <div className="mb-8 animate-fade-in">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                <Sparkles className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold">Selamat Datang, Admin</h1>
+                <p className="text-muted-foreground">Kelola konten website Atha Studio dengan mudah</p>
+              </div>
+            </div>
           </div>
 
-          {/* Quick Stats Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <Card className="border-l-4 border-l-primary">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Total Aktivitas</p>
-                    <p className="text-2xl font-bold">{totalActivity}</p>
-                    <p className="text-xs text-muted-foreground">dalam 7 hari terakhir</p>
+          {/* Quick Stats Cards with Glassmorphism */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8 stagger-children">
+            <Card className="card-premium gradient-border group relative overflow-hidden border-l-4 border-l-primary">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <CardContent className="p-6 relative">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                    <Activity className="h-6 w-6 text-primary group-hover:text-primary-foreground transition-colors" />
                   </div>
-                  <Activity className="h-8 w-8 text-primary opacity-50" />
                 </div>
+                <p className="text-sm text-muted-foreground mb-1">Total Aktivitas</p>
+                <p className="text-3xl font-bold text-foreground mb-1">{totalActivity}</p>
+                <p className="text-xs text-muted-foreground">dalam 7 hari terakhir</p>
               </CardContent>
             </Card>
-            <Card className="border-l-4 border-l-green-500">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Rata-rata Harian</p>
-                    <p className="text-2xl font-bold">{avgDaily}</p>
-                    <p className="text-xs text-muted-foreground">aktivitas per hari</p>
+
+            <Card className="card-premium gradient-border group relative overflow-hidden border-l-4 border-l-green-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <CardContent className="p-6 relative">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center group-hover:bg-green-500 group-hover:scale-110 transition-all duration-300">
+                    <TrendingUp className="h-6 w-6 text-green-500 group-hover:text-white transition-colors" />
                   </div>
-                  <TrendingUp className="h-8 w-8 text-green-500 opacity-50" />
                 </div>
+                <p className="text-sm text-muted-foreground mb-1">Rata-rata Harian</p>
+                <p className="text-3xl font-bold text-foreground mb-1">{avgDaily}</p>
+                <p className="text-xs text-muted-foreground">aktivitas per hari</p>
               </CardContent>
             </Card>
-            <Card className="border-l-4 border-l-blue-500">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Foto Unggulan</p>
-                    <p className="text-2xl font-bold">{photos.filter(p => p.is_featured).length}</p>
-                    <p className="text-xs text-muted-foreground">dari {photos.length} foto</p>
+
+            <Card className="card-premium gradient-border group relative overflow-hidden border-l-4 border-l-blue-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <CardContent className="p-6 relative">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:scale-110 transition-all duration-300">
+                    <Star className="h-6 w-6 text-blue-500 group-hover:text-white transition-colors" />
                   </div>
-                  <Star className="h-8 w-8 text-blue-500 opacity-50" />
                 </div>
+                <p className="text-sm text-muted-foreground mb-1">Foto Unggulan</p>
+                <p className="text-3xl font-bold text-foreground mb-1">{photos.filter(p => p.is_featured).length}</p>
+                <p className="text-xs text-muted-foreground">dari {photos.length} foto</p>
               </CardContent>
             </Card>
-            <Card className="border-l-4 border-l-purple-500">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Pesanan Baru</p>
-                    <p className="text-2xl font-bold">{bookings.filter(b => b.status === 'pending').length}</p>
-                    <p className="text-xs text-muted-foreground">menunggu konfirmasi</p>
+
+            <Card className="card-premium gradient-border group relative overflow-hidden border-l-4 border-l-purple-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <CardContent className="p-6 relative">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500 group-hover:scale-110 transition-all duration-300">
+                    <Calendar className="h-6 w-6 text-purple-500 group-hover:text-white transition-colors" />
                   </div>
-                  <Calendar className="h-8 w-8 text-purple-500 opacity-50" />
                 </div>
+                <p className="text-sm text-muted-foreground mb-1">Pesanan Baru</p>
+                <p className="text-3xl font-bold text-foreground mb-1">{bookings.filter(b => b.status === 'pending').length}</p>
+                <p className="text-xs text-muted-foreground">menunggu konfirmasi</p>
               </CardContent>
             </Card>
           </div>
 
-          {/* Activity Chart */}
-          <Card className="mb-6">
+          {/* Activity Chart with Glassmorphism */}
+          <Card className="mb-8 glass-card animate-fade-in" style={{ animationDelay: '0.2s' }}>
             <CardHeader>
-              <CardTitle className="text-lg">Aktivitas Harian</CardTitle>
-              <CardDescription>Grafik aktivitas admin per hari</CardDescription>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-primary" />
+                <CardTitle className="text-xl">Aktivitas Harian</CardTitle>
+              </div>
+              <CardDescription>Grafik aktivitas admin dalam 7 hari terakhir</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-64">
+              <div className="h-72">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={activityData}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis dataKey="date" className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
-                    <YAxis className="text-xs" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted/30" />
+                    <XAxis 
+                      dataKey="date" 
+                      className="text-xs" 
+                      tick={{ fill: 'hsl(var(--muted-foreground))' }} 
+                    />
+                    <YAxis 
+                      className="text-xs" 
+                      tick={{ fill: 'hsl(var(--muted-foreground))' }} 
+                    />
                     <Tooltip 
                       contentStyle={{ 
                         backgroundColor: 'hsl(var(--background))', 
                         border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px'
+                        borderRadius: '12px',
+                        boxShadow: 'var(--shadow-soft)'
                       }} 
                     />
                     <Line 
                       type="monotone" 
                       dataKey="aktivitas" 
                       stroke="hsl(var(--primary))" 
-                      strokeWidth={2}
-                      dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2 }}
+                      strokeWidth={3}
+                      dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 5 }}
+                      activeDot={{ r: 7 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -358,24 +394,27 @@ export default function AdminPanel() {
             </CardContent>
           </Card>
 
-          {/* Charts Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Charts Row with Modern Design */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-10 stagger-children" style={{ animationDelay: '0.3s' }}>
             {/* Status Distribution */}
-            <Card>
+            <Card className="glass-card">
               <CardHeader>
-                <CardTitle className="text-lg">Status Pesanan</CardTitle>
-                <CardDescription>Distribusi status booking</CardDescription>
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-xl">Status Pesanan</CardTitle>
+                </div>
+                <CardDescription>Distribusi status booking saat ini</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-48">
+                <div className="h-56">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
                         data={getStatusData()}
                         cx="50%"
                         cy="50%"
-                        innerRadius={40}
-                        outerRadius={70}
+                        innerRadius={50}
+                        outerRadius={80}
                         paddingAngle={5}
                         dataKey="value"
                         label={({ name, value }) => `${name}: ${value}`}
@@ -384,7 +423,13 @@ export default function AdminPanel() {
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
-                      <Tooltip />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--background))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '12px'
+                        }} 
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -392,26 +437,38 @@ export default function AdminPanel() {
             </Card>
 
             {/* Category Distribution */}
-            <Card>
+            <Card className="glass-card">
               <CardHeader>
-                <CardTitle className="text-lg">Kategori Foto</CardTitle>
+                <div className="flex items-center gap-2">
+                  <Camera className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-xl">Kategori Foto</CardTitle>
+                </div>
                 <CardDescription>Distribusi foto per kategori</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-48">
+                <div className="h-56">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={getCategoryData()}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis dataKey="name" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} />
-                      <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted/30" />
+                      <XAxis 
+                        dataKey="name" 
+                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} 
+                      />
+                      <YAxis 
+                        tick={{ fill: 'hsl(var(--muted-foreground))' }} 
+                      />
                       <Tooltip 
                         contentStyle={{ 
                           backgroundColor: 'hsl(var(--background))', 
                           border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px'
+                          borderRadius: '12px'
                         }} 
                       />
-                      <Bar dataKey="value" fill="hsl(142, 76%, 36%)" radius={[4, 4, 0, 0]} />
+                      <Bar 
+                        dataKey="value" 
+                        fill="hsl(var(--primary))" 
+                        radius={[8, 8, 0, 0]} 
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -419,126 +476,185 @@ export default function AdminPanel() {
             </Card>
           </div>
 
-          {/* Navigation Cards */}
-          <h2 className="text-lg font-semibold mb-4">Menu Admin</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {adminMenuItems.map((item) => {
-              const Icon = item.icon;
-              const count = item.id === 'bookings' ? bookings.length : 
-                           item.id === 'photos' ? photos.length : 
-                           item.id === 'users' ? profiles.length : 
-                           item.id === 'roles' ? userRoles.length : null;
-              
-              return (
-                <Card 
-                  key={item.id}
-                  className="cursor-pointer hover:shadow-lg hover:border-primary/30 transition-all duration-300 group"
-                  onClick={() => setActiveSection(item.id)}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                        <Icon className="h-6 w-6" />
+          {/* Navigation Cards with Premium Design */}
+          <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <LayoutGrid className="h-6 w-6 text-primary" />
+              Menu Admin
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+              {adminMenuItems.map((item, index) => {
+                const Icon = item.icon;
+                const count = item.id === 'bookings' ? bookings.length : 
+                             item.id === 'photos' ? photos.length : 
+                             item.id === 'users' ? profiles.length : 
+                             item.id === 'roles' ? userRoles.length : null;
+                
+                return (
+                  <Card 
+                    key={item.id}
+                    className="card-premium gradient-border cursor-pointer group relative overflow-hidden"
+                    onClick={() => setActiveSection(item.id)}
+                    style={{ animationDelay: `${0.5 + index * 0.05}s` }}
+                  >
+                    {/* Gradient Background on Hover */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    
+                    <CardContent className="p-6 relative">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                          <Icon className="h-7 w-7 text-primary group-hover:text-primary transition-colors" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-bold text-lg mb-1 flex items-center gap-2 group-hover:text-primary transition-colors">
+                            {item.title}
+                            {count !== null && (
+                              <Badge variant="secondary" className="text-xs px-2 py-0.5">{count}</Badge>
+                            )}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">{item.description}</p>
+                          
+                          {/* Arrow that appears on hover */}
+                          <div className="mt-3 flex items-center text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-2">
+                            <span className="text-sm font-medium">Kelola</span>
+                            <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-1 flex items-center gap-2">
-                          {item.title}
-                          {count !== null && (
-                            <Badge variant="secondary" className="text-xs">{count}</Badge>
-                          )}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">{item.description}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  // Content Section with Back Button
+  // Content Section with Back Button and Modern Design
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-background via-secondary/10 to-background relative overflow-hidden">
+      {/* Background Decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+      </div>
+
       <Navbar />
-      <div className="container mx-auto px-4 py-8 pt-24 max-w-6xl">
+      <div className="container mx-auto px-4 py-8 pt-24 max-w-7xl relative">
         {/* Header with Back Button */}
-        <div className="mb-6">
+        <div className="mb-8 animate-fade-in">
           <Button 
             variant="ghost" 
             onClick={() => setActiveSection('dashboard')}
-            className="mb-4 -ml-2"
+            className="mb-4 -ml-2 hover:bg-primary/10 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Kembali ke Dashboard
           </Button>
           
-          <h1 className="text-2xl font-bold">
-            {adminMenuItems.find(m => m.id === activeSection)?.title || 'Admin Panel'}
-          </h1>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+              {adminMenuItems.find(m => m.id === activeSection)?.icon && 
+                React.createElement(adminMenuItems.find(m => m.id === activeSection)!.icon, { className: "h-6 w-6 text-primary" })
+              }
+            </div>
+            <h1 className="text-3xl font-bold">
+              {adminMenuItems.find(m => m.id === activeSection)?.title || 'Admin Panel'}
+            </h1>
+          </div>
         </div>
 
-        {/* Bookings Section */}
+        {/* Bookings Section with Modern Table */}
         {activeSection === 'bookings' && (
-          <Card>
+          <Card className="glass-card animate-fade-in">
             <CardHeader>
-              <CardTitle>Manajemen Pesanan</CardTitle>
+              <div className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                <CardTitle className="text-xl">Manajemen Pesanan</CardTitle>
+              </div>
               <CardDescription>Lihat dan kelola pesanan pelanggan</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto -mx-6 px-6">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Layanan</TableHead>
-                      <TableHead>Tanggal</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Budget</TableHead>
-                      <TableHead>Aksi</TableHead>
+                    <TableRow className="border-border/50 hover:bg-muted/50">
+                      <TableHead className="font-semibold">Customer</TableHead>
+                      <TableHead className="font-semibold">Layanan</TableHead>
+                      <TableHead className="font-semibold">Tanggal</TableHead>
+                      <TableHead className="font-semibold">Status</TableHead>
+                      <TableHead className="font-semibold">Budget</TableHead>
+                      <TableHead className="font-semibold">Aksi</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {bookings.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                          Belum ada pesanan
+                        <TableCell colSpan={6} className="text-center py-12">
+                          <div className="flex flex-col items-center gap-2">
+                            <BookOpen className="h-12 w-12 text-muted-foreground/50" />
+                            <p className="text-muted-foreground">Belum ada pesanan</p>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ) : (
-                      bookings.map((booking) => (
-                        <TableRow key={booking.id}>
+                      bookings.map((booking, index) => (
+                        <TableRow 
+                          key={booking.id} 
+                          className="border-border/50 hover:bg-muted/30 transition-colors"
+                          style={{ animationDelay: `${index * 0.05}s` }}
+                        >
                           <TableCell>
                             <div>
-                              <div className="font-medium">{booking.customer_name}</div>
+                              <div className="font-medium text-foreground">{booking.customer_name}</div>
                               <div className="text-sm text-muted-foreground">{booking.customer_email}</div>
                             </div>
                           </TableCell>
                           <TableCell>
                             <div>
-                              <div className="font-medium">{booking.service_type}</div>
+                              <div className="font-medium text-foreground">{booking.service_type}</div>
                               <div className="text-sm text-muted-foreground">{booking.package_type}</div>
                             </div>
                           </TableCell>
-                          <TableCell>{booking.event_date ? new Date(booking.event_date).toLocaleDateString('id-ID') : '-'}</TableCell>
+                          <TableCell className="text-foreground">
+                            {booking.event_date ? new Date(booking.event_date).toLocaleDateString('id-ID') : '-'}
+                          </TableCell>
                           <TableCell>
                             <Select value={booking.status} onValueChange={(value) => updateBookingStatus(booking.id, value)}>
-                              <SelectTrigger className="w-32">
+                              <SelectTrigger className="w-36 border-border/50">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="confirmed">Confirmed</SelectItem>
-                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                                <SelectItem value="pending">
+                                  <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/30">
+                                    Pending
+                                  </Badge>
+                                </SelectItem>
+                                <SelectItem value="confirmed">
+                                  <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/30">
+                                    Confirmed
+                                  </Badge>
+                                </SelectItem>
+                                <SelectItem value="cancelled">
+                                  <Badge variant="secondary" className="bg-red-500/10 text-red-600 border-red-500/30">
+                                    Cancelled
+                                  </Badge>
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           </TableCell>
-                          <TableCell>{booking.budget_range}</TableCell>
+                          <TableCell className="font-medium text-foreground">{booking.budget_range}</TableCell>
                           <TableCell>
-                            <Button variant="destructive" size="sm" onClick={() => deleteBooking(booking.id)}>
+                            <Button 
+                              variant="destructive" 
+                              size="sm" 
+                              onClick={() => deleteBooking(booking.id)}
+                              className="hover:scale-105 transition-transform"
+                            >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </TableCell>
@@ -552,18 +668,24 @@ export default function AdminPanel() {
           </Card>
         )}
 
-        {/* Photos Section */}
+        {/* Photos Section with Modern Grid */}
         {activeSection === 'photos' && (
-          <Card>
+          <Card className="glass-card animate-fade-in">
             <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <CardTitle>Manajemen Foto</CardTitle>
+                <div className="flex items-center gap-2 mb-2">
+                  <Camera className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-xl">Manajemen Foto</CardTitle>
+                </div>
                 <CardDescription>Kelola galeri dan portfolio foto</CardDescription>
               </div>
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button onClick={() => setEditingPhoto(null)}>
-                    <Plus className="h-4 w-4 mr-2" />
+                  <Button 
+                    onClick={() => setEditingPhoto(null)}
+                    className="group"
+                  >
+                    <Plus className="h-4 w-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
                     Tambah Foto
                   </Button>
                 </DialogTrigger>
@@ -575,29 +697,49 @@ export default function AdminPanel() {
               </Dialog>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {photos.length === 0 ? (
-                  <div className="col-span-full text-center py-12 text-muted-foreground">
-                    Belum ada foto. Klik "Tambah Foto" untuk menambahkan.
+                  <div className="col-span-full text-center py-16">
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="w-20 h-20 rounded-2xl bg-muted/50 flex items-center justify-center">
+                        <Camera className="h-10 w-10 text-muted-foreground" />
+                      </div>
+                      <p className="text-muted-foreground text-lg">Belum ada foto</p>
+                      <p className="text-muted-foreground/60 text-sm">Klik "Tambah Foto" untuk menambahkan foto baru</p>
+                    </div>
                   </div>
                 ) : (
-                  photos.map((photo) => (
-                    <Card key={photo.id} className="overflow-hidden">
-                      <div className="aspect-video relative">
-                        <img src={photo.image_url} alt={photo.title} className="w-full h-full object-cover" />
+                  photos.map((photo, index) => (
+                    <Card 
+                      key={photo.id} 
+                      className="card-premium group overflow-hidden"
+                      style={{ animationDelay: `${index * 0.05}s` }}
+                    >
+                      <div className="aspect-video relative overflow-hidden">
+                        <img 
+                          src={photo.image_url} 
+                          alt={photo.title} 
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                        />
                         {photo.is_featured && (
-                          <Badge className="absolute top-2 left-2 bg-primary">Featured</Badge>
+                          <Badge className="absolute top-3 left-3 bg-primary shadow-lg">
+                            <Star className="h-3 w-3 mr-1 fill-current" />
+                            Featured
+                          </Badge>
                         )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>
-                      <CardContent className="p-4">
-                        <h3 className="font-medium truncate">{photo.title}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{photo.description}</p>
-                        <div className="flex items-center justify-between mb-3">
-                          <Badge variant="outline" className="text-xs">{photo.category || 'Uncategorized'}</Badge>
+                      <CardContent className="p-5">
+                        <h3 className="font-semibold text-lg truncate mb-2 group-hover:text-primary transition-colors">{photo.title}</h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{photo.description}</p>
+                        <div className="flex items-center justify-between mb-4">
+                          <Badge variant="outline" className="text-xs border-border/50">
+                            {photo.category || 'Uncategorized'}
+                          </Badge>
                           {/* Toggle Featured */}
                           <div className="flex items-center gap-2">
-                            <Label htmlFor={`featured-${photo.id}`} className="text-xs text-muted-foreground">
-                              <Star className={`h-4 w-4 ${photo.is_featured ? 'text-yellow-500 fill-yellow-500' : ''}`} />
+                            <Label htmlFor={`featured-${photo.id}`} className="text-xs text-muted-foreground cursor-pointer">
+                              <Star className={`h-4 w-4 transition-colors ${photo.is_featured ? 'text-yellow-500 fill-yellow-500' : 'text-muted-foreground'}`} />
                             </Label>
                             <Switch 
                               id={`featured-${photo.id}`}
@@ -615,10 +757,20 @@ export default function AdminPanel() {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm" className="flex-1" onClick={() => { setEditingPhoto(photo); setIsDialogOpen(true); }}>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1 hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors" 
+                            onClick={() => { setEditingPhoto(photo); setIsDialogOpen(true); }}
+                          >
                             <Edit className="h-4 w-4 mr-1" /> Edit
                           </Button>
-                          <Button variant="destructive" size="sm" onClick={() => deletePhoto(photo.id)}>
+                          <Button 
+                            variant="destructive" 
+                            size="sm" 
+                            onClick={() => deletePhoto(photo.id)}
+                            className="hover:scale-105 transition-transform"
+                          >
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -633,9 +785,12 @@ export default function AdminPanel() {
 
         {/* Hero Stats Section */}
         {activeSection === 'hero' && (
-          <Card>
+          <Card className="glass-card animate-fade-in">
             <CardHeader>
-              <CardTitle>Hero Stats</CardTitle>
+              <div className="flex items-center gap-2">
+                <Star className="h-5 w-5 text-primary" />
+                <CardTitle className="text-xl">Hero Stats</CardTitle>
+              </div>
               <CardDescription>Kelola statistik yang tampil di halaman utama</CardDescription>
             </CardHeader>
             <CardContent>
@@ -645,40 +800,54 @@ export default function AdminPanel() {
         )}
 
         {/* About Section */}
-        {activeSection === 'about' && <AdminAboutManager />}
+        {activeSection === 'about' && (
+          <div className="animate-fade-in">
+            <AdminAboutManager />
+          </div>
+        )}
 
-        {/* Users Section */}
+        {/* Users Section with Modern Table */}
         {activeSection === 'users' && (
-          <Card>
+          <Card className="glass-card animate-fade-in">
             <CardHeader>
-              <CardTitle>Daftar Pengguna</CardTitle>
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-primary" />
+                <CardTitle className="text-xl">Daftar Pengguna</CardTitle>
+              </div>
               <CardDescription>Lihat semua pengguna terdaftar</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto -mx-6 px-6">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Nama</TableHead>
-                      <TableHead>Telepon</TableHead>
-                      <TableHead>Bio</TableHead>
-                      <TableHead>Bergabung</TableHead>
+                    <TableRow className="border-border/50 hover:bg-muted/50">
+                      <TableHead className="font-semibold">Nama</TableHead>
+                      <TableHead className="font-semibold">Telepon</TableHead>
+                      <TableHead className="font-semibold">Bio</TableHead>
+                      <TableHead className="font-semibold">Bergabung</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {profiles.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                          Belum ada pengguna
+                        <TableCell colSpan={4} className="text-center py-12">
+                          <div className="flex flex-col items-center gap-2">
+                            <Users className="h-12 w-12 text-muted-foreground/50" />
+                            <p className="text-muted-foreground">Belum ada pengguna</p>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ) : (
-                      profiles.map((profile) => (
-                        <TableRow key={profile.id}>
-                          <TableCell className="font-medium">{profile.full_name || 'N/A'}</TableCell>
-                          <TableCell>{profile.phone || 'N/A'}</TableCell>
-                          <TableCell className="max-w-xs truncate">{profile.bio || 'N/A'}</TableCell>
-                          <TableCell>{new Date(profile.created_at).toLocaleDateString('id-ID')}</TableCell>
+                      profiles.map((profile, index) => (
+                        <TableRow 
+                          key={profile.id}
+                          className="border-border/50 hover:bg-muted/30 transition-colors"
+                          style={{ animationDelay: `${index * 0.05}s` }}
+                        >
+                          <TableCell className="font-medium text-foreground">{profile.full_name || 'N/A'}</TableCell>
+                          <TableCell className="text-foreground">{profile.phone || 'N/A'}</TableCell>
+                          <TableCell className="max-w-xs truncate text-muted-foreground">{profile.bio || 'N/A'}</TableCell>
+                          <TableCell className="text-foreground">{new Date(profile.created_at).toLocaleDateString('id-ID')}</TableCell>
                         </TableRow>
                       ))
                     )}
@@ -689,51 +858,72 @@ export default function AdminPanel() {
           </Card>
         )}
 
-        {/* Roles Section */}
+        {/* Roles Section with Modern Table */}
         {activeSection === 'roles' && (
-          <Card>
+          <Card className="glass-card animate-fade-in">
             <CardHeader>
-              <CardTitle>Manajemen Hak Akses</CardTitle>
+              <div className="flex items-center gap-2">
+                <Shield className="h-5 w-5 text-primary" />
+                <CardTitle className="text-xl">Manajemen Hak Akses</CardTitle>
+              </div>
               <CardDescription>Kelola role dan permission pengguna</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto -mx-6 px-6">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>User ID</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Dibuat</TableHead>
-                      <TableHead>Aksi</TableHead>
+                    <TableRow className="border-border/50 hover:bg-muted/50">
+                      <TableHead className="font-semibold">User ID</TableHead>
+                      <TableHead className="font-semibold">Role</TableHead>
+                      <TableHead className="font-semibold">Dibuat</TableHead>
+                      <TableHead className="font-semibold">Aksi</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {userRoles.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                          Belum ada data role
+                        <TableCell colSpan={4} className="text-center py-12">
+                          <div className="flex flex-col items-center gap-2">
+                            <Shield className="h-12 w-12 text-muted-foreground/50" />
+                            <p className="text-muted-foreground">Belum ada role</p>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ) : (
-                      userRoles.map((userRole) => (
-                        <TableRow key={userRole.id}>
-                          <TableCell className="font-mono text-xs">{userRole.user_id.slice(0, 8)}...</TableCell>
+                      userRoles.map((role, index) => (
+                        <TableRow 
+                          key={role.id}
+                          className="border-border/50 hover:bg-muted/30 transition-colors"
+                          style={{ animationDelay: `${index * 0.05}s` }}
+                        >
+                          <TableCell className="font-mono text-sm text-foreground">{role.user_id.substring(0, 8)}...</TableCell>
                           <TableCell>
-                            <Badge variant={userRole.role === 'admin' ? 'default' : 'secondary'}>
-                              {userRole.role}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{new Date(userRole.created_at).toLocaleDateString('id-ID')}</TableCell>
-                          <TableCell>
-                            <Select value={userRole.role} onValueChange={(value: 'admin' | 'user') => updateUserRole(userRole.user_id, value)}>
-                              <SelectTrigger className="w-28">
+                            <Select value={role.role} onValueChange={(value) => updateUserRole(role.user_id, value as 'admin' | 'user')}>
+                              <SelectTrigger className="w-32 border-border/50">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="user">User</SelectItem>
-                                <SelectItem value="admin">Admin</SelectItem>
+                                <SelectItem value="admin">
+                                  <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30">
+                                    Admin
+                                  </Badge>
+                                </SelectItem>
+                                <SelectItem value="user">
+                                  <Badge variant="secondary" className="bg-muted text-muted-foreground">
+                                    User
+                                  </Badge>
+                                </SelectItem>
                               </SelectContent>
                             </Select>
+                          </TableCell>
+                          <TableCell className="text-foreground">{new Date(role.created_at).toLocaleDateString('id-ID')}</TableCell>
+                          <TableCell>
+                            <Badge 
+                              variant={role.role === 'admin' ? 'default' : 'secondary'}
+                              className={role.role === 'admin' ? 'bg-primary' : ''}
+                            >
+                              {role.role === 'admin' ? 'Administrator' : 'Regular User'}
+                            </Badge>
                           </TableCell>
                         </TableRow>
                       ))
@@ -749,7 +939,8 @@ export default function AdminPanel() {
   );
 }
 
-// Photo Dialog Component
+
+// Photo Dialog Component with Modern Design
 function PhotoDialog({ photo, onSave, onClose }: { photo: Photo | null; onSave: (photo: any) => void; onClose: () => void; }) {
   const { toast } = useToast();
   const { user } = useAuth();
@@ -808,83 +999,166 @@ function PhotoDialog({ photo, onSave, onClose }: { photo: Photo | null; onSave: 
   };
 
   return (
-    <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+    <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto glass-card border-border/50">
       <DialogHeader>
-        <DialogTitle>{photo ? 'Edit Foto' : 'Tambah Foto Baru'}</DialogTitle>
-        <DialogDescription>{photo ? 'Update detail foto' : 'Upload foto baru ke galeri'}</DialogDescription>
+        <DialogTitle className="text-2xl flex items-center gap-2">
+          <Camera className="h-6 w-6 text-primary" />
+          {photo ? 'Edit Foto' : 'Tambah Foto Baru'}
+        </DialogTitle>
+        <DialogDescription>{photo ? 'Update detail foto portfolio' : 'Upload foto baru ke galeri portfolio'}</DialogDescription>
       </DialogHeader>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
-          <Label>Upload Foto</Label>
-          <div className="border-2 border-dashed border-border rounded-lg p-4">
+          <Label className="text-sm font-semibold">Upload Foto</Label>
+          <div className="border-2 border-dashed border-border/50 rounded-xl p-6 hover:border-primary/50 transition-colors">
             {previewUrl ? (
-              <div className="relative">
-                <img src={previewUrl} alt="Preview" className="w-full h-48 object-cover rounded" />
-                <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2" onClick={() => { setPreviewUrl(''); setFormData(prev => ({ ...prev, image_url: '' })); }}>
-                  <X className="h-4 w-4" />
-                </Button>
+              <div className="relative group">
+                <img src={previewUrl} alt="Preview" className="w-full h-56 object-cover rounded-lg" />
+                <div className="absolute inset-0 bg-foreground/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                  <Button 
+                    type="button" 
+                    variant="destructive" 
+                    size="icon" 
+                    className="hover:scale-110 transition-transform" 
+                    onClick={() => { setPreviewUrl(''); setFormData(prev => ({ ...prev, image_url: '' })); }}
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             ) : (
-              <div className="text-center">
-                <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-2" />
-                <div className="text-sm text-muted-foreground mb-2">Klik untuk upload</div>
-                <Input type="file" accept="image/*" onChange={handleFileSelect} disabled={uploading} />
-                {uploading && <div className="mt-2 text-sm text-muted-foreground">Mengupload...</div>}
+              <div className="text-center py-8">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <Upload className="h-8 w-8 text-primary" />
+                </div>
+                <div className="text-sm text-muted-foreground mb-3">Klik untuk upload atau drag & drop</div>
+                <Input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleFileSelect} 
+                  disabled={uploading}
+                  className="cursor-pointer"
+                />
+                {uploading && (
+                  <div className="mt-3 flex items-center justify-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                    <span className="text-sm text-muted-foreground">Mengupload...</span>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="image_url">URL Gambar (opsional)</Label>
-          <Input id="image_url" type="url" value={formData.image_url} onChange={(e) => { setFormData(prev => ({ ...prev, image_url: e.target.value })); setPreviewUrl(e.target.value); }} placeholder="https://example.com/image.jpg" />
+        <div className="space-y-2">
+          <Label htmlFor="image_url" className="text-sm font-semibold">URL Gambar (opsional)</Label>
+          <Input 
+            id="image_url" 
+            type="url" 
+            value={formData.image_url} 
+            onChange={(e) => { setFormData(prev => ({ ...prev, image_url: e.target.value })); setPreviewUrl(e.target.value); }} 
+            placeholder="https://example.com/image.jpg"
+            className="border-border/50 focus:border-primary"
+          />
         </div>
 
-        <div>
-          <Label htmlFor="title">Judul</Label>
-          <Input id="title" value={formData.title} onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))} required />
+        <div className="space-y-2">
+          <Label htmlFor="title" className="text-sm font-semibold">Judul <span className="text-destructive">*</span></Label>
+          <Input 
+            id="title" 
+            value={formData.title} 
+            onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))} 
+            required 
+            placeholder="Contoh: Wedding Outdoor Photography"
+            className="border-border/50 focus:border-primary"
+          />
         </div>
 
-        <div>
-          <Label htmlFor="description">Deskripsi</Label>
-          <Textarea id="description" value={formData.description} onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))} />
+        <div className="space-y-2">
+          <Label htmlFor="description" className="text-sm font-semibold">Deskripsi</Label>
+          <Textarea 
+            id="description" 
+            value={formData.description} 
+            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+            placeholder="Deskripsi singkat tentang foto ini..."
+            rows={3}
+            className="border-border/50 focus:border-primary resize-none"
+          />
         </div>
 
-        <div>
-          <Label htmlFor="category">Kategori</Label>
-          <Select value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}>
-            <SelectTrigger>
-              <SelectValue placeholder="Pilih kategori" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="portrait">Portrait</SelectItem>
-              <SelectItem value="landscape">Landscape</SelectItem>
-              <SelectItem value="wedding">Wedding</SelectItem>
-              <SelectItem value="architecture">Arsitektur</SelectItem>
-              <SelectItem value="product">Produk</SelectItem>
-              <SelectItem value="street">Street</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="category" className="text-sm font-semibold">Kategori</Label>
+            <Select value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}>
+              <SelectTrigger className="border-border/50 focus:border-primary">
+                <SelectValue placeholder="Pilih kategori" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="portrait">Portrait</SelectItem>
+                <SelectItem value="landscape">Landscape</SelectItem>
+                <SelectItem value="wedding">Wedding</SelectItem>
+                <SelectItem value="architecture">Arsitektur</SelectItem>
+                <SelectItem value="product">Produk</SelectItem>
+                <SelectItem value="street">Street</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="sort_order" className="text-sm font-semibold">Urutan Tampil</Label>
+            <Input 
+              id="sort_order" 
+              type="number" 
+              value={formData.sort_order} 
+              onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) }))}
+              className="border-border/50 focus:border-primary"
+            />
+          </div>
         </div>
 
-        <div>
-          <Label htmlFor="tags">Tags (pisahkan dengan koma)</Label>
-          <Input id="tags" value={formData.tags} onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))} placeholder="wedding, outdoor, romantic" />
+        <div className="space-y-2">
+          <Label htmlFor="tags" className="text-sm font-semibold">Tags (pisahkan dengan koma)</Label>
+          <Input 
+            id="tags" 
+            value={formData.tags} 
+            onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))} 
+            placeholder="wedding, outdoor, romantic, sunset"
+            className="border-border/50 focus:border-primary"
+          />
         </div>
 
-        <div>
-          <Label htmlFor="sort_order">Urutan Tampil</Label>
-          <Input id="sort_order" type="number" value={formData.sort_order} onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) }))} />
+        <div className="flex items-center space-x-3 p-4 rounded-lg bg-muted/30 border border-border/50">
+          <input 
+            type="checkbox" 
+            id="is_featured" 
+            checked={formData.is_featured} 
+            onChange={(e) => setFormData(prev => ({ ...prev, is_featured: e.target.checked }))} 
+            className="rounded border-border w-5 h-5 cursor-pointer"
+          />
+          <Label htmlFor="is_featured" className="text-sm font-semibold cursor-pointer flex items-center gap-2">
+            <Star className={`h-4 w-4 ${formData.is_featured ? 'text-yellow-500 fill-yellow-500' : 'text-muted-foreground'}`} />
+            Tandai sebagai Foto Unggulan
+          </Label>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <input type="checkbox" id="is_featured" checked={formData.is_featured} onChange={(e) => setFormData(prev => ({ ...prev, is_featured: e.target.checked }))} className="rounded border-border" />
-          <Label htmlFor="is_featured">Foto Unggulan</Label>
-        </div>
-
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button type="button" variant="outline" onClick={onClose}>Batal</Button>
-          <Button type="submit" disabled={!formData.image_url || uploading}>{photo ? 'Update' : 'Simpan'}</Button>
+        <DialogFooter className="gap-2 sm:gap-0 pt-4">
+          <Button type="button" variant="outline" onClick={onClose} className="hover:bg-muted">
+            Batal
+          </Button>
+          <Button 
+            type="submit" 
+            disabled={!formData.image_url || uploading}
+            className="min-w-[100px]"
+          >
+            {uploading ? (
+              <div className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Proses...</span>
+              </div>
+            ) : (
+              photo ? 'Update Foto' : 'Simpan Foto'
+            )}
+          </Button>
         </DialogFooter>
       </form>
 
