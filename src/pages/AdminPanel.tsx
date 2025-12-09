@@ -60,6 +60,19 @@ interface Photo {
   created_at: string;
 }
 
+interface Testimonial {
+  id: string;
+  client_name: string;
+  client_role: string;
+  client_photo_url: string | null;
+  rating: number;
+  review_text: string;
+  service_type: string;
+  is_featured: boolean;
+  display_order: number;
+  created_at: string;
+}
+
 interface UserRole {
   id: string;
   user_id: string;
@@ -67,12 +80,13 @@ interface UserRole {
   created_at: string;
 }
 
-type ActiveSection = 'dashboard' | 'bookings' | 'photos' | 'hero' | 'about' | 'users' | 'roles';
+type ActiveSection = 'dashboard' | 'bookings' | 'photos' | 'testimonials' | 'hero' | 'about' | 'users' | 'roles';
 
 const adminMenuItems = [
   { id: 'bookings' as const, icon: BookOpen, title: 'Pesanan', description: 'Kelola pesanan pelanggan', color: 'from-blue-500/20 to-cyan-500/20' },
   { id: 'photos' as const, icon: Camera, title: 'Galeri Foto', description: 'Kelola foto portfolio', color: 'from-purple-500/20 to-pink-500/20' },
-  { id: 'hero' as const, icon: Star, title: 'Hero Stats', description: 'Kelola statistik homepage', color: 'from-amber-500/20 to-yellow-500/20' },
+  { id: 'testimonials' as const, icon: Star, title: 'Testimoni', description: 'Kelola testimoni klien', color: 'from-yellow-500/20 to-amber-500/20' },
+  { id: 'hero' as const, icon: Sparkles, title: 'Hero Stats', description: 'Kelola statistik homepage', color: 'from-amber-500/20 to-yellow-500/20' },
   { id: 'about' as const, icon: User, title: 'Halaman About', description: 'Kelola halaman tentang kami', color: 'from-green-500/20 to-emerald-500/20' },
   { id: 'users' as const, icon: Users, title: 'Pengguna', description: 'Lihat data pengguna', color: 'from-indigo-500/20 to-blue-500/20' },
   { id: 'roles' as const, icon: Shield, title: 'Hak Akses', description: 'Kelola role pengguna', color: 'from-red-500/20 to-orange-500/20' },
@@ -85,12 +99,16 @@ export default function AdminPanel() {
   const [profiles, setProfiles] = React.useState<Profile[]>([]);
   const [bookings, setBookings] = React.useState<Booking[]>([]);
   const [photos, setPhotos] = React.useState<Photo[]>([]);
+  const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
   const [userRoles, setUserRoles] = React.useState<UserRole[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [activeSection, setActiveSection] = React.useState<ActiveSection>('dashboard');
   
   const [editingPhoto, setEditingPhoto] = React.useState<Photo | null>(null);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  
+  const [editingTestimonial, setEditingTestimonial] = React.useState<Testimonial | null>(null);
+  const [isTestimonialDialogOpen, setIsTestimonialDialogOpen] = React.useState(false);
 
   React.useEffect(() => {
     fetchAllData();
@@ -126,21 +144,24 @@ export default function AdminPanel() {
   const fetchAllData = async () => {
     try {
       setLoading(true);
-      const [profilesRes, bookingsRes, photosRes, rolesRes] = await Promise.all([
+      const [profilesRes, bookingsRes, photosRes, testimonialsRes, rolesRes] = await Promise.all([
         supabase.from('profiles').select('*').order('created_at', { ascending: false }),
         supabase.from('bookings').select('*').order('created_at', { ascending: false }),
         supabase.from('photos').select('*').order('sort_order', { ascending: true }),
+        supabase.from('testimonials').select('*').order('display_order', { ascending: true }),
         supabase.from('user_roles').select('*').order('created_at', { ascending: false })
       ]);
 
       if (profilesRes.error) throw profilesRes.error;
       if (bookingsRes.error) throw bookingsRes.error;
       if (photosRes.error) throw photosRes.error;
+      if (testimonialsRes.error) throw testimonialsRes.error;
       if (rolesRes.error) throw rolesRes.error;
 
       setProfiles(profilesRes.data || []);
       setBookings(bookingsRes.data || []);
       setPhotos(photosRes.data || []);
+      setTestimonials(testimonialsRes.data || []);
       setUserRoles(rolesRes.data || []);
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -197,6 +218,55 @@ export default function AdminPanel() {
       if (error) throw error;
       toast({ title: "Berhasil", description: "Foto ditambahkan" });
       setIsDialogOpen(false);
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+  };
+
+  // Testimonial CRUD Functions
+  const createTestimonial = async (testimonialData: Omit<Testimonial, 'id' | 'created_at'>) => {
+    try {
+      const { error } = await supabase.from('testimonials').insert([testimonialData]);
+      if (error) throw error;
+      toast({ title: "Berhasil", description: "Testimoni ditambahkan" });
+      setIsTestimonialDialogOpen(false);
+      setEditingTestimonial(null);
+      fetchAllData();
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+  };
+
+  const updateTestimonial = async (id: string, testimonialData: Partial<Testimonial>) => {
+    try {
+      const { error } = await supabase.from('testimonials').update(testimonialData).eq('id', id);
+      if (error) throw error;
+      toast({ title: "Berhasil", description: "Testimoni diperbarui" });
+      setIsTestimonialDialogOpen(false);
+      setEditingTestimonial(null);
+      fetchAllData();
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+  };
+
+  const deleteTestimonial = async (testimonialId: string) => {
+    try {
+      const { error } = await supabase.from('testimonials').delete().eq('id', testimonialId);
+      if (error) throw error;
+      toast({ title: "Berhasil", description: "Testimoni dihapus" });
+      fetchAllData();
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+  };
+
+  const toggleTestimonialFeatured = async (testimonialId: string, currentStatus: boolean) => {
+    try {
+      const { error } = await supabase.from('testimonials').update({ is_featured: !currentStatus }).eq('id', testimonialId);
+      if (error) throw error;
+      toast({ title: "Berhasil", description: `Testimoni ${!currentStatus ? 'ditampilkan' : 'disembunyikan'}` });
+      fetchAllData();
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     }
@@ -788,6 +858,166 @@ export default function AdminPanel() {
           />
         </Dialog>
 
+        {/* Testimonials Section with Modern Table */}
+        {activeSection === 'testimonials' && (
+          <>
+            <Card className="glass-card animate-fade-in">
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Star className="h-5 w-5 text-primary" />
+                    <CardTitle>Manajemen Testimoni</CardTitle>
+                  </div>
+                  <CardDescription>Kelola testimoni klien real yang ditampilkan di homepage</CardDescription>
+                </div>
+                <Button 
+                  onClick={() => { setEditingTestimonial(null); setIsTestimonialDialogOpen(true); }}
+                  className="bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
+                >
+                  <Plus className="h-4 w-4 mr-2" /> Tambah Testimoni
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {testimonials.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Star className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />
+                    <p className="text-muted-foreground mb-4">Belum ada testimoni</p>
+                    <Button 
+                      onClick={() => { setEditingTestimonial(null); setIsTestimonialDialogOpen(true); }}
+                      variant="outline"
+                    >
+                      <Plus className="h-4 w-4 mr-2" /> Tambah Testimoni Pertama
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {testimonials.map((testimonial, index) => (
+                      <Card 
+                        key={testimonial.id} 
+                        className="card-premium group overflow-hidden relative z-[60]"
+                        style={{ animationDelay: `${index * 0.05}s` }}
+                      >
+                        <CardContent className="p-6">
+                          {/* Rating Stars */}
+                          <div className="flex gap-1 mb-4">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`h-4 w-4 ${
+                                  i < testimonial.rating
+                                    ? "fill-primary text-primary"
+                                    : "text-muted/30"
+                                }`}
+                              />
+                            ))}
+                          </div>
+
+                          {/* Review Text */}
+                          <p className="text-sm text-foreground/80 mb-4 line-clamp-3 italic">
+                            "{testimonial.review_text}"
+                          </p>
+
+                          {/* Client Info */}
+                          <div className="flex items-center gap-3 mb-4 pb-4 border-b border-border/50">
+                            {testimonial.client_photo_url ? (
+                              <img
+                                src={testimonial.client_photo_url}
+                                alt={testimonial.client_name}
+                                className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center ring-2 ring-primary/20">
+                                <span className="text-sm font-bold text-primary">
+                                  {testimonial.client_name.charAt(0)}
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-sm truncate">{testimonial.client_name}</h3>
+                              <p className="text-xs text-muted-foreground truncate">{testimonial.client_role}</p>
+                            </div>
+                          </div>
+
+                          {/* Service Badge & Display Order */}
+                          <div className="flex items-center justify-between mb-4">
+                            <Badge variant="outline" className="text-xs">
+                              {testimonial.service_type}
+                            </Badge>
+                            <span className="text-xs text-muted-foreground">
+                              Urutan: {testimonial.display_order}
+                            </span>
+                          </div>
+
+                          {/* Featured Toggle */}
+                          <div className="flex items-center justify-between mb-4 p-3 bg-secondary/30 rounded-lg">
+                            <Label htmlFor={`featured-${testimonial.id}`} className="text-sm cursor-pointer">
+                              Tampilkan di Homepage
+                            </Label>
+                            <Switch
+                              id={`featured-${testimonial.id}`}
+                              checked={testimonial.is_featured}
+                              onCheckedChange={() => toggleTestimonialFeatured(testimonial.id, testimonial.is_featured)}
+                            />
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="flex-1 hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors relative z-10" 
+                              onClick={(e) => { 
+                                e.stopPropagation();
+                                setEditingTestimonial(testimonial); 
+                                setIsTestimonialDialogOpen(true); 
+                              }}
+                            >
+                              <Edit className="h-4 w-4 mr-1" /> Edit
+                            </Button>
+                            <Button 
+                              variant="destructive" 
+                              size="sm" 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (confirm('Yakin ingin menghapus testimoni ini?')) {
+                                  deleteTestimonial(testimonial.id);
+                                }
+                              }}
+                              className="hover:bg-destructive/90 transition-colors"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Testimonial Dialog */}
+            <Dialog open={isTestimonialDialogOpen} onOpenChange={setIsTestimonialDialogOpen}>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Star className="h-5 w-5 text-primary" />
+                    {editingTestimonial ? 'Edit Testimoni' : 'Tambah Testimoni'}
+                  </DialogTitle>
+                  <DialogDescription>
+                    {editingTestimonial ? 'Update detail testimoni klien' : 'Tambahkan testimoni klien baru'}
+                  </DialogDescription>
+                </DialogHeader>
+                <TestimonialDialogForm 
+                  testimonial={editingTestimonial}
+                  onSave={editingTestimonial ? updateTestimonial : createTestimonial}
+                  onClose={() => { setIsTestimonialDialogOpen(false); setEditingTestimonial(null); }}
+                />
+              </DialogContent>
+            </Dialog>
+          </>
+        )}
+
         {/* Hero Stats Section */}
         {activeSection === 'hero' && (
           <Card className="glass-card animate-fade-in">
@@ -1199,3 +1429,188 @@ function PhotoDialog({ photo, onSave, onClose }: { photo: Photo | null; onSave: 
     </DialogContent>
   );
 }
+
+// TestimonialDialogForm Component
+interface TestimonialDialogFormProps {
+  testimonial: Testimonial | null;
+  onSave: (id: string, data: any) => void | ((data: any) => void);
+  onClose: () => void;
+}
+
+const TestimonialDialogForm: React.FC<TestimonialDialogFormProps> = ({ testimonial, onSave, onClose }) => {
+  const [formData, setFormData] = React.useState({
+    client_name: '',
+    client_role: '',
+    client_photo_url: '',
+    rating: 5,
+    review_text: '',
+    service_type: '',
+    is_featured: false,
+    display_order: 0,
+  });
+
+  React.useEffect(() => {
+    if (testimonial) {
+      setFormData({
+        client_name: testimonial.client_name,
+        client_role: testimonial.client_role,
+        client_photo_url: testimonial.client_photo_url || '',
+        rating: testimonial.rating,
+        review_text: testimonial.review_text,
+        service_type: testimonial.service_type,
+        is_featured: testimonial.is_featured,
+        display_order: testimonial.display_order,
+      });
+    } else {
+      setFormData({
+        client_name: '',
+        client_role: '',
+        client_photo_url: '',
+        rating: 5,
+        review_text: '',
+        service_type: '',
+        is_featured: false,
+        display_order: 0,
+      });
+    }
+  }, [testimonial]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (testimonial) {
+      onSave(testimonial.id, formData);
+    } else {
+      onSave(formData);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Client Name */}
+        <div className="space-y-2">
+          <Label htmlFor="client_name">Nama Klien *</Label>
+          <Input
+            id="client_name"
+            type="text"
+            placeholder="Contoh: Dimas Prasetyo"
+            value={formData.client_name}
+            onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
+            required
+          />
+        </div>
+
+        {/* Client Role */}
+        <div className="space-y-2">
+          <Label htmlFor="client_role">Role/Posisi Klien *</Label>
+          <Input
+            id="client_role"
+            type="text"
+            placeholder="Contoh: Groom - Wedding Client"
+            value={formData.client_role}
+            onChange={(e) => setFormData({ ...formData, client_role: e.target.value })}
+            required
+          />
+        </div>
+      </div>
+
+      {/* Client Photo URL */}
+      <div className="space-y-2">
+        <Label htmlFor="client_photo_url">URL Foto Klien (opsional)</Label>
+        <Input
+          id="client_photo_url"
+          type="url"
+          placeholder="https://example.com/photo.jpg"
+          value={formData.client_photo_url}
+          onChange={(e) => setFormData({ ...formData, client_photo_url: e.target.value })}
+        />
+        <p className="text-xs text-muted-foreground">Kosongkan jika tidak ada foto, akan menggunakan inisial nama</p>
+      </div>
+
+      {/* Rating */}
+      <div className="space-y-2">
+        <Label htmlFor="rating">Rating (1-5 bintang) *</Label>
+        <Select 
+          value={formData.rating.toString()} 
+          onValueChange={(value) => setFormData({ ...formData, rating: parseInt(value) })}
+        >
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="5">⭐⭐⭐⭐⭐ (5 Bintang)</SelectItem>
+            <SelectItem value="4">⭐⭐⭐⭐ (4 Bintang)</SelectItem>
+            <SelectItem value="3">⭐⭐⭐ (3 Bintang)</SelectItem>
+            <SelectItem value="2">⭐⭐ (2 Bintang)</SelectItem>
+            <SelectItem value="1">⭐ (1 Bintang)</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Review Text */}
+      <div className="space-y-2">
+        <Label htmlFor="review_text">Testimoni/Review *</Label>
+        <Textarea
+          id="review_text"
+          placeholder="Tulis testimoni klien di sini..."
+          value={formData.review_text}
+          onChange={(e) => setFormData({ ...formData, review_text: e.target.value })}
+          rows={4}
+          required
+        />
+      </div>
+
+      {/* Service Type */}
+      <div className="space-y-2">
+        <Label htmlFor="service_type">Jenis Layanan *</Label>
+        <Input
+          id="service_type"
+          type="text"
+          placeholder="Contoh: Wedding Photography, Website Development"
+          value={formData.service_type}
+          onChange={(e) => setFormData({ ...formData, service_type: e.target.value })}
+          required
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Display Order */}
+        <div className="space-y-2">
+          <Label htmlFor="display_order">Urutan Tampil</Label>
+          <Input
+            id="display_order"
+            type="number"
+            min="0"
+            value={formData.display_order}
+            onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })}
+          />
+          <p className="text-xs text-muted-foreground">Urutan tampil di homepage (0 = paling awal)</p>
+        </div>
+
+        {/* Featured Toggle */}
+        <div className="space-y-2">
+          <Label htmlFor="is_featured">Tampilkan di Homepage</Label>
+          <div className="flex items-center gap-2 h-10">
+            <Switch
+              id="is_featured"
+              checked={formData.is_featured}
+              onCheckedChange={(checked) => setFormData({ ...formData, is_featured: checked })}
+            />
+            <span className="text-sm text-muted-foreground">
+              {formData.is_featured ? 'Ya' : 'Tidak'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <DialogFooter>
+        <Button type="button" variant="outline" onClick={onClose}>
+          Batal
+        </Button>
+        <Button type="submit" className="bg-gradient-to-r from-primary to-accent">
+          {testimonial ? 'Update Testimoni' : 'Tambah Testimoni'}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
+};
