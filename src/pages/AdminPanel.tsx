@@ -679,22 +679,13 @@ export default function AdminPanel() {
                 </div>
                 <CardDescription>Kelola galeri dan portfolio foto</CardDescription>
               </div>
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button 
-                    onClick={() => setEditingPhoto(null)}
-                    className="group"
-                  >
-                    <Plus className="h-4 w-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
-                    Tambah Foto
-                  </Button>
-                </DialogTrigger>
-                <PhotoDialog 
-                  photo={editingPhoto} 
-                  onSave={editingPhoto ? updatePhoto : createPhoto}
-                  onClose={() => setIsDialogOpen(false)}
-                />
-              </Dialog>
+              <Button 
+                onClick={() => { setEditingPhoto(null); setIsDialogOpen(true); }}
+                className="group"
+              >
+                <Plus className="h-4 w-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
+                Tambah Foto
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -782,6 +773,15 @@ export default function AdminPanel() {
             </CardContent>
           </Card>
         )}
+
+        {/* Photo Dialog - Controlled programmatically */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <PhotoDialog 
+            photo={editingPhoto} 
+            onSave={editingPhoto ? updatePhoto : createPhoto}
+            onClose={() => { setIsDialogOpen(false); setEditingPhoto(null); }}
+          />
+        </Dialog>
 
         {/* Hero Stats Section */}
         {activeSection === 'hero' && (
