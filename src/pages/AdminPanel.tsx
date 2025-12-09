@@ -958,6 +958,34 @@ function PhotoDialog({ photo, onSave, onClose }: { photo: Photo | null; onSave: 
     sort_order: photo?.sort_order || 0
   });
 
+  // Update formData when photo prop changes
+  React.useEffect(() => {
+    if (photo) {
+      setFormData({
+        title: photo.title || '',
+        description: photo.description || '',
+        image_url: photo.image_url || '',
+        category: photo.category || '',
+        tags: photo.tags?.join(', ') || '',
+        is_featured: photo.is_featured || false,
+        sort_order: photo.sort_order || 0
+      });
+      setPreviewUrl(photo.image_url || '');
+    } else {
+      // Reset form for new photo
+      setFormData({
+        title: '',
+        description: '',
+        image_url: '',
+        category: '',
+        tags: '',
+        is_featured: false,
+        sort_order: 0
+      });
+      setPreviewUrl('');
+    }
+  }, [photo]);
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
