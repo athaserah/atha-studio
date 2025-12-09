@@ -703,7 +703,7 @@ export default function AdminPanel() {
                   photos.map((photo, index) => (
                     <Card 
                       key={photo.id} 
-                      className="card-premium group overflow-hidden"
+                      className="card-premium group overflow-hidden relative z-[60]"
                       style={{ animationDelay: `${index * 0.05}s` }}
                     >
                       <div className="aspect-video relative overflow-hidden">
