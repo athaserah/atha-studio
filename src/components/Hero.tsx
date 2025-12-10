@@ -188,47 +188,6 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Content - Floating Photo Gallery */}
-          <div className="hidden lg:block relative h-[600px]">
-            {/* Main Large Photo */}
-            <div 
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 rounded-3xl overflow-hidden shadow-2xl border-4 border-background animate-float z-20"
-              style={{ animationDelay: '0s' }}
-            >
-              <img 
-                src={heroImage} 
-                alt="Featured Work 1" 
-                className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
-            </div>
-
-            {/* Top Right Photo */}
-            <div 
-              className="absolute top-8 right-8 w-48 h-56 rounded-2xl overflow-hidden shadow-xl border-3 border-background animate-float z-10"
-              style={{ animationDelay: '1s' }}
-            >
-              <img 
-                src={heroImage} 
-                alt="Featured Work 2" 
-                className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 via-transparent to-transparent" />
-            </div>
-
-            {/* Bottom Left Photo */}
-            <div 
-              className="absolute bottom-16 left-4 w-56 h-64 rounded-2xl overflow-hidden shadow-xl border-3 border-background animate-float z-10"
-              style={{ animationDelay: '2s' }}
-            >
-              <img 
-                src={heroImage} 
-                alt="Featured Work 3" 
-                className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 via-transparent to-transparent" />
-            </div>
-
             {/* Decorative Elements */}
             <div className="absolute top-20 left-20 w-32 h-32 bg-primary/10 rounded-full blur-2xl animate-pulse" />
             <div className="absolute bottom-32 right-16 w-40 h-40 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
