@@ -40,23 +40,19 @@ interface Booking {
   customer_phone: string;
   service_type: string;
   package_type: string;
-  event_date: string;
-  event_location: string;
+  event_date: string | null;
+  event_location: string | null;
   budget_range: string;
-  message: string;
+  message: string | null;
   status: string;
   created_at: string;
-  // Invoice fields
-  invoice_number?: string | null;
-  total_price?: number | null;
+  // Database fields
+  total_amount?: number | null;
   deposit_amount?: number | null;
-  deposit_paid?: boolean;
-  full_payment_paid?: boolean;
-  payment_method?: string | null;
-  payment_notes?: string | null;
-  invoice_date?: string | null;
-  due_date?: string | null;
+  payment_status?: string | null;
   notes?: string | null;
+  booking_date?: string | null;
+  preferred_time?: string | null;
 }
 
 interface Photo {
@@ -234,22 +230,11 @@ export default function AdminPanel() {
     }
   };
 
-  const generateInvoiceNumber = async (bookingId: string) => {
+  // Payment status update helper
+  const updatePaymentStatus = async (bookingId: string, paymentStatus: string) => {
     try {
-      // Generate invoice number client-side: INV-YYYYMMDD-XXXX
-      const now = new Date();
-      const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
-      const randomNum = Math.floor(1000 + Math.random() * 9000);
-      const invoiceNumber = `INV-${dateStr}-${randomNum}`;
-      const invoiceDate = now.toISOString().split('T')[0];
-      
-      await updateBooking(bookingId, {
-        invoice_number: invoiceNumber,
-        invoice_date: invoiceDate,
-        status: 'invoiced'
-      });
-      
-      toast({ title: "Berhasil", description: `Invoice ${invoiceNumber} dibuat` });
+      await updateBooking(bookingId, { payment_status: paymentStatus });
+      toast({ title: "Berhasil", description: `Status pembayaran diperbarui` });
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     }
@@ -793,17 +778,6 @@ export default function AdminPanel() {
                           <TableCell className="font-medium text-foreground">{booking.budget_range}</TableCell>
                           <TableCell>
                             <div className="flex gap-2">
-                              {booking.invoice_number && (
-                                <Button 
-                                  variant="secondary" 
-                                  size="sm" 
-                                  onClick={() => { setViewingInvoice(booking); setIsInvoiceDialogOpen(true); }}
-                                  className="hover:bg-secondary/80 transition-colors"
-                                  title="View Invoice"
-                                >
-                                  <FileText className="h-4 w-4" />
-                                </Button>
-                              )}
                               <Button 
                                 variant="outline" 
                                 size="sm" 
@@ -852,15 +826,12 @@ export default function AdminPanel() {
               booking={editingBooking}
               onSave={(idOrData: any, data?: any) => {
                 if (typeof idOrData === 'string') {
-                  // Update mode: idOrData is booking ID
                   updateBooking(idOrData, data);
                 } else {
-                  // Create mode: idOrData is booking data
                   createBooking(idOrData);
                 }
               }}
               onClose={() => { setIsBookingDialogOpen(false); setEditingBooking(null); }}
-              onGenerateInvoice={generateInvoiceNumber}
             />
           </DialogContent>
         </Dialog>
@@ -871,10 +842,10 @@ export default function AdminPanel() {
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-primary" />
-                Invoice - {viewingInvoice?.invoice_number}
+                Detail Pesanan - {viewingInvoice?.customer_name}
               </DialogTitle>
               <DialogDescription>
-                View and print invoice
+                Detail lengkap pesanan
               </DialogDescription>
             </DialogHeader>
             {viewingInvoice && <Invoice booking={viewingInvoice} />}
@@ -1763,10 +1734,9 @@ interface BookingEditDialogProps {
   booking: Booking | null;
   onSave: ((id: string, data: Partial<Booking>) => void) | ((data: Omit<Booking, 'id' | 'created_at'>) => void);
   onClose: () => void;
-  onGenerateInvoice: (id: string) => void;
 }
 
-const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, onClose, onGenerateInvoice }) => {
+const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, onClose }) => {
   const [formData, setFormData] = React.useState({
     customer_name: '',
     customer_email: '',
@@ -1778,16 +1748,9 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
     budget_range: '',
     message: '',
     status: 'pending',
-    // Invoice fields
-    invoice_number: '',
-    total_price: '',
+    total_amount: '',
     deposit_amount: '',
-    deposit_paid: false,
-    full_payment_paid: false,
-    payment_method: '',
-    payment_notes: '',
-    invoice_date: '',
-    due_date: '',
+    payment_status: 'pending',
     notes: '',
   });
 
@@ -1804,15 +1767,9 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
         budget_range: booking.budget_range,
         message: booking.message || '',
         status: booking.status,
-        invoice_number: booking.invoice_number || '',
-        total_price: booking.total_price?.toString() || '',
+        total_amount: booking.total_amount?.toString() || '',
         deposit_amount: booking.deposit_amount?.toString() || '',
-        deposit_paid: booking.deposit_paid || false,
-        full_payment_paid: booking.full_payment_paid || false,
-        payment_method: booking.payment_method || '',
-        payment_notes: booking.payment_notes || '',
-        invoice_date: booking.invoice_date || '',
-        due_date: booking.due_date || '',
+        payment_status: booking.payment_status || 'pending',
         notes: booking.notes || '',
       });
     }
@@ -1832,23 +1789,15 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
       budget_range: formData.budget_range,
       message: formData.message || null,
       status: formData.status,
-      invoice_number: formData.invoice_number || null,
-      total_price: formData.total_price ? parseFloat(formData.total_price) : null,
+      total_amount: formData.total_amount ? parseFloat(formData.total_amount) : null,
       deposit_amount: formData.deposit_amount ? parseFloat(formData.deposit_amount) : null,
-      deposit_paid: formData.deposit_paid,
-      full_payment_paid: formData.full_payment_paid,
-      payment_method: formData.payment_method || null,
-      payment_notes: formData.payment_notes || null,
-      invoice_date: formData.invoice_date || null,
-      due_date: formData.due_date || null,
+      payment_status: formData.payment_status,
       notes: formData.notes || null,
     };
 
     if (booking) {
-      // Update existing booking
       (onSave as (id: string, data: Partial<Booking>) => void)(booking.id, bookingData);
     } else {
-      // Create new booking
       (onSave as (data: Omit<Booking, 'id' | 'created_at'>) => void)(bookingData as Omit<Booking, 'id' | 'created_at'>);
     }
   };
@@ -1982,37 +1931,19 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
         </div>
       </div>
 
-      {/* Invoice Information */}
+      {/* Payment Information */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between border-b pb-2">
-          <h3 className="font-semibold text-lg">Informasi Invoice</h3>
-          {!formData.invoice_number && booking && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => onGenerateInvoice(booking.id)}
-            >
-              <Plus className="h-4 w-4 mr-1" /> Generate Invoice
-            </Button>
-          )}
-        </div>
-
-        {formData.invoice_number && (
-          <div className="bg-primary/5 p-3 rounded-lg">
-            <p className="text-sm font-medium">Invoice Number: <span className="text-primary">{formData.invoice_number}</span></p>
-          </div>
-        )}
+        <h3 className="font-semibold text-lg border-b pb-2">Informasi Pembayaran</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="total_price">Total Harga (Rp)</Label>
+            <Label htmlFor="total_amount">Total Harga (Rp)</Label>
             <Input
-              id="total_price"
+              id="total_amount"
               type="number"
               step="0.01"
-              value={formData.total_price}
-              onChange={(e) => setFormData({ ...formData, total_price: e.target.value })}
+              value={formData.total_amount}
+              onChange={(e) => setFormData({ ...formData, total_amount: e.target.value })}
               placeholder="0"
             />
           </div>
@@ -2030,67 +1961,18 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="invoice_date">Tanggal Invoice</Label>
-            <Input
-              id="invoice_date"
-              type="date"
-              value={formData.invoice_date}
-              onChange={(e) => setFormData({ ...formData, invoice_date: e.target.value })}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="due_date">Jatuh Tempo</Label>
-            <Input
-              id="due_date"
-              type="date"
-              value={formData.due_date}
-              onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-            />
-          </div>
-        </div>
-
         <div className="space-y-2">
-          <Label htmlFor="payment_method">Metode Pembayaran</Label>
-          <Input
-            id="payment_method"
-            value={formData.payment_method}
-            onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-            placeholder="Transfer Bank, Cash, dll"
-          />
-        </div>
-
-        <div className="flex gap-6">
-          <div className="flex items-center gap-2">
-            <Switch
-              id="deposit_paid"
-              checked={formData.deposit_paid}
-              onCheckedChange={(checked) => setFormData({ ...formData, deposit_paid: checked })}
-            />
-            <Label htmlFor="deposit_paid" className="cursor-pointer">DP Sudah Dibayar</Label>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Switch
-              id="full_payment_paid"
-              checked={formData.full_payment_paid}
-              onCheckedChange={(checked) => setFormData({ ...formData, full_payment_paid: checked })}
-            />
-            <Label htmlFor="full_payment_paid" className="cursor-pointer">Lunas</Label>
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="payment_notes">Catatan Pembayaran</Label>
-          <Textarea
-            id="payment_notes"
-            value={formData.payment_notes}
-            onChange={(e) => setFormData({ ...formData, payment_notes: e.target.value })}
-            rows={2}
-            placeholder="Catatan terkait pembayaran..."
-          />
+          <Label htmlFor="payment_status">Status Pembayaran</Label>
+          <Select value={formData.payment_status} onValueChange={(value) => setFormData({ ...formData, payment_status: value })}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="pending">Belum Bayar</SelectItem>
+              <SelectItem value="dp_paid">DP Sudah Dibayar</SelectItem>
+              <SelectItem value="paid">Lunas</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
