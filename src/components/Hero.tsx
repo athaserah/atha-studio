@@ -187,12 +187,11 @@ const Hero = () => {
                   })}
             </div>
           </div>
-
-            {/* Decorative Elements */}
-            <div className="absolute top-20 left-20 w-32 h-32 bg-primary/10 rounded-full blur-2xl animate-pulse" />
-            <div className="absolute bottom-32 right-16 w-40 h-40 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
-          </div>
         </div>
+
+        {/* Decorative Elements */}
+        <div className="absolute top-20 left-20 w-32 h-32 bg-primary/10 rounded-full blur-2xl animate-pulse" />
+        <div className="absolute bottom-32 right-16 w-40 h-40 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
       </div>
 
       {/* Scroll Indicator */}

@@ -56,7 +56,7 @@ interface Booking {
   payment_notes?: string | null;
   invoice_date?: string | null;
   due_date?: string | null;
-  admin_notes?: string | null;
+  notes?: string | null;
 }
 
 interface Photo {
@@ -236,11 +236,12 @@ export default function AdminPanel() {
 
   const generateInvoiceNumber = async (bookingId: string) => {
     try {
-      const { data, error } = await supabase.rpc('generate_invoice_number');
-      if (error) throw error;
-      
-      const invoiceNumber = data as string;
-      const invoiceDate = new Date().toISOString().split('T')[0];
+      // Generate invoice number client-side: INV-YYYYMMDD-XXXX
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      const invoiceNumber = `INV-${dateStr}-${randomNum}`;
+      const invoiceDate = now.toISOString().split('T')[0];
       
       await updateBooking(bookingId, {
         invoice_number: invoiceNumber,
@@ -1575,7 +1576,7 @@ function PhotoDialog({ photo, onSave, onClose }: { photo: Photo | null; onSave: 
 // TestimonialDialogForm Component
 interface TestimonialDialogFormProps {
   testimonial: Testimonial | null;
-  onSave: (id: string, data: any) => void | ((data: any) => void);
+  onSave: ((id: string, data: Partial<Testimonial>) => void) | ((data: Omit<Testimonial, 'id' | 'created_at'>) => void);
   onClose: () => void;
 }
 
@@ -1620,9 +1621,9 @@ const TestimonialDialogForm: React.FC<TestimonialDialogFormProps> = ({ testimoni
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (testimonial) {
-      onSave(testimonial.id, formData);
+      (onSave as (id: string, data: Partial<Testimonial>) => void)(testimonial.id, formData);
     } else {
-      onSave(formData);
+      (onSave as (data: Omit<Testimonial, 'id' | 'created_at'>) => void)(formData);
     }
   };
 
@@ -1760,7 +1761,7 @@ const TestimonialDialogForm: React.FC<TestimonialDialogFormProps> = ({ testimoni
 // BookingEditDialog Component
 interface BookingEditDialogProps {
   booking: Booking | null;
-  onSave: (id: string, data: Partial<Booking>) => void | ((data: Omit<Booking, 'id' | 'created_at'>) => void);
+  onSave: ((id: string, data: Partial<Booking>) => void) | ((data: Omit<Booking, 'id' | 'created_at'>) => void);
   onClose: () => void;
   onGenerateInvoice: (id: string) => void;
 }
@@ -1787,7 +1788,7 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
     payment_notes: '',
     invoice_date: '',
     due_date: '',
-    admin_notes: '',
+    notes: '',
   });
 
   React.useEffect(() => {
@@ -1812,7 +1813,7 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
         payment_notes: booking.payment_notes || '',
         invoice_date: booking.invoice_date || '',
         due_date: booking.due_date || '',
-        admin_notes: booking.admin_notes || '',
+        notes: booking.notes || '',
       });
     }
   }, [booking]);
@@ -1840,15 +1841,15 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
       payment_notes: formData.payment_notes || null,
       invoice_date: formData.invoice_date || null,
       due_date: formData.due_date || null,
-      admin_notes: formData.admin_notes || null,
+      notes: formData.notes || null,
     };
 
     if (booking) {
       // Update existing booking
-      onSave(booking.id, bookingData);
+      (onSave as (id: string, data: Partial<Booking>) => void)(booking.id, bookingData);
     } else {
       // Create new booking
-      onSave(bookingData as any);
+      (onSave as (data: Omit<Booking, 'id' | 'created_at'>) => void)(bookingData as Omit<Booking, 'id' | 'created_at'>);
     }
   };
 
@@ -2098,9 +2099,9 @@ const BookingEditDialog: React.FC<BookingEditDialogProps> = ({ booking, onSave, 
         <h3 className="font-semibold text-lg border-b pb-2">Catatan Admin (Internal)</h3>
         <div className="space-y-2">
           <Textarea
-            id="admin_notes"
-            value={formData.admin_notes}
-            onChange={(e) => setFormData({ ...formData, admin_notes: e.target.value })}
+            id="notes"
+            value={formData.notes}
+            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
             rows={3}
             placeholder="Catatan internal untuk admin..."
           />
