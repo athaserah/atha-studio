@@ -162,7 +162,6 @@ const Gallery = () => {
                     src={photo.image_url}
                     alt={photo.title}
                     className="absolute inset-0 w-full h-full"
-                    aspectRatio="fill"
                     objectFit="cover"
                   />
                   
