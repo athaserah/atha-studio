@@ -263,7 +263,7 @@ const Gallery = () => {
 
                   {/* Image Container */}
                   <div 
-                    className="flex-1 flex items-center justify-center p-4 pt-16 pb-32 sm:pb-24"
+                    className="flex-1 flex items-center justify-center p-4 pt-16 pb-32 sm:pb-20"
                     onClick={(e) => {
                       // Handle swipe on mobile
                       const target = e.target as HTMLElement;
