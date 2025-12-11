@@ -12,15 +12,14 @@ interface InvoiceProps {
     package_type: string;
     event_date?: string | null;
     event_location?: string | null;
-    invoice_number?: string | null;
-    total_price?: number | null;
+    budget_range?: string;
+    message?: string | null;
+    status?: string;
+    total_amount?: number | null;
     deposit_amount?: number | null;
-    deposit_paid?: boolean;
-    full_payment_paid?: boolean;
-    payment_method?: string | null;
-    invoice_date?: string | null;
-    due_date?: string | null;
-    admin_notes?: string | null;
+    payment_status?: string | null;
+    notes?: string | null;
+    created_at?: string;
   };
 }
 
@@ -47,7 +46,12 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
     });
   };
 
-  const remainingPayment = (booking.total_price || 0) - (booking.deposit_amount || 0);
+  // Generate invoice number from booking ID and date
+  const invoiceNumber = `INV-${new Date(booking.created_at || Date.now()).toISOString().slice(0, 10).replace(/-/g, '')}-${booking.id.slice(0, 8).toUpperCase()}`;
+  
+  const remainingPayment = (booking.total_amount || 0) - (booking.deposit_amount || 0);
+  const isDepositPaid = booking.payment_status === 'dp_paid' || booking.payment_status === 'paid';
+  const isFullyPaid = booking.payment_status === 'paid';
 
   return (
     <div className="space-y-6">
@@ -67,28 +71,31 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
         <div className="flex justify-between items-start mb-8 pb-6 border-b-2 border-gray-300">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">ATHA STUDIO</h1>
-            <p className="text-sm text-gray-600 mt-1">Photography & Web Development</p>
+            <p className="text-sm text-gray-600 mt-1">Professional Photography Services</p>
             <p className="text-sm text-gray-600">Yogyakarta, Indonesia</p>
-            <p className="text-sm text-gray-600">Email: contact@athastudio.com</p>
-            <p className="text-sm text-gray-600">Phone: +62 123 4567 890</p>
+            <p className="text-sm text-gray-600">Email: athadiary21@gmail.com</p>
+            <p className="text-sm text-gray-600">Phone: +62 822 4159 0417</p>
           </div>
           <div className="text-right">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">INVOICE</h2>
             <p className="text-sm text-gray-600">
-              <span className="font-semibold">Invoice #:</span> {booking.invoice_number || '-'}
+              <span className="font-semibold">Invoice #:</span> {invoiceNumber}
             </p>
             <p className="text-sm text-gray-600">
-              <span className="font-semibold">Date:</span> {formatDate(booking.invoice_date)}
+              <span className="font-semibold">Date:</span> {formatDate(booking.created_at)}
             </p>
             <p className="text-sm text-gray-600">
-              <span className="font-semibold">Due Date:</span> {formatDate(booking.due_date)}
+              <span className="font-semibold">Status:</span>{' '}
+              <span className={`font-semibold ${isFullyPaid ? 'text-green-600' : isDepositPaid ? 'text-blue-600' : 'text-yellow-600'}`}>
+                {isFullyPaid ? 'LUNAS' : isDepositPaid ? 'DP SUDAH DIBAYAR' : 'BELUM BAYAR'}
+              </span>
             </p>
           </div>
         </div>
 
         {/* Bill To */}
         <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Bill To:</h3>
+          <h3 className="text-lg font-bold text-gray-900 mb-3">Kepada:</h3>
           <div className="bg-gray-50 p-4 rounded">
             <p className="font-semibold text-gray-900">{booking.customer_name}</p>
             <p className="text-sm text-gray-600">{booking.customer_email}</p>
@@ -98,28 +105,31 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
 
         {/* Service Details */}
         <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Service Details:</h3>
+          <h3 className="text-lg font-bold text-gray-900 mb-3">Detail Layanan:</h3>
           <table className="w-full">
             <thead>
               <tr className="bg-gray-100 border-b-2 border-gray-300">
-                <th className="text-left p-3 font-semibold text-gray-900">Description</th>
-                <th className="text-right p-3 font-semibold text-gray-900">Amount</th>
+                <th className="text-left p-3 font-semibold text-gray-900">Deskripsi</th>
+                <th className="text-right p-3 font-semibold text-gray-900">Total</th>
               </tr>
             </thead>
             <tbody>
               <tr className="border-b border-gray-200">
                 <td className="p-3">
                   <p className="font-semibold text-gray-900">{booking.service_type}</p>
-                  <p className="text-sm text-gray-600">Package: {booking.package_type}</p>
+                  <p className="text-sm text-gray-600">Paket: {booking.package_type}</p>
                   {booking.event_date && (
-                    <p className="text-sm text-gray-600">Event Date: {formatDate(booking.event_date)}</p>
+                    <p className="text-sm text-gray-600">Tanggal Acara: {formatDate(booking.event_date)}</p>
                   )}
                   {booking.event_location && (
-                    <p className="text-sm text-gray-600">Location: {booking.event_location}</p>
+                    <p className="text-sm text-gray-600">Lokasi: {booking.event_location}</p>
+                  )}
+                  {booking.budget_range && (
+                    <p className="text-sm text-gray-600">Budget: {booking.budget_range}</p>
                   )}
                 </td>
                 <td className="p-3 text-right font-semibold text-gray-900">
-                  {formatCurrency(booking.total_price)}
+                  {formatCurrency(booking.total_amount)}
                 </td>
               </tr>
             </tbody>
@@ -132,18 +142,18 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-gray-700">Subtotal:</span>
-                <span className="font-semibold text-gray-900">{formatCurrency(booking.total_price)}</span>
+                <span className="font-semibold text-gray-900">{formatCurrency(booking.total_amount)}</span>
               </div>
               
               {booking.deposit_amount && booking.deposit_amount > 0 && (
                 <>
-                  <div className="flex justify-between items-center text-green-600">
-                    <span>Deposit Paid {booking.deposit_paid && '✓'}:</span>
+                  <div className={`flex justify-between items-center ${isDepositPaid ? 'text-green-600' : 'text-gray-600'}`}>
+                    <span>Deposit {isDepositPaid && '✓'}:</span>
                     <span className="font-semibold">- {formatCurrency(booking.deposit_amount)}</span>
                   </div>
                   <div className="border-t-2 border-gray-300 pt-3 mt-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-lg font-bold text-gray-900">Remaining Balance:</span>
+                      <span className="text-lg font-bold text-gray-900">Sisa Pembayaran:</span>
                       <span className="text-lg font-bold text-gray-900">{formatCurrency(remainingPayment)}</span>
                     </div>
                   </div>
@@ -152,65 +162,63 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
               
               <div className="border-t-2 border-gray-300 pt-3 mt-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold text-gray-900">Total Amount:</span>
-                  <span className="text-xl font-bold text-gray-900">{formatCurrency(booking.total_price)}</span>
+                  <span className="text-xl font-bold text-gray-900">Total:</span>
+                  <span className="text-xl font-bold text-gray-900">{formatCurrency(booking.total_amount)}</span>
                 </div>
               </div>
 
-              {booking.full_payment_paid && (
+              {isFullyPaid && (
                 <div className="mt-4 p-3 bg-green-100 border-2 border-green-500 rounded text-center">
-                  <p className="text-green-800 font-bold text-lg">✓ PAID IN FULL</p>
+                  <p className="text-green-800 font-bold text-lg">✓ LUNAS</p>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Payment Information */}
-        {booking.payment_method && (
-          <div className="mb-8">
-            <h3 className="text-lg font-bold text-gray-900 mb-3">Payment Information:</h3>
-            <div className="bg-gray-50 p-4 rounded">
-              <p className="text-sm text-gray-600">
-                <span className="font-semibold text-gray-900">Payment Method:</span> {booking.payment_method}
-              </p>
-            </div>
-          </div>
-        )}
-
         {/* Bank Details */}
         <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Bank Details:</h3>
+          <h3 className="text-lg font-bold text-gray-900 mb-3">Informasi Pembayaran:</h3>
           <div className="bg-gray-50 p-4 rounded space-y-2">
             <p className="text-sm text-gray-600">
               <span className="font-semibold text-gray-900">Bank:</span> Bank BCA
             </p>
             <p className="text-sm text-gray-600">
-              <span className="font-semibold text-gray-900">Account Name:</span> Atha Studio
+              <span className="font-semibold text-gray-900">Nama Rekening:</span> Gue Arki
             </p>
             <p className="text-sm text-gray-600">
-              <span className="font-semibold text-gray-900">Account Number:</span> 1234567890
+              <span className="font-semibold text-gray-900">Nomor Rekening:</span> 1234567890
             </p>
           </div>
         </div>
 
+        {/* Notes */}
+        {booking.notes && (
+          <div className="mb-8">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">Catatan:</h3>
+            <div className="bg-gray-50 p-4 rounded">
+              <p className="text-sm text-gray-600">{booking.notes}</p>
+            </div>
+          </div>
+        )}
+
         {/* Terms & Conditions */}
         <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Terms & Conditions:</h3>
+          <h3 className="text-lg font-bold text-gray-900 mb-3">Syarat & Ketentuan:</h3>
           <div className="text-xs text-gray-600 space-y-1">
-            <p>1. Payment must be made before the due date mentioned above.</p>
-            <p>2. Deposit is non-refundable.</p>
-            <p>3. Full payment must be completed before final delivery.</p>
-            <p>4. Late payment may incur additional charges.</p>
-            <p>5. Please include invoice number in payment reference.</p>
+            <p>1. Pembayaran dilakukan sebelum tanggal jatuh tempo.</p>
+            <p>2. Deposit tidak dapat dikembalikan (non-refundable).</p>
+            <p>3. Pelunasan harus dilakukan sebelum pengiriman hasil akhir.</p>
+            <p>4. Keterlambatan pembayaran dapat dikenakan biaya tambahan.</p>
+            <p>5. Sertakan nomor invoice pada referensi pembayaran.</p>
           </div>
         </div>
 
         {/* Footer */}
         <div className="border-t-2 border-gray-300 pt-6 text-center">
-          <p className="text-sm text-gray-600">Thank you for your business!</p>
+          <p className="text-sm text-gray-600">Terima kasih atas kepercayaan Anda!</p>
           <p className="text-xs text-gray-500 mt-2">
-            This is a computer-generated invoice and does not require a signature.
+            Invoice ini dihasilkan secara otomatis dan tidak memerlukan tanda tangan.
           </p>
         </div>
       </div>
