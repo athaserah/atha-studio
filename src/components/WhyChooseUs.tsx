@@ -158,21 +158,7 @@ export const WhyChooseUs = () => {
             icon: Users
           }].map((stat, index) => {
             const Icon = stat.icon;
-            return (
-              <div 
-                key={stat.label}
-                className="text-center group p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:bg-card/80 transition-all duration-300 hover:-translate-y-1"
-                style={{ animationDelay: `${0.6 + index * 0.1}s` }}
-              >
-                <div className="flex justify-center mb-4">
-                  <div className="icon-container w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
-                    <Icon className="h-7 w-7 text-primary group-hover:text-primary-foreground transition-colors duration-300" />
-                  </div>
-                </div>
-                <div className="text-3xl font-bold gradient-text mb-1">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            );
+            return;
           })}
           </div>
         </div>
