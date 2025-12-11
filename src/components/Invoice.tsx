@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Printer, Download } from 'lucide-react';
+import { Printer, Download, Share2 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import logoImage from '@/assets/atha-studio-logo.png';
+import { toast } from 'sonner';
 
 interface InvoiceProps {
   booking: {
@@ -34,10 +35,16 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
     window.print();
   };
 
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+  };
+
   const handleDownloadPDF = async () => {
     if (!invoiceRef.current) return;
     
     setIsGeneratingPDF(true);
+    toast.loading('Membuat PDF...', { id: 'pdf-generation' });
+    
     try {
       // Hide buttons before capturing
       const buttons = invoiceRef.current.parentElement?.querySelector('.print\\:hidden');
@@ -45,12 +52,28 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
         (buttons as HTMLElement).style.display = 'none';
       }
 
+      // Scroll to top of invoice to ensure full capture
+      const dialogContent = invoiceRef.current.closest('.overflow-y-auto');
+      if (dialogContent) {
+        dialogContent.scrollTop = 0;
+      }
+
+      // Wait a bit for rendering
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      // Adjust scale based on device
+      const scale = isMobile() ? 1.5 : 2;
+      
       // Capture the invoice content
       const canvas = await html2canvas(invoiceRef.current, {
-        scale: 2,
+        scale: scale,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        windowWidth: invoiceRef.current.scrollWidth,
+        windowHeight: invoiceRef.current.scrollHeight,
+        scrollY: -window.scrollY,
+        scrollX: -window.scrollX
       });
 
       // Calculate PDF dimensions
@@ -59,16 +82,55 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
       
       // Create PDF
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/png', 0.95);
       
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      // Handle multi-page if content is too long
+      const pageHeight = 297; // A4 height in mm
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
       
       // Generate filename
       const invoiceNumber = `INV-${new Date(booking.created_at || Date.now()).toISOString().slice(0, 10).replace(/-/g, '')}-${booking.id.slice(0, 8).toUpperCase()}`;
       const filename = `${invoiceNumber}_${booking.customer_name.replace(/\s+/g, '_')}.pdf`;
       
-      // Download PDF
-      pdf.save(filename);
+      // For mobile, try to use share API if available
+      if (isMobile() && navigator.share && navigator.canShare) {
+        try {
+          const pdfBlob = pdf.output('blob');
+          const file = new File([pdfBlob], filename, { type: 'application/pdf' });
+          
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'Invoice',
+              text: `Invoice untuk ${booking.customer_name}`
+            });
+            toast.success('PDF berhasil dibuat!', { id: 'pdf-generation' });
+          } else {
+            // Fallback to download
+            pdf.save(filename);
+            toast.success('PDF berhasil didownload!', { id: 'pdf-generation' });
+          }
+        } catch (shareError) {
+          console.log('Share failed, falling back to download:', shareError);
+          pdf.save(filename);
+          toast.success('PDF berhasil didownload!', { id: 'pdf-generation' });
+        }
+      } else {
+        // Download PDF for desktop
+        pdf.save(filename);
+        toast.success('PDF berhasil didownload!', { id: 'pdf-generation' });
+      }
 
       // Show buttons again
       if (buttons) {
@@ -76,7 +138,7 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
       }
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Gagal membuat PDF. Silakan coba lagi.');
+      toast.error('Gagal membuat PDF. Silakan coba lagi.', { id: 'pdf-generation' });
     } finally {
       setIsGeneratingPDF(false);
     }
@@ -110,18 +172,26 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
   return (
     <div className="space-y-6">
       {/* Print Buttons - Hidden when printing */}
-      <div className="flex gap-2 print:hidden">
-        <Button onClick={handlePrint} className="flex-1" disabled={isGeneratingPDF}>
-          <Printer className="h-4 w-4 mr-2" /> Print Invoice
-        </Button>
+      <div className="flex flex-col sm:flex-row gap-2 print:hidden">
         <Button 
-          variant="outline" 
           onClick={handleDownloadPDF} 
-          className="flex-1"
+          className="flex-1 w-full"
           disabled={isGeneratingPDF}
         >
-          <Download className="h-4 w-4 mr-2" /> 
-          {isGeneratingPDF ? 'Generating PDF...' : 'Download PDF'}
+          {isMobile() && navigator.share ? (
+            <Share2 className="h-4 w-4 mr-2" />
+          ) : (
+            <Download className="h-4 w-4 mr-2" />
+          )}
+          {isGeneratingPDF ? 'Membuat PDF...' : isMobile() && navigator.share ? 'Share PDF' : 'Download PDF'}
+        </Button>
+        <Button 
+          onClick={handlePrint} 
+          variant="outline"
+          className="flex-1 w-full" 
+          disabled={isGeneratingPDF}
+        >
+          <Printer className="h-4 w-4 mr-2" /> Print
         </Button>
       </div>
 
