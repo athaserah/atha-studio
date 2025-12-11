@@ -377,13 +377,12 @@ const Gallery = () => {
 
                   {/* Main Image */}
                   <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
-                    <div className="relative w-full h-full flex items-center justify-center">
-                      <OptimizedImage
-                        src={currentPhoto.image_url}
-                        alt={currentPhoto.title}
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
+                    <img
+                      src={currentPhoto.image_url}
+                      alt={currentPhoto.title}
+                      className="max-w-full max-h-full object-contain"
+                      loading="eager"
+                    />
                   </div>
 
                   {/* Navigation Arrows */}
