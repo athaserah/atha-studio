@@ -707,7 +707,108 @@ export default function AdminPanel() {
               </Button>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto -mx-6 px-6">
+              {/* Mobile Card View */}
+              <div className="block lg:hidden space-y-4">
+                {bookings.length === 0 ? (
+                  <div className="flex flex-col items-center gap-2 py-12">
+                    <BookOpen className="h-12 w-12 text-muted-foreground/50" />
+                    <p className="text-muted-foreground">Belum ada pesanan</p>
+                  </div>
+                ) : (
+                  bookings.map((booking, index) => (
+                    <Card key={booking.id} className="p-4 space-y-3" style={{ animationDelay: `${index * 0.05}s` }}>
+                      {/* Customer Info */}
+                      <div>
+                        <div className="font-medium text-foreground">{booking.customer_name}</div>
+                        <div className="text-sm text-muted-foreground">{booking.customer_email}</div>
+                        <div className="text-sm text-muted-foreground">{booking.customer_phone}</div>
+                      </div>
+                      
+                      {/* Service Info */}
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="text-xs text-muted-foreground">Layanan</div>
+                          <div className="font-medium text-foreground">{booking.service_type}</div>
+                          <div className="text-sm text-muted-foreground">{booking.package_type}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-xs text-muted-foreground">Budget</div>
+                          <div className="font-medium text-foreground">{booking.budget_range}</div>
+                        </div>
+                      </div>
+                      
+                      {/* Date & Status */}
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="text-xs text-muted-foreground">Tanggal Acara</div>
+                          <div className="text-sm font-medium">
+                            {booking.event_date ? new Date(booking.event_date).toLocaleDateString('id-ID') : '-'}
+                          </div>
+                        </div>
+                        <Select value={booking.status} onValueChange={(value) => updateBookingStatus(booking.id, value)}>
+                          <SelectTrigger className="w-32 h-8 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="pending">
+                              <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/30 text-xs">
+                                Pending
+                              </Badge>
+                            </SelectItem>
+                            <SelectItem value="confirmed">
+                              <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/30 text-xs">
+                                Confirmed
+                              </Badge>
+                            </SelectItem>
+                            <SelectItem value="cancelled">
+                              <Badge variant="secondary" className="bg-red-500/10 text-red-600 border-red-500/30 text-xs">
+                                Cancelled
+                              </Badge>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 pt-2 border-t border-border/50">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => { setViewingInvoice(booking); setIsInvoiceDialogOpen(true); }}
+                          className="flex-1 hover:bg-blue-500/10 hover:text-blue-600 hover:border-blue-500/30 transition-colors"
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          <span className="text-xs">Invoice</span>
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => { setEditingBooking(booking); setIsBookingDialogOpen(true); }}
+                          className="flex-1 hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
+                        >
+                          <Edit className="h-4 w-4 mr-1" />
+                          <span className="text-xs">Edit</span>
+                        </Button>
+                        <Button 
+                          variant="destructive" 
+                          size="sm" 
+                          onClick={() => {
+                            if (confirm('Yakin ingin menghapus pesanan ini?')) {
+                              deleteBooking(booking.id);
+                            }
+                          }}
+                          className="hover:scale-105 transition-transform"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </Card>
+                  ))
+                )}
+              </div>
+              
+              {/* Desktop Table View */}
+              <div className="hidden lg:block overflow-x-auto -mx-6 px-6">
                 <Table>
                   <TableHeader>
                     <TableRow className="border-border/50 hover:bg-muted/50">
