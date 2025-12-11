@@ -196,112 +196,155 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
       </div>
 
       {/* Invoice Content - Optimized for printing */}
-      <div ref={invoiceRef} className="bg-white text-black p-8 rounded-lg border-2 border-gray-300 print:border-0 print:p-0">
+      <div ref={invoiceRef} className="bg-white text-black p-4 sm:p-8 rounded-lg border-2 border-gray-300 print:border-0 print:p-0">
         {/* Header */}
-        <div className="flex justify-between items-start mb-8 pb-6 border-b-2 border-gray-300">
-          <div className="flex items-start gap-4">
-            <img src={logoImage} alt="Atha Studio Logo" className="w-16 h-16 object-contain" />
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">ATHA STUDIO</h1>
-              <p className="text-sm text-gray-600 mt-1">Professional Photography Services</p>
-              <p className="text-sm text-gray-600">Email: athadiary21@gmail.com</p>
-              <p className="text-sm text-gray-600">Phone: +62 822 4159 0417</p>
+        <div className="mb-6 sm:mb-8 pb-4 sm:pb-6 border-b-2 border-gray-300">
+          {/* Mobile: Stack vertically */}
+          <div className="flex flex-col gap-4 sm:hidden">
+            {/* Logo and Company Info */}
+            <div className="flex items-start gap-3">
+              <img src={logoImage} alt="Atha Studio Logo" className="w-12 h-12 sm:w-16 sm:h-16 object-contain flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <h1 className="text-xl font-bold text-gray-900">ATHA STUDIO</h1>
+                <p className="text-xs text-gray-600 mt-0.5">Professional Photography Services</p>
+              </div>
+            </div>
+            
+            {/* Contact Info */}
+            <div className="text-xs text-gray-600 space-y-0.5">
+              <p>Email: athadiary21@gmail.com</p>
+              <p>Phone: +62 822 4159 0417</p>
+            </div>
+            
+            {/* Invoice Info */}
+            <div className="bg-gray-50 p-3 rounded">
+              <h2 className="text-lg font-bold text-gray-900 mb-2">INVOICE</h2>
+              <div className="space-y-1 text-xs text-gray-600">
+                <p>
+                  <span className="font-semibold">Invoice #:</span><br/>
+                  <span className="break-all">{invoiceNumber}</span>
+                </p>
+                <p>
+                  <span className="font-semibold">Date:</span> {formatDate(booking.created_at)}
+                </p>
+                <p>
+                  <span className="font-semibold">Status:</span>{' '}
+                  <span className={`font-semibold ${isFullyPaid ? 'text-green-600' : isDepositPaid ? 'text-blue-600' : 'text-yellow-600'}`}>
+                    {isFullyPaid ? 'LUNAS' : isDepositPaid ? 'DP SUDAH DIBAYAR' : 'BELUM BAYAR'}
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
-          <div className="text-right">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">INVOICE</h2>
-            <p className="text-sm text-gray-600">
-              <span className="font-semibold">Invoice #:</span> {invoiceNumber}
-            </p>
-            <p className="text-sm text-gray-600">
-              <span className="font-semibold">Date:</span> {formatDate(booking.created_at)}
-            </p>
-            <p className="text-sm text-gray-600">
-              <span className="font-semibold">Status:</span>{' '}
-              <span className={`font-semibold ${isFullyPaid ? 'text-green-600' : isDepositPaid ? 'text-blue-600' : 'text-yellow-600'}`}>
-                {isFullyPaid ? 'LUNAS' : isDepositPaid ? 'DP SUDAH DIBAYAR' : 'BELUM BAYAR'}
-              </span>
-            </p>
+          
+          {/* Desktop: Side by side */}
+          <div className="hidden sm:flex justify-between items-start">
+            <div className="flex items-start gap-4">
+              <img src={logoImage} alt="Atha Studio Logo" className="w-16 h-16 object-contain" />
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">ATHA STUDIO</h1>
+                <p className="text-sm text-gray-600 mt-1">Professional Photography Services</p>
+                <p className="text-sm text-gray-600">Email: athadiary21@gmail.com</p>
+                <p className="text-sm text-gray-600">Phone: +62 822 4159 0417</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">INVOICE</h2>
+              <p className="text-sm text-gray-600">
+                <span className="font-semibold">Invoice #:</span> {invoiceNumber}
+              </p>
+              <p className="text-sm text-gray-600">
+                <span className="font-semibold">Date:</span> {formatDate(booking.created_at)}
+              </p>
+              <p className="text-sm text-gray-600">
+                <span className="font-semibold">Status:</span>{' '}
+                <span className={`font-semibold ${isFullyPaid ? 'text-green-600' : isDepositPaid ? 'text-blue-600' : 'text-yellow-600'}`}>
+                  {isFullyPaid ? 'LUNAS' : isDepositPaid ? 'DP SUDAH DIBAYAR' : 'BELUM BAYAR'}
+                </span>
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Bill To */}
-        <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Kepada:</h3>
-          <div className="bg-gray-50 p-4 rounded">
-            <p className="font-semibold text-gray-900">{booking.customer_name}</p>
-            <p className="text-sm text-gray-600">{booking.customer_email}</p>
-            <p className="text-sm text-gray-600">{booking.customer_phone}</p>
+        <div className="mb-6 sm:mb-8">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 sm:mb-3">Kepada:</h3>
+          <div className="bg-gray-50 p-3 sm:p-4 rounded">
+            <p className="font-semibold text-gray-900 text-sm sm:text-base">{booking.customer_name}</p>
+            <p className="text-xs sm:text-sm text-gray-600">{booking.customer_email}</p>
+            <p className="text-xs sm:text-sm text-gray-600">{booking.customer_phone}</p>
           </div>
         </div>
 
         {/* Service Details */}
-        <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Detail Layanan:</h3>
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gray-100 border-b-2 border-gray-300">
-                <th className="text-left p-3 font-semibold text-gray-900">Deskripsi</th>
-                <th className="text-right p-3 font-semibold text-gray-900">Total</th>
-              </tr>
-            </thead>
+        <div className="mb-6 sm:mb-8">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 sm:mb-3">Detail Layanan:</h3>
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="w-full min-w-full">
+              <thead>
+                <tr className="bg-gray-100 border-b-2 border-gray-300">
+                  <th className="text-left p-2 sm:p-3 font-semibold text-gray-900 text-xs sm:text-sm">Deskripsi</th>
+                  <th className="text-right p-2 sm:p-3 font-semibold text-gray-900 text-xs sm:text-sm whitespace-nowrap">Total</th>
+                </tr>
+              </thead>
             <tbody>
               <tr className="border-b border-gray-200">
-                <td className="p-3">
-                  <p className="font-semibold text-gray-900">{booking.service_type}</p>
-                  <p className="text-sm text-gray-600">Paket: {booking.package_type}</p>
+                <td className="p-2 sm:p-3">
+                  <p className="font-semibold text-gray-900 text-sm sm:text-base">{booking.service_type}</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Paket: {booking.package_type}</p>
                   {booking.event_date && (
-                    <p className="text-sm text-gray-600">Tanggal Acara: {formatDate(booking.event_date)}</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Tanggal Acara: {formatDate(booking.event_date)}</p>
                   )}
                   {booking.event_location && (
-                    <p className="text-sm text-gray-600">Lokasi: {booking.event_location}</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Lokasi: {booking.event_location}</p>
                   )}
                   {booking.budget_range && (
-                    <p className="text-sm text-gray-600">Budget: {booking.budget_range}</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Budget: {booking.budget_range}</p>
                   )}
                 </td>
-                <td className="p-3 text-right font-semibold text-gray-900">
+                <td className="p-2 sm:p-3 text-right font-semibold text-gray-900 text-sm sm:text-base whitespace-nowrap align-top">
                   {formatCurrency(booking.total_amount)}
                 </td>
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
 
         {/* Payment Summary */}
-        <div className="mb-8">
-          <div className="bg-gray-50 p-6 rounded-lg">
-            <div className="space-y-3">
+        <div className="mb-6 sm:mb-8">
+          <div className="bg-gray-50 p-3 sm:p-6 rounded-lg">
+            <div className="space-y-2 sm:space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-gray-700">Subtotal:</span>
-                <span className="font-semibold text-gray-900">{formatCurrency(booking.total_amount)}</span>
+                <span className="text-gray-700 text-sm sm:text-base">Subtotal:</span>
+                <span className="font-semibold text-gray-900 text-sm sm:text-base">{formatCurrency(booking.total_amount)}</span>
               </div>
               
               {booking.deposit_amount && booking.deposit_amount > 0 && (
                 <>
-                  <div className={`flex justify-between items-center ${isDepositPaid ? 'text-green-600' : 'text-gray-600'}`}>
+                  <div className={`flex justify-between items-center text-sm sm:text-base ${isDepositPaid ? 'text-green-600' : 'text-gray-600'}`}>
                     <span>Deposit {isDepositPaid && '✓'}:</span>
                     <span className="font-semibold">- {formatCurrency(booking.deposit_amount)}</span>
                   </div>
-                  <div className="border-t-2 border-gray-300 pt-3 mt-3">
+                  <div className="border-t-2 border-gray-300 pt-2 sm:pt-3 mt-2 sm:mt-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-lg font-bold text-gray-900">Sisa Pembayaran:</span>
-                      <span className="text-lg font-bold text-gray-900">{formatCurrency(remainingPayment)}</span>
+                      <span className="text-base sm:text-lg font-bold text-gray-900">Sisa Pembayaran:</span>
+                      <span className="text-base sm:text-lg font-bold text-gray-900">{formatCurrency(remainingPayment)}</span>
                     </div>
                   </div>
                 </>
               )}
               
-              <div className="border-t-2 border-gray-300 pt-3 mt-3">
+              <div className="border-t-2 border-gray-300 pt-2 sm:pt-3 mt-2 sm:mt-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold text-gray-900">Total:</span>
-                  <span className="text-xl font-bold text-gray-900">{formatCurrency(booking.total_amount)}</span>
+                  <span className="text-lg sm:text-xl font-bold text-gray-900">Total:</span>
+                  <span className="text-lg sm:text-xl font-bold text-gray-900">{formatCurrency(booking.total_amount)}</span>
                 </div>
               </div>
 
               {isFullyPaid && (
-                <div className="mt-4 p-3 bg-green-100 border-2 border-green-500 rounded text-center">
-                  <p className="text-green-800 font-bold text-lg">✓ LUNAS</p>
+                <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-green-100 border-2 border-green-500 rounded text-center">
+                  <p className="text-green-800 font-bold text-base sm:text-lg">✓ LUNAS</p>
                 </div>
               )}
             </div>
@@ -309,16 +352,16 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
         </div>
 
         {/* Bank Details */}
-        <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Informasi Pembayaran:</h3>
-          <div className="bg-gray-50 p-4 rounded space-y-2">
-            <p className="text-sm text-gray-600">
+        <div className="mb-6 sm:mb-8">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 sm:mb-3">Informasi Pembayaran:</h3>
+          <div className="bg-gray-50 p-3 sm:p-4 rounded space-y-1.5 sm:space-y-2">
+            <p className="text-xs sm:text-sm text-gray-600">
               <span className="font-semibold text-gray-900">Bank:</span> Bank BCA
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-gray-600">
               <span className="font-semibold text-gray-900">Nama Rekening:</span> Atha Rasyid Risqi
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-gray-600">
               <span className="font-semibold text-gray-900">Nomor Rekening:</span> 1880678805
             </p>
           </div>
@@ -326,18 +369,18 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
 
         {/* Notes */}
         {booking.notes && (
-          <div className="mb-8">
-            <h3 className="text-lg font-bold text-gray-900 mb-3">Catatan:</h3>
-            <div className="bg-gray-50 p-4 rounded">
-              <p className="text-sm text-gray-600">{booking.notes}</p>
+          <div className="mb-6 sm:mb-8">
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 sm:mb-3">Catatan:</h3>
+            <div className="bg-gray-50 p-3 sm:p-4 rounded">
+              <p className="text-xs sm:text-sm text-gray-600">{booking.notes}</p>
             </div>
           </div>
         )}
 
         {/* Terms & Conditions */}
-        <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Syarat & Ketentuan:</h3>
-          <div className="text-xs text-gray-600 space-y-1">
+        <div className="mb-6 sm:mb-8">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 sm:mb-3">Syarat & Ketentuan:</h3>
+          <div className="text-[10px] sm:text-xs text-gray-600 space-y-0.5 sm:space-y-1">
             <p>1. Pembayaran dilakukan sebelum tanggal jatuh tempo.</p>
             <p>2. Deposit tidak dapat dikembalikan (non-refundable).</p>
             <p>3. Pelunasan harus dilakukan sebelum pengiriman hasil akhir.</p>
@@ -347,9 +390,9 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
         </div>
 
         {/* Footer */}
-        <div className="border-t-2 border-gray-300 pt-6 text-center">
-          <p className="text-sm text-gray-600">Terima kasih atas kepercayaan Anda!</p>
-          <p className="text-xs text-gray-500 mt-2">
+        <div className="border-t-2 border-gray-300 pt-4 sm:pt-6 text-center">
+          <p className="text-xs sm:text-sm text-gray-600">Terima kasih atas kepercayaan Anda!</p>
+          <p className="text-[10px] sm:text-xs text-gray-500 mt-1 sm:mt-2">
             Invoice ini dihasilkan secara otomatis oleh Atha Studio dan tidak memerlukan tanda tangan.
           </p>
         </div>
