@@ -781,6 +781,15 @@ export default function AdminPanel() {
                               <Button 
                                 variant="outline" 
                                 size="sm" 
+                                onClick={() => { setViewingInvoice(booking); setIsInvoiceDialogOpen(true); }}
+                                className="hover:bg-blue-500/10 hover:text-blue-600 hover:border-blue-500/30 transition-colors"
+                                title="Lihat & Download Invoice"
+                              >
+                                <FileText className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
                                 onClick={() => { setEditingBooking(booking); setIsBookingDialogOpen(true); }}
                                 className="hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
                               >

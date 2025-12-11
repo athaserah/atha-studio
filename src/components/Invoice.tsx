@@ -1,6 +1,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Printer, Download } from 'lucide-react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import logoImage from '@/assets/atha-studio-logo.png';
 
 interface InvoiceProps {
   booking: {
@@ -24,8 +27,59 @@ interface InvoiceProps {
 }
 
 export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
+  const [isGeneratingPDF, setIsGeneratingPDF] = React.useState(false);
+  const invoiceRef = React.useRef<HTMLDivElement>(null);
+
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!invoiceRef.current) return;
+    
+    setIsGeneratingPDF(true);
+    try {
+      // Hide buttons before capturing
+      const buttons = invoiceRef.current.parentElement?.querySelector('.print\\:hidden');
+      if (buttons) {
+        (buttons as HTMLElement).style.display = 'none';
+      }
+
+      // Capture the invoice content
+      const canvas = await html2canvas(invoiceRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      // Calculate PDF dimensions
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      // Create PDF
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgData = canvas.toDataURL('image/png');
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      
+      // Generate filename
+      const invoiceNumber = `INV-${new Date(booking.created_at || Date.now()).toISOString().slice(0, 10).replace(/-/g, '')}-${booking.id.slice(0, 8).toUpperCase()}`;
+      const filename = `${invoiceNumber}_${booking.customer_name.replace(/\s+/g, '_')}.pdf`;
+      
+      // Download PDF
+      pdf.save(filename);
+
+      // Show buttons again
+      if (buttons) {
+        (buttons as HTMLElement).style.display = '';
+      }
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Gagal membuat PDF. Silakan coba lagi.');
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   const formatCurrency = (amount: number | null | undefined) => {
@@ -57,24 +111,33 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
     <div className="space-y-6">
       {/* Print Buttons - Hidden when printing */}
       <div className="flex gap-2 print:hidden">
-        <Button onClick={handlePrint} className="flex-1">
+        <Button onClick={handlePrint} className="flex-1" disabled={isGeneratingPDF}>
           <Printer className="h-4 w-4 mr-2" /> Print Invoice
         </Button>
-        <Button variant="outline" onClick={handlePrint} className="flex-1">
-          <Download className="h-4 w-4 mr-2" /> Save as PDF
+        <Button 
+          variant="outline" 
+          onClick={handleDownloadPDF} 
+          className="flex-1"
+          disabled={isGeneratingPDF}
+        >
+          <Download className="h-4 w-4 mr-2" /> 
+          {isGeneratingPDF ? 'Generating PDF...' : 'Download PDF'}
         </Button>
       </div>
 
       {/* Invoice Content - Optimized for printing */}
-      <div className="bg-white text-black p-8 rounded-lg border-2 border-gray-300 print:border-0 print:p-0">
+      <div ref={invoiceRef} className="bg-white text-black p-8 rounded-lg border-2 border-gray-300 print:border-0 print:p-0">
         {/* Header */}
         <div className="flex justify-between items-start mb-8 pb-6 border-b-2 border-gray-300">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">ATHA STUDIO</h1>
-            <p className="text-sm text-gray-600 mt-1">Professional Photography Services</p>
-            <p className="text-sm text-gray-600">Yogyakarta, Indonesia</p>
-            <p className="text-sm text-gray-600">Email: athadiary21@gmail.com</p>
-            <p className="text-sm text-gray-600">Phone: +62 822 4159 0417</p>
+          <div className="flex items-start gap-4">
+            <img src={logoImage} alt="Atha Studio Logo" className="w-16 h-16 object-contain" />
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">ATHA STUDIO</h1>
+              <p className="text-sm text-gray-600 mt-1">Professional Photography Services</p>
+              <p className="text-sm text-gray-600">Yogyakarta, Indonesia</p>
+              <p className="text-sm text-gray-600">Email: athadiary21@gmail.com</p>
+              <p className="text-sm text-gray-600">Phone: +62 822 4159 0417</p>
+            </div>
           </div>
           <div className="text-right">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">INVOICE</h2>
