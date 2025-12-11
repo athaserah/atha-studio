@@ -134,7 +134,6 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">ATHA STUDIO</h1>
               <p className="text-sm text-gray-600 mt-1">Professional Photography Services</p>
-              <p className="text-sm text-gray-600">Yogyakarta, Indonesia</p>
               <p className="text-sm text-gray-600">Email: athadiary21@gmail.com</p>
               <p className="text-sm text-gray-600">Phone: +62 822 4159 0417</p>
             </div>
@@ -247,10 +246,10 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
               <span className="font-semibold text-gray-900">Bank:</span> Bank BCA
             </p>
             <p className="text-sm text-gray-600">
-              <span className="font-semibold text-gray-900">Nama Rekening:</span> Gue Arki
+              <span className="font-semibold text-gray-900">Nama Rekening:</span> Atha Rasyid Risqi
             </p>
             <p className="text-sm text-gray-600">
-              <span className="font-semibold text-gray-900">Nomor Rekening:</span> 1234567890
+              <span className="font-semibold text-gray-900">Nomor Rekening:</span> 1880678805
             </p>
           </div>
         </div>
@@ -273,7 +272,7 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
             <p>2. Deposit tidak dapat dikembalikan (non-refundable).</p>
             <p>3. Pelunasan harus dilakukan sebelum pengiriman hasil akhir.</p>
             <p>4. Keterlambatan pembayaran dapat dikenakan biaya tambahan.</p>
-            <p>5. Sertakan nomor invoice pada referensi pembayaran.</p>
+            <p>5. Sertakan bukti transfer sebagai bukti pembayaran.</p>
           </div>
         </div>
 
@@ -281,7 +280,7 @@ export const Invoice: React.FC<InvoiceProps> = ({ booking }) => {
         <div className="border-t-2 border-gray-300 pt-6 text-center">
           <p className="text-sm text-gray-600">Terima kasih atas kepercayaan Anda!</p>
           <p className="text-xs text-gray-500 mt-2">
-            Invoice ini dihasilkan secara otomatis dan tidak memerlukan tanda tangan.
+            Invoice ini dihasilkan secara otomatis oleh Atha Studio dan tidak memerlukan tanda tangan.
           </p>
         </div>
       </div>

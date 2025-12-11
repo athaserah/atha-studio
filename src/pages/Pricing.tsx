@@ -53,7 +53,7 @@ const Pricing = () => {
         "Revisi minor 1x"
       ],
       gradient: "from-blue-500 to-cyan-500",
-      popular: false
+      popular: true
     },
     {
       name: "Standard",
@@ -69,7 +69,7 @@ const Pricing = () => {
         "Bonus 10 foto filter vintage"
       ],
       gradient: "from-purple-500 to-pink-500",
-      popular: true
+      popular: false
     },
     {
       name: "Premium",

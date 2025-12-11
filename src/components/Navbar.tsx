@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const navItems = [
     { href: "/", label: "Beranda", icon: Home },
-    { href: "/gallery", label: "Portfolio", icon: Camera },
+    { href: "/gallery", label: "Galeri", icon: Camera },
     { href: "/pricing", label: "Layanan", icon: Camera },
     { href: "/about", label: "Tentang", icon: User },
     { href: "/contact", label: "Kontak", icon: MessageCircle },

@@ -53,7 +53,7 @@ const Services = () => {
         "File digital via Google Drive",
         "Revisi minor 1x"
       ],
-      popular: false,
+      popular: true,
       icon: Camera
     },
     {
@@ -69,7 +69,7 @@ const Services = () => {
         "Revisi 2x",
         "Bonus 10 foto filter vintage"
       ],
-      popular: true,
+      popular: false,
       icon: Crown
     },
     {
