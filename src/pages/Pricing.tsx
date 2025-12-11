@@ -1,7 +1,8 @@
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Camera, MessageCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Check, Camera, MessageCircle, Crown, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import {
   Accordion,
@@ -20,6 +21,12 @@ const Pricing = () => {
         event.stopPropagation();
       }
 
+      if (typeof window !== 'undefined') {
+        import('@/utils/analytics').then(({ trackWhatsAppClick }) => {
+          trackWhatsAppClick(serviceName, packageName, 'pricing_page');
+        });
+      }
+
       const message = `Halo! Saya tertarik dengan layanan ${serviceName} - Paket ${packageName}. Mohon informasi lebih lanjut mengenai paket ini.`;
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
       
@@ -33,6 +40,7 @@ const Pricing = () => {
         });
       }
     } catch (error) {
+      console.error('Error opening WhatsApp:', error);
       toast.error('Gagal membuka WhatsApp', {
         description: 'Silakan coba lagi atau hubungi langsung ke 082241590417'
       });
@@ -52,8 +60,8 @@ const Pricing = () => {
         "File digital via Google Drive",
         "Revisi minor 1x"
       ],
-      gradient: "from-blue-500 to-cyan-500",
-      popular: true
+      popular: true,
+      icon: Camera
     },
     {
       name: "Standard",
@@ -68,8 +76,8 @@ const Pricing = () => {
         "Revisi 2x",
         "Bonus 10 foto filter vintage"
       ],
-      gradient: "from-purple-500 to-pink-500",
-      popular: false
+      popular: false,
+      icon: Crown
     },
     {
       name: "Premium",
@@ -85,11 +93,10 @@ const Pricing = () => {
         "Behind the scenes video",
         "2 photographer + assistant"
       ],
-      gradient: "from-orange-500 to-red-500",
-      popular: false
+      popular: false,
+      icon: Sparkles
     }
   ];
-
 
   return (
     <div className="min-h-screen bg-background">
@@ -97,102 +104,157 @@ const Pricing = () => {
       
       <main className="container mx-auto px-4 py-8 mt-16">
         {/* Photography Services */}
-        <div className="mb-16 lg:mb-24">
-          <div className="text-center mb-8 lg:mb-12 fade-in">
-            <div className="flex justify-center mb-4">
-              <Camera className="h-10 w-10 lg:h-12 lg:w-12 text-primary" />
+        <section className="py-section bg-gradient-to-b from-background via-secondary/10 to-background relative overflow-hidden mb-16 lg:mb-24">
+          {/* Background Decoration */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/4 -left-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-1/4 -right-40 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
+          </div>
+
+          <div className="relative">
+            {/* Header */}
+            <div className="text-center mb-16 animate-fade-in">
+              <Badge variant="outline" className="mb-4 badge-premium">
+                <Camera className="h-3 w-3 mr-1" />
+                Paket Layanan
+              </Badge>
+              <h1 className="text-3xl lg:text-5xl font-bold mb-4">
+                Paket Fotografi{" "}
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Profesional
+                </span>
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                Paket fotografi berkualitas tinggi untuk berbagai kebutuhan. 
+                Dari sesi personal hingga dokumentasi acara besar, kami siap membantu.
+              </p>
             </div>
-            <h1 className="text-3xl lg:text-5xl font-bold mb-4">
-              Layanan Fotografi
-              <span className="block bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Profesional
-              </span>
-            </h1>
-            <p className="text-base lg:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Abadikan momen spesial Anda dengan hasil foto berkualitas tinggi. 
-              Dari sesi foto personal hingga dokumentasi acara besar, kami memberikan layanan terbaik untuk kebutuhan Anda.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {photographyPackages.map((pkg, index) => (
-              <Card 
-                key={pkg.name}
-                className={`relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-glow ${
-                  pkg.popular ? 'border-primary border-2' : ''
-                }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {pkg.popular && (
-                  <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-bold">
-                    TERPOPULER
-                  </div>
-                )}
-                
-                <div className={`h-2 bg-gradient-to-r ${pkg.gradient}`} />
-                
-                <CardHeader>
-                  <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                  <CardDescription className="text-base">{pkg.description}</CardDescription>
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold">Rp {pkg.price}</span>
-                  </div>
-                </CardHeader>
-                
-                <CardContent>
-                  <ul className="space-y-3">
-                    {pkg.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-                
-                <CardFooter>
-                  <Button 
-                    className="w-full group"
-                    variant={pkg.popular ? "default" : "outline"}
-                    onClick={(e) => handleBooking("Photography", pkg.name, e)}
+            {/* Pricing Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 stagger-children">
+              {photographyPackages.map((pkg, index) => {
+                const Icon = pkg.icon;
+                return (
+                  <Card 
+                    key={pkg.name}
+                    className={`relative overflow-hidden transition-all duration-500 card-3d group ${
+                      pkg.popular 
+                        ? 'border-2 border-primary shadow-glow scale-105 lg:scale-110 z-10' 
+                        : 'border-border/50 hover:border-primary/30'
+                    }`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <MessageCircle className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                    Pesan via WhatsApp
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </div>
+                    {/* Popular Badge */}
+                    {pkg.popular && (
+                      <div className="absolute -top-0 left-0 right-0">
+                        <div className="badge-popular text-center py-2">
+                          <Crown className="h-4 w-4 inline mr-1" />
+                          TERPOPULER
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Gradient Border Effect */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5" />
+                    </div>
+                    
+                    <CardHeader className={`relative ${pkg.popular ? 'pt-12' : ''}`}>
+                      {/* Icon */}
+                      <div className={`icon-container w-16 h-16 mb-4 ${pkg.popular ? 'bg-primary text-primary-foreground' : ''}`}>
+                        <Icon className="h-8 w-8" />
+                      </div>
+                      
+                      <CardTitle className="text-2xl text-foreground">{pkg.name}</CardTitle>
+                      <CardDescription className="text-base">{pkg.description}</CardDescription>
+                      
+                      {/* Price */}
+                      <div className="mt-6">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-sm text-muted-foreground">Rp</span>
+                          <span className={`text-4xl lg:text-5xl font-bold ${pkg.popular ? 'text-primary' : 'text-foreground'}`}>
+                            {pkg.price}
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">per sesi</p>
+                      </div>
+                    </CardHeader>
+                    
+                    <CardContent className="relative">
+                      <ul className="space-y-4">
+                        {pkg.features.map((feature, i) => (
+                          <li key={feature} className="flex items-start gap-3 group/item">
+                            <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-300 ${
+                              pkg.popular 
+                                ? 'bg-primary text-primary-foreground' 
+                                : 'bg-primary/10 text-primary group-hover/item:bg-primary group-hover/item:text-primary-foreground'
+                            }`}>
+                              <Check className="h-3 w-3" />
+                            </div>
+                            <span className="text-sm text-foreground/90">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                    
+                    <CardFooter className="relative pt-6">
+                      <Button 
+                        className={`w-full group/btn h-12 text-base ${
+                          pkg.popular 
+                            ? 'bg-gradient-to-r from-primary to-accent hover:opacity-90' 
+                            : ''
+                        }`}
+                        variant={pkg.popular ? "default" : "outline"}
+                        onClick={(e) => handleBooking("Photography", pkg.name, e)}
+                      >
+                        <MessageCircle className="h-5 w-5 mr-2 group-hover/btn:scale-110 transition-transform" />
+                        Pesan Sekarang
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                );
+              })}
+            </div>
 
-        {/* CTA Section */}
-        <div className="mb-16 lg:mb-24 text-center">
-          <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">
-            <CardHeader>
-              <CardTitle className="text-2xl lg:text-3xl">
-                Butuh Konsultasi?
-              </CardTitle>
-              <CardDescription className="text-base lg:text-lg">
-                Hubungi kami via WhatsApp untuk konsultasi gratis. Tim kami siap membantu Anda memilih paket yang sesuai dengan kebutuhan.
-              </CardDescription>
-            </CardHeader>
-            <CardFooter className="justify-center">
-              <Button 
-                size="lg"
-                variant="default"
-                className="group"
-                onClick={(e) => handleBooking("Konsultasi", "General", e)}
-              >
-                <MessageCircle className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-                Konsultasi via WhatsApp
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
+            {/* CTA Section */}
+            <div className="mt-20 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+              <Card className="relative overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10" />
+                <CardContent className="relative p-8 lg:p-12 text-center">
+                  <h3 className="text-2xl lg:text-3xl font-bold mb-4">
+                    Butuh Paket Custom?
+                  </h3>
+                  <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+                    Hubungi kami via WhatsApp untuk konsultasi gratis. Tim kami siap membantu Anda memilih paket yang sesuai dengan kebutuhan.
+                  </p>
+                  <Button 
+                    size="lg"
+                    className="group h-14 px-8 text-lg"
+                    onClick={(e) => handleBooking("Konsultasi", "Custom", e)}
+                  >
+                    <MessageCircle className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
+                    Konsultasi Gratis
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
 
         {/* FAQ Section */}
-        <section className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 text-center">Pertanyaan Sering Ditanya</h2>
+        <section className="max-w-3xl mx-auto mb-16">
+          <div className="text-center mb-8 animate-fade-in">
+            <Badge variant="outline" className="mb-4 badge-premium">
+              FAQ
+            </Badge>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              Pertanyaan{" "}
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Sering Ditanya
+              </span>
+            </h2>
+          </div>
+          
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
               <AccordionTrigger className="text-left">
