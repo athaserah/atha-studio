@@ -32,20 +32,25 @@ const faqs = [
 
 export const FAQ = () => {
   return (
-    <section className="py-section bg-secondary/20">
-      <div className="container-responsive max-w-4xl">
-        <div className="text-center mb-12 fade-in">
-          <Badge variant="outline" className="mb-4">
-            <HelpCircle className="h-3 w-3 mr-1" />
+    <section className="py-section bg-gradient-to-b from-secondary/20 via-background to-background relative overflow-hidden">
+      {/* Background Decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/3 rounded-full blur-[100px]" />
+      </div>
+
+      <div className="container-responsive max-w-4xl relative">
+        <div className="text-center mb-16 fade-in">
+          <Badge variant="outline" className="mb-6 badge-premium">
+            <HelpCircle className="h-3.5 w-3.5 mr-1.5" />
             FAQ
           </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+          <h2 className="heading-section font-display mb-6">
             Pertanyaan{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <span className="gradient-text">
               Umum
             </span>
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Jawaban untuk pertanyaan yang sering ditanyakan seputar layanan fotografi kami
           </p>
         </div>
@@ -55,13 +60,15 @@ export const FAQ = () => {
             <AccordionItem 
               key={index} 
               value={`item-${index}`}
-              className="bg-background border rounded-lg px-6 slide-up"
-              style={{ animationDelay: `${index * 0.05}s` }}
+              className="accordion-premium data-[state=open]:shadow-soft slide-up"
+              style={{ animationDelay: `${index * 0.08}s` }}
             >
-              <AccordionTrigger className="text-left hover:no-underline">
-                <span className="font-semibold">{faq.question}</span>
+              <AccordionTrigger className="text-left hover:no-underline py-6 group">
+                <span className="font-semibold text-base sm:text-lg pr-4 group-hover:text-primary transition-colors duration-300">
+                  {faq.question}
+                </span>
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
+              <AccordionContent className="text-muted-foreground pb-6 text-base leading-relaxed">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

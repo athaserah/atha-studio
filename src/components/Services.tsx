@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Camera, Check, MessageCircle, Crown, Sparkles } from "lucide-react";
+import { Camera, Check, MessageCircle, Crown, Sparkles, Star } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -53,7 +53,7 @@ const Services = () => {
         "File digital via Google Drive",
         "Revisi minor 1x"
       ],
-      popular: true,
+      popular: false,
       icon: Camera
     },
     {
@@ -69,7 +69,7 @@ const Services = () => {
         "Revisi 2x",
         "Bonus 10 foto filter vintage"
       ],
-      popular: false,
+      popular: true,
       icon: Crown
     },
     {
@@ -92,105 +92,105 @@ const Services = () => {
   ];
 
   return (
-    <section className="py-section bg-gradient-to-b from-background via-secondary/10 to-background relative overflow-hidden">
+    <section className="py-section bg-gradient-to-b from-background via-secondary/5 to-background relative overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 -left-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-40 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 -left-40 w-[500px] h-[500px] bg-primary/3 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 -right-40 w-[400px] h-[400px] bg-accent/3 rounded-full blur-[100px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
-          <Badge variant="outline" className="mb-4 badge-premium">
-            <Camera className="h-3 w-3 mr-1" />
+        <div className="text-center mb-20 animate-fade-in">
+          <Badge variant="outline" className="mb-6 badge-premium">
+            <Camera className="h-3.5 w-3.5 mr-1.5" />
             Paket Layanan
           </Badge>
-          <h2 className="text-3xl lg:text-5xl font-bold mb-4">
+          <h2 className="heading-section font-display mb-6">
             Paket Fotografi{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Profesional
-            </span>
+            <span className="gradient-text">Profesional</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Paket fotografi berkualitas tinggi untuk berbagai kebutuhan. 
             Dari sesi personal hingga dokumentasi acara besar, kami siap membantu.
           </p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 stagger-children">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 items-start stagger-children">
           {photographyPackages.map((pkg, index) => {
             const Icon = pkg.icon;
             return (
               <Card 
                 key={pkg.name}
-                className={`relative overflow-hidden transition-all duration-500 card-3d group ${
+                className={`relative overflow-hidden transition-all duration-700 card-3d group ${
                   pkg.popular 
-                    ? 'border-2 border-primary shadow-glow scale-105 lg:scale-110 z-10' 
-                    : 'border-border/50 hover:border-primary/30'
+                    ? 'border-2 border-primary/40 shadow-premium scale-[1.03] z-10 bg-card' 
+                    : 'border-border/40 hover:border-primary/25 bg-card/80'
                 }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
+                style={{ animationDelay: `${index * 0.12}s` }}
               >
                 {/* Popular Badge */}
                 {pkg.popular && (
                   <div className="absolute -top-0 left-0 right-0">
-                    <div className="badge-popular text-center py-2">
-                      <Crown className="h-4 w-4 inline mr-1" />
-                      TERPOPULER
+                    <div className="badge-popular text-center py-2.5 flex items-center justify-center gap-2">
+                      <Star className="h-4 w-4 fill-current" />
+                      PALING DIMINATI
                     </div>
                   </div>
                 )}
                 
                 {/* Gradient Border Effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/3" />
                 </div>
                 
-                <CardHeader className={`relative ${pkg.popular ? 'pt-12' : ''}`}>
+                <CardHeader className={`relative space-y-6 ${pkg.popular ? 'pt-14' : 'pt-8'} pb-6`}>
                   {/* Icon */}
-                  <div className={`icon-container w-16 h-16 mb-4 ${pkg.popular ? 'bg-primary text-primary-foreground' : ''}`}>
-                    <Icon className="h-8 w-8" />
+                  <div className={`icon-container w-18 h-18 ${pkg.popular ? 'bg-primary text-primary-foreground shadow-glow' : ''}`}>
+                    <Icon className="h-9 w-9" />
                   </div>
                   
-                  <CardTitle className="text-2xl text-foreground">{pkg.name}</CardTitle>
-                  <CardDescription className="text-base">{pkg.description}</CardDescription>
+                  <div>
+                    <CardTitle className="text-2xl sm:text-3xl text-foreground font-display">{pkg.name}</CardTitle>
+                    <CardDescription className="text-base mt-2">{pkg.description}</CardDescription>
+                  </div>
                   
                   {/* Price */}
-                  <div className="mt-6">
+                  <div className="pt-4">
                     <div className="flex items-baseline gap-1">
-                      <span className="text-sm text-muted-foreground">Rp</span>
-                      <span className={`text-4xl lg:text-5xl font-bold ${pkg.popular ? 'text-primary' : 'text-foreground'}`}>
+                      <span className="text-base text-muted-foreground">Rp</span>
+                      <span className={`text-4xl lg:text-5xl font-bold font-display ${pkg.popular ? 'text-primary' : 'text-foreground'}`}>
                         {pkg.price}
                       </span>
                     </div>
-                    <p className="text-sm text-muted-foreground mt-1">per sesi</p>
+                    <p className="text-sm text-muted-foreground mt-2">per sesi</p>
                   </div>
                 </CardHeader>
                 
-                <CardContent className="relative">
+                <CardContent className="relative pb-8">
                   <ul className="space-y-4">
                     {pkg.features.map((feature, i) => (
                       <li key={feature} className="flex items-start gap-3 group/item">
-                        <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-300 ${
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-500 ${
                           pkg.popular 
                             ? 'bg-primary text-primary-foreground' 
                             : 'bg-primary/10 text-primary group-hover/item:bg-primary group-hover/item:text-primary-foreground'
                         }`}>
-                          <Check className="h-3 w-3" />
+                          <Check className="h-3.5 w-3.5" />
                         </div>
-                        <span className="text-sm text-foreground/90">{feature}</span>
+                        <span className="text-sm text-foreground/85 leading-relaxed">{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </CardContent>
                 
-                <CardFooter className="relative pt-6">
+                <CardFooter className="relative pt-4 pb-8">
                   <Button 
-                    className={`w-full group/btn h-12 text-base ${
+                    className={`w-full group/btn h-14 text-base font-medium ${
                       pkg.popular 
-                        ? 'bg-gradient-to-r from-primary to-accent hover:opacity-90' 
-                        : ''
+                        ? 'btn-glow bg-gradient-to-r from-primary to-accent hover:opacity-95' 
+                        : 'hover:bg-primary hover:text-primary-foreground'
                     }`}
                     variant={pkg.popular ? "default" : "outline"}
                     onClick={(e) => handleBooking("Photography", pkg.name, e)}
@@ -205,19 +205,19 @@ const Services = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-20 animate-fade-in" style={{ animationDelay: '0.5s' }}>
-          <Card className="relative overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10" />
-            <CardContent className="relative p-8 lg:p-12 text-center">
-              <h3 className="text-2xl lg:text-3xl font-bold mb-4">
+        <div className="mt-24 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+          <Card className="relative overflow-hidden border border-primary/20 bg-gradient-to-br from-primary/5 via-card to-accent/3 rounded-3xl">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_hsl(var(--primary)/0.08),transparent_50%)]" />
+            <CardContent className="relative p-10 lg:p-16 text-center">
+              <h3 className="heading-card font-display mb-6">
                 Butuh Paket Custom?
               </h3>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
                 Hubungi kami via WhatsApp untuk konsultasi gratis. Tim kami siap membantu Anda memilih paket yang sesuai dengan kebutuhan.
               </p>
               <Button 
                 size="lg"
-                className="group h-14 px-8 text-lg"
+                className="group h-14 px-10 text-lg btn-glow bg-gradient-to-r from-primary to-accent hover:opacity-95"
                 onClick={(e) => handleBooking("Konsultasi", "Custom", e)}
               >
                 <MessageCircle className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
